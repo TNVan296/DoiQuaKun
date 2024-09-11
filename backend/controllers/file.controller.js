@@ -1,0 +1,77 @@
+const { createFile } = require('../services/file.service');
+const fs = require('fs');
+
+const { YYYYMMDD_HHMM } = require("../utils/datetime.utils");
+const upload = async (req, res) => {
+  try {
+    if (!req.file) {
+      return res.status(400).send({ message: 'Please upload a file' });
+    }
+
+    console.log('====================================')
+    console.log(`----------create file at ${YYYYMMDD_HHMM(new Date())}---------`)
+    let logfile = [
+      { 
+        id: null,
+        date : YYYYMMDD_HHMM(new Date()),
+        file : req.file.originalname,
+        path : req.file.path
+      }
+    ]
+    const file = await createFile(req.file);
+    logfile.push({
+      id: file.id,
+      date : YYYYMMDD_HHMM(new Date()),
+      file : file.dataValues.name,
+      path : file.dataValues.path
+
+    })
+    console.table(logfile)
+    console.log('====================================')
+    res.status(200).send(file);
+  } catch (err) {
+    res.status(500).send({ message: err.message });
+  }
+};
+
+const getListFiles = (req, res) => {
+  const directoryPath = __basedir + "/resources/static/assets/uploads/";
+
+  fs.readdir(directoryPath, function (err, files) {
+    if (err) {
+      res.status(500).send({
+        message: "Unable to scan files!",
+      });
+    }
+
+    let fileInfos = [];
+
+    files.forEach((file) => {
+      fileInfos.push({
+        name: file,
+        url: baseUrl + file,
+      });
+    });
+
+    res.status(200).send(fileInfos);
+  });
+};
+
+const download = (req, res) => {
+  const fileName = req.params.name;
+  const directoryPath = __basedir + "/resources/static/assets/uploads/";
+
+  res.download(directoryPath + fileName, fileName, (err) => {
+    if (err) {
+      res.status(500).send({
+        message: "Could not download the file. " + err,
+      });
+    }
+  });
+};
+
+module.exports = {
+  upload,
+  getListFiles,
+  download,
+};

@@ -1,0 +1,31 @@
+{
+  "name": "api-dongdienthieunhi",
+  "version": "1.0.0",
+  "description": "To make it easy for you to get started with GitLab, here's a list of recommended next steps.",
+  "main": "index.js",
+  "scripts": {
+    "dev": "nodemon server.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+ssh://git@gitlab.com/idp-competitions/api-dongdienthieunhi.git"
+  },
+  "author": "tanlee2k2",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://gitlab.com/idp-competitions/api-dongdienthieunhi/issues"
+  },
+  "homepage": "https://gitlab.com/idp-competitions/api-dongdienthieunhi#readme",
+  "dependencies": {
+    "cors": "^2.8.5",
+    "express": "^4.18.3",
+    "morgan": "^1.10.0",
+    "multer": "^1.4.5-lts.1",
+    "mysql2": "^3.9.2",
+    "nodemon": "^3.1.0",
+    "sequelize": "^6.37.1",
+    "uuid": "^9.0.1",
+    "dotenv": "^16.4.5"
+  }
+}
