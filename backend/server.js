@@ -7,11 +7,8 @@ require("dotenv").config();
 global.__basedir = __dirname
 
 const app = express();
-const ALLOW_DOMAINS = process.env.ALLOW_DOMAINS.split(',').map(domain => domain.trim());
-var corsOptions = {
-  origin: ALLOW_DOMAINS
-};
-app.use(cors(corsOptions));
+
+app.use(cors());
 
 app.use(morgan('combined'));
 
