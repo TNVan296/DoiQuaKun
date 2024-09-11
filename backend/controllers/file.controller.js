@@ -8,26 +8,7 @@ const upload = async (req, res) => {
       return res.status(400).send({ message: 'Please upload a file' });
     }
 
-    console.log('====================================')
-    console.log(`----------create file at ${YYYYMMDD_HHMM(new Date())}---------`)
-    let logfile = [
-      { 
-        id: null,
-        date : YYYYMMDD_HHMM(new Date()),
-        file : req.file.originalname,
-        path : req.file.path
-      }
-    ]
     const file = await createFile(req.file);
-    logfile.push({
-      id: file.id,
-      date : YYYYMMDD_HHMM(new Date()),
-      file : file.dataValues.name,
-      path : file.dataValues.path
-
-    })
-    console.table(logfile)
-    console.log('====================================')
     res.status(200).send(file);
   } catch (err) {
     res.status(500).send({ message: err.message });
