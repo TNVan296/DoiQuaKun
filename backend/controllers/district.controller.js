@@ -4,6 +4,7 @@ const District = db.District;
 
 exports.findOne = (req, res) => {
   const id = req.params.id;
+  // TODO: move this to a service
   District.findByPk(id)
   .then(data => {
     if (data) {
@@ -22,6 +23,7 @@ exports.findOne = (req, res) => {
 };
 exports.findAll = (req,res) => {
   const cityId = req.query.cityId;
+  // TODO: move this to a service
   District.findAll({
     where: {
       cityId: cityId

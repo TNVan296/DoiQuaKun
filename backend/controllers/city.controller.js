@@ -4,6 +4,7 @@ const City = db.City;
 
 exports.findOne = (req, res) => {
   const id = req.params.id;
+  // TODO: move this to a service
   City.findByPk(id)
   .then(data => {
     if (data) {
@@ -21,6 +22,7 @@ exports.findOne = (req, res) => {
   });
 };
 exports.findAll = (req,res) => {
+  // TODO: move this to a service
   City.findAll()
   .then(data => {
     res.send(data);
