@@ -16,8 +16,13 @@ module.exports = (sequelize) => {
         allowNull: false,
         type: DataTypes.STRING(255)
       },
-      points:
-      {
+      // Thưởng sửa
+      // points:
+      // {
+      //   allowNull: false,
+      //   type: DataTypes.INTEGER
+      // },
+      total_items: {
         allowNull: false,
         type: DataTypes.INTEGER
       },
@@ -26,11 +31,12 @@ module.exports = (sequelize) => {
         allowNull: false,
         type: DataTypes.INTEGER
       },
-      shipAddress:
-      {
-        allowNull: false,
-        type: DataTypes.STRING(255)
-      },
+      // // Thưởng sửa
+      // shipAddress:
+      // {
+      //   allowNull: false,
+      //   type: DataTypes.STRING(255)
+      // },
      
      
     }, 

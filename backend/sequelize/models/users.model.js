@@ -14,7 +14,7 @@ module.exports = (sequelize) => {
         allowNull: false,
         type: DataTypes.STRING(255)
       },
-      detail:
+      detailAddress:
       {
         allowNull: false,
         type: DataTypes.STRING(255)
@@ -39,8 +39,7 @@ module.exports = (sequelize) => {
         allowNull: false,
         type: DataTypes.STRING(255)
       }
-
-    }, 
+    },
     {
       tableName: 'users',
       underscored: true,

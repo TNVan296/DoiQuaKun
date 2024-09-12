@@ -5,14 +5,17 @@ module.exports = (sequelize) => {
   const CartItem = sequelize.define(
     'CartItem', 
     { 
-      id: {
+      // Thưởng sửa
+      // id: {
+      //   allowNull: false,
+      //   autoIncrement: true,
+      //   primaryKey: true,
+      //   type: DataTypes.INTEGER
+      // },
+      cartId: {
         allowNull: false,
         autoIncrement: true,
         primaryKey: true,
-        type: DataTypes.INTEGER
-      },
-      cartId: {
-        allowNull: false,
         type: DataTypes.INTEGER
       },
       productId: {

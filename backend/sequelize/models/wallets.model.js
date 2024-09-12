@@ -25,6 +25,12 @@ module.exports = (sequelize) => {
         allowNull: false,
         type: DataTypes.INTEGER
       },
+      // Thưởng thêm
+      status:
+      {
+        allowNull: false,
+        type: DataTypes.STRING(10)
+      }
     }, 
     {
       tableName: 'wallets',

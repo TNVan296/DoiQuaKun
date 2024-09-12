@@ -20,7 +20,7 @@ module.exports = (sequelize) => {
         allowNull: false,
         type: DataTypes.STRING(255)
       },
-      validForm:
+      validFrom:
       {
         allowNull: false,
         type: DataTypes.DATE
