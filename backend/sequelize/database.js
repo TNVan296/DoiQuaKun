@@ -22,8 +22,6 @@ db.cartsItems = require('./models/cartItems.model')(sequelize, Sequelize);
 db.deliveries = require('./models/deliveries.model')(sequelize, Sequelize);
 require('./extra-setup')(sequelize);
 
-
-
 sequelize
   .authenticate()
   .then(() => {
