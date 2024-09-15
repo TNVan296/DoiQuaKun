@@ -15,7 +15,7 @@ const swaggerOptions = {
       },
     ],
   },
-  apis: ['./router/*.js'], // Đường dẫn tới các file chứa định nghĩa API
+  apis: ['./routes/*.js'], // Đường dẫn tới các file chứa định nghĩa API
 };
 
 // Khởi tạo Swagger

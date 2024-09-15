@@ -1,36 +1,30 @@
 const { DataTypes } = require('sequelize');
-const { products } = require('../database');
+const { carts } = require('./database');
 
 module.exports = (sequelize) => {
-  const Cart = sequelize.define(
-    'Cart', 
-    { 
-      id: {
+  const CartItem = sequelize.define(
+    'CartItem', 
+    {
+      cartId: {
         allowNull: false,
         autoIncrement: true,
         primaryKey: true,
         type: DataTypes.INTEGER
       },
-      status:
-      {
-        allowNull: false,
-        type: DataTypes.STRING(255)
-      },
-      total_items: {
+      productId: {
         allowNull: false,
         type: DataTypes.INTEGER
       },
-      userId:
-      {
+      quantity: {
         allowNull: false,
         type: DataTypes.INTEGER
-      },
+      }
     }, 
     {
-      tableName: 'carts',
+      tableName: 'cart-items',
       underscored: true,
     }
   );
 
-  return Cart;
+  return CartItem;
 };

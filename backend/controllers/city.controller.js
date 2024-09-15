@@ -1,4 +1,4 @@
-const db = require("../models");
+const db = require("../models/database.js");
 const City = db.City;
 // const Op = db.Sequelize.Op;
 
