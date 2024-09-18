@@ -14,6 +14,20 @@ const swaggerOptions = {
         url: 'http://localhost:3000',
       },
     ],
+    components: {
+      securitySchemes: {
+        BearerAuth: {
+          type: 'http',
+          scheme: 'bearer',
+          bearerFormat: 'JWT', // Tùy chọn, thường dùng với JWT
+        },
+      },
+    },
+    security: [
+      {
+        BearerAuth: [], // Áp dụng bảo mật cho tất cả các API
+      },
+    ],
   },
   apis: ['./routes/*.js'], // Đường dẫn tới các file chứa định nghĩa API
 };

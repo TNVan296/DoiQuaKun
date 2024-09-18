@@ -32,9 +32,9 @@ db.users = require('./users.model.js')(sequelize, Sequelize);
 db.cartsItems = require('./cartItems.model.js')(sequelize, Sequelize);
 db.deliveries = require('./deliveries.model.js')(sequelize, Sequelize);
 
-db.City = require('./city.model.js')(sequelize, Sequelize);
-db.District = require('./district.model.js')(sequelize, Sequelize)
-db.File = require('./file.model.js')(sequelize, Sequelize)
+// db.City = require('./city.model.js')(sequelize, Sequelize);
+// db.District = require('./district.model.js')(sequelize, Sequelize)
+// db.File = require('./file.model.js')(sequelize, Sequelize)
 
 require('./extra-setup.js')(sequelize);
 

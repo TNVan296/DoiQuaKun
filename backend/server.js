@@ -22,8 +22,8 @@ app.use('/public', express.static(path.join(__dirname, 'public')));
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocs));
 
 // Router
-const mlTech = require('./routes/index.js');
-app.use('/mltech', mlTech);
+const api = require('./routes/index.js');
+app.use('/api', api);
 
 
 app.listen(process.env.PORT, function () {

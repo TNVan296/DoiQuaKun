@@ -1,37 +1,50 @@
-const nodemailer = require('nodemailer');
-const { sendEmail } = require('../utils/emailHelper');
+const dotenv = require('dotenv');
+dotenv.config();
+// const bcrypt = require('bcryptjs')
+const { sendOtpToEmail } = require('../utils/emailHelper.utils')
+const { accessToken } = require('../utils/jwtToken.utils')
 
-// Lưu OTP tạm thời (hoặc sử dụng Redis, DB)
+const users = []
 const otpStore = {};
 
-const generateOTP = () => {
-  // Tạo mã OTP 6 chữ số
-  return Math.floor(100000 + Math.random() * 900000);
-};
+const register =  async (req, res) => {
+  const { username } = req.body;
 
-// Hàm gửi OTP
-const sendOtpToEmail = async (req, res) => {
-  const { email } = req.body;
+  // trường hợp user đã tồn tại hay chưa
+  const userExists = users.find(user => user.username === username);
+  if (userExists) {
+    return res.status(400).json({ message: 'User already exists' });
+  }
+  // thêm user
+  users.push({ username })
+  res.status(201).send({ message: 'User registered successfully !' })
+}
 
-  if (!email || !email.includes('@')) {
-    return res.status(400).send('Invalid email format');
+const login = async (req, res) => {
+  const { username } = req.body;
+  
+  // trường hợp username viết tào lao
+  if (!username) {
+    return res.status(400).send({ message: 'Invalid username' });
   }
 
-  // Tạo OTP
-  const otp = generateOTP();
+  // trường hợp user đã tồn tại hay chưa
+  const userExists = users.find(user => user.username === username);
+  if (userExists) {
+    // Tạo OTP
+    const otp = Math.floor(100000 + Math.random() * 900000);
 
-  // Luu OTP (5p hết (milisec))
-  otpStore[email] = {otp, expires: Date.now() + 300000};
+    // Luu OTP (5p hết (milisec))
+    otpStore[username] = { otp, expires: Date.now() + 300000 };
 
-  // Gửi OTP qua email
-  try {
-    await sendEmail(email, otp);
-    res.status(200).send('OTP sent to email');
-  } catch (error) {
-    // console.error(error);
-    res.status(500).send('Failed to send OTP');
+    // Gửi OTP qua email
+    const mailSent = sendOtpToEmail(userExists.username, otp);
+
+    return res.status(200).send({ message: 'OTP sent to your email' });
+  } else {
+    return res.status(400).send({ message: 'User not exist !' })
   }
-};
+}
 
 // Hàm xác thực OTP
 const verifyOtp = (req, res) => {
@@ -58,11 +71,21 @@ const verifyOtp = (req, res) => {
     return res.status(400).send('Invalid OTP');
   }
 
-  // Xác thực thành công, có thể tiến hành tạo session hoặc token
-  res.status(200).send('OTP verified, login successful');
+  // Xác thực thành công, tiến hành tạo session hoặc token
+  const token = accessToken(email, process.env.JWT_SECRET);
+  res.status(200).json({ accessToken: token , message: 'OTP verified, login successful'});
 };
 
+const profileUser = (req, res) => {
+  if (!req.user) {
+    return res.status(401).send({ message: 'Unauthorized' });
+  }
+  res.json({ user: req.user });
+}
+
 module.exports = {
-  sendOtpToEmail,
-  verifyOtp
-};
+  verifyOtp,
+  register,
+  login,
+  profileUser
+}
