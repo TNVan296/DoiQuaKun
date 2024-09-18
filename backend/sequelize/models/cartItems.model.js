@@ -1,5 +1,4 @@
 const { DataTypes } = require('sequelize');
-const { carts } = require('../database');
 
 module.exports = (sequelize) => {
   const CartItem = sequelize.define(
@@ -28,7 +27,7 @@ module.exports = (sequelize) => {
       }
     }, 
     {
-      tableName: 'cart-items',
+      tableName: 'cart_items',
       underscored: true,
     }
   );
