@@ -56,7 +56,7 @@ router.get('/search', productController.searchProducts);
 
 /**
  * @swagger
- * /api/products/search/{id}:
+ * /api/products/{id}:
  *   get:
  *     summary: Tìm kiếm sản phẩm theo id
  *     parameters:
@@ -104,6 +104,6 @@ router.get('/search', productController.searchProducts);
  *       500:
  *         description: Lỗi máy chủ
  * */
-router.get('/search/:id', productController.getProductById);
+router.get('/:id', productController.getProductById);
 
 module.exports = router;

@@ -25,6 +25,7 @@ app.listen(3000, function () {
   console.log('Swagger Docs available at http://localhost:3000/api-docs');
 });
 
+// Uncomment to sync the database
 // db.sequelize.sync({ force: true })
 //   .then(() => {
 //     console.log('Đồng bộ cơ sở dữ liệu thành công.');
