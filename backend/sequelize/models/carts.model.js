@@ -16,7 +16,7 @@ module.exports = (sequelize) => {
         allowNull: false,
         type: DataTypes.STRING(255)
       },
-      total_items: {
+      totalItems: {
         allowNull: false,
         type: DataTypes.INTEGER
       },
