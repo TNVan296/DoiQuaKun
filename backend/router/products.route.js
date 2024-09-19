@@ -106,4 +106,6 @@ router.get('/search', productController.searchProducts);
  * */
 router.get('/:id', productController.getProductById);
 
+router.get('/', productController.getAllProducts);
+
 module.exports = router;

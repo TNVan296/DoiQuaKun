@@ -33,7 +33,25 @@ const getProductById = async (id) => {
   }
 };
 
+const getAllProducts = async () => {
+  try {
+    return await db.products.findAll({
+      include: [
+        { model: db.pictures, as: 'picture' },
+        { model: db.colors, as: 'color' },
+        { model: db.sizes, as: 'size' },
+        { model: db.productsCategories, as: 'category' }
+      ],
+      attributes: { exclude: ['createdAt', 'updatedAt'] }
+    });
+  } catch (error) {
+    console.error('Lỗi khi truy vấn tất cả sản phẩm:', error);
+    throw error;
+  }
+};
+
 module.exports = {
   searchProducts,
   getProductById,
+  getAllProducts,
 };
