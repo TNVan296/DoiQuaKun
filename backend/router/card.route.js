@@ -4,7 +4,7 @@ const cardController = require('../controller/card.controller');
 
 /**
  * @swagger
- * /api/cards/add-points:
+ * /api/cards/recharge:
  *   post:
  *     summary: Add points to a user's wallet using a card
  *     description: Adds points from an active card to the wallet of the user. The card's status is updated to 'Inactive'.
@@ -58,6 +58,6 @@ const cardController = require('../controller/card.controller');
  *                   example: 'No token provided'
  *                   # Removed the repeated example entry
  */
-router.post('/add-points', cardController.handleAddCardPoints);
+router.post('/recharge', cardController.handleAddCardPoints);
 
 module.exports = router;
