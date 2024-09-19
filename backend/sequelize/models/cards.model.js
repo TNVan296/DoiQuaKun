@@ -3,19 +3,14 @@ const { DataTypes } = require('sequelize');
 module.exports = (sequelize) => {
   const Card = sequelize.define(
     'Card', 
-    { 
+    {
+      // 
       id: {
         allowNull: false,
         autoIncrement: true,
         primaryKey: true,
         type: DataTypes.INTEGER
       },
-      
-      name: {
-        allowNull: false,
-        type: DataTypes.STRING(255)
-      },
-
       points:
       {
         allowNull: false,
