@@ -39,7 +39,6 @@ const addCardPoints = async (cardName, userId) => {
       message: 'Points added to wallet successfully'
     };
   } catch (error) {
-    console.error('Lỗi khi thực hiện truy vấn:', error);
     throw error;
   }
 };
