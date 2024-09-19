@@ -7,8 +7,6 @@ module.exports = (sequelize) => {
     {
       cartId: {
         allowNull: false,
-        autoIncrement: true,
-        primaryKey: true,
         type: DataTypes.INTEGER
       },
       productId: {
@@ -21,7 +19,7 @@ module.exports = (sequelize) => {
       }
     }, 
     {
-      tableName: 'cart-items',
+      tableName: 'cart_items',
       underscored: true,
     }
   );

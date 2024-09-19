@@ -4,8 +4,8 @@ dotenv.config();
 
 // Cấu hình transporter với thông tin từ Mailtrap
 const transporter = nodemailer.createTransport({
-  host: "sandbox.smtp.mailtrap.io",
-  port: 2525,
+  host: process.env.MAILTRAP_HOST,
+  port: process.env.MAILTRAP_PORT,
   auth: {
     user: process.env.MAILTRAP_USER, // Thay bằng thông tin Mailtrap của bạn
     pass: process.env.MAILTRAP_PASS
@@ -15,17 +15,15 @@ const transporter = nodemailer.createTransport({
 // Hàm gửi email
 const sendOtpToEmail = async (userEmail, otp) => {
   const mailOptions = {
-    from: '"DoiQuaKun" <thuongnva2923@gmail.com>',
+    from: `"DoiQuaKun" <${process.env.EMAIL_SENDER}>`,
     to: userEmail,
-    subject: "Login Verification Code",
+    subject: process.env.EMAIL_SUBJECT,
     text: `Your login OTP is: ${otp}`,
     html: `<p>Your login OTP is: <b>${otp}</b></p>`
   };
 
   try {
-    // console.log("Sending email to:", userEmail);
     await transporter.sendMail(mailOptions);
-    console.log("Email sent successfully");
   } catch (error) {
     console.error("Error sending email:", error);
   }
