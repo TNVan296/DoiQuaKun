@@ -1,5 +1,5 @@
 const { Op } = require('sequelize');
-const db = require('../models/database');
+const db = require('../models/index');
 
 const searchProducts = async (name) => {
   try {

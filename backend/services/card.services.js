@@ -1,43 +1,28 @@
-const db = require('../models/database');
-const { Op } = require('sequelize');
+const cardResponseTemplate = require('../utils/responses/card.response');
+const db = require('../models/index');
 
-// Thêm điểm vào ví
 const addCardPoints = async (cardName, userId) => {
   try {
-    // Tìm thẻ theo tên
     const card = await db.cards.findOne({ where: { name: cardName } });
 
     if (!card) {
       throw new Error('Card not found');
     }
-    
-    // Log trạng thái của thẻ
-    console.log('Card:', card);
 
     if (card.status !== 'active') {
       throw new Error('Card is not active');
     }
 
-    // Tìm ví tiền của người dùng
     const wallet = await db.wallets.findOne({ where: { userId: userId } });
 
     if (!wallet) {
       throw new Error('Wallet not found');
     }
-    
-    // Log ví tiền và điểm hiện tại
-    console.log('Wallet:', wallet);
 
-    // Cập nhật trạng thái của thẻ
-    await card.update({ status: 'inactive' });
-
-    // Cập nhật điểm trong ví tiền
+    await card.update({ status: 'inactive', walletId: wallet.id });
     await wallet.increment({ points: card.points });
 
-    return {
-      success: true,
-      message: 'Points added to wallet successfully'
-    };
+    return cardResponseTemplate(card);
   } catch (error) {
     throw error;
   }

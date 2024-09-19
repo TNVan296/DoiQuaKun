@@ -1,71 +1,54 @@
-const db = require('../models/database');
-const { Op } = require('sequelize');
-const { v4: uuidv4 } = require('uuid'); // Thư viện để tạo UUID cho guest ID
+const db = require('../models/index');
 
-const addCartItem = async (cardName, userId = null, guestId = null) => {
+const addCartItem = async (productId, userId, quantity = 1) => {
     try {
-        let cart;
-        
-        if (userId) {
-            // Nếu người dùng đã đăng nhập, tìm giỏ hàng dựa trên userId
-            cart = await db.carts.findOne({ where: { userId } });
-            
-            if (!cart) {
-                // Nếu giỏ hàng chưa tồn tại, tạo mới giỏ hàng cho người dùng
-                cart = await db.carts.create({ userId });
-            }
-        } else {
-            // Nếu người dùng chưa đăng nhập, sử dụng guestId
-            if (!guestId) {
-                // Nếu chưa có guestId, tạo mới một UUID cho khách hàng
-                guestId = uuidv4();
-            }
-
-            // Tìm giỏ hàng dựa trên guestId
-            cart = await db.carts.findOne({ where: { guestId } });
-
-            if (!cart) {
-                // Nếu giỏ hàng chưa tồn tại, tạo mới giỏ hàng cho khách hàng
-                cart = await db.carts.create({ guestId });
-            }
-        }
-
-        // Tìm sản phẩm dựa trên tên sản phẩm (cardName)
-        const product = await db.products.findOne({ where: { name: cardName } });
-
-        if (!product) {
-            throw new Error('Sản phẩm không tồn tại.');
-        }
-
-        // Kiểm tra xem sản phẩm đã có trong giỏ hàng chưa
-        let cartItem = await db.cartsItems.findOne({
-            where: {
-                cartId: cart.id,
-                productId: product.id,
-            },
+      console.log('Adding item to cart:', { productId, userId, quantity });
+  
+      // Tìm giỏ hàng của user
+      let cart = await db.carts.findOne({
+        where: { userId, status: 'active' },
+        include: [{ model: db.cartItems, as: 'cartItems' }]
+      });
+  
+      if (!cart) {
+        console.log('No cart found, creating a new one.');
+        cart = await db.carts.create({
+          userId,
+          status: 'active',
+          total_items: 0
         });
-
-        if (cartItem) {
-            // Nếu đã tồn tại, cập nhật số lượng
-            cartItem.quantity += 1; // Hoặc cập nhật theo logic cụ thể
-            await cartItem.save();
-        } else {
-            // Nếu chưa tồn tại, thêm mục mới
-            cartItem = await db.cartsItems.create({
-                cartId: cart.id,
-                productId: product.id,
-                quantity: 1, // Số lượng mặc định khi thêm mới
-            });
-        }
-
-        console.log('Đã thêm sản phẩm vào giỏ hàng.');
-        return { cartItem, guestId }; // Trả về thông tin sản phẩm và guestId
+      }
+  
+      // Kiểm tra xem sản phẩm đã có trong giỏ hàng chưa
+      let cartItem = await db.cartItems.findOne({
+        where: { cartId: cart.id, productId }
+      });
+  
+      if (cartItem) {
+        console.log('Item found in cart, updating quantity.');
+        cartItem.quantity += quantity;
+        await cartItem.save();
+      } else {
+        console.log('Item not found in cart, creating a new CartItem.');
+        await db.CartItem.create({
+          cartId: cart.id,
+          productId,
+          quantity
+        });
+      }
+  
+      // Cập nhật tổng số lượng sản phẩm trong giỏ hàng
+      cart.total_items += quantity;
+      await cart.save();
+  
+      console.log('Item added to cart successfully:', cart);
+      return cart;
     } catch (error) {
-        console.error('Lỗi khi thực hiện truy vấn:', error);
-        throw error;
+      console.error('Error in addCartItem:', error);
+      throw new Error('Could not add item to cart');
     }
-};
-
+  };
+  
 module.exports = {
-    addCartItem,
+  addCartItem,
 };

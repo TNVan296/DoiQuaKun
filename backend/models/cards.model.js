@@ -35,6 +35,11 @@ module.exports = (sequelize) => {
       {
         allowNull: false,
         type: DataTypes.DATE
+      },
+      walletId:
+      {
+        allowNull: true,
+        type: DataTypes.INTEGER
       }
     }, 
     {

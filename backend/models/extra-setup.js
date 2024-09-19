@@ -12,7 +12,6 @@ module.exports = (sequelize) => {
       as: 'picture'
     });
   
-    // Một Color có nhiều Products
     Color.hasMany(Product, {
       foreignKey: 'colorId',
       as: 'products'
@@ -23,7 +22,6 @@ module.exports = (sequelize) => {
       as: 'color'
     });
   
-    // Một Size có nhiều Products
     Size.hasMany(Product, {
       foreignKey: 'sizeId',
       as: 'products'
@@ -34,9 +32,6 @@ module.exports = (sequelize) => {
       as: 'size'
     });
 
- 
-  
-    // Một ProductCategory có nhiều Products
     ProductCategory.hasMany(Product, {
       foreignKey: 'categoryId',
       as: 'products'
@@ -87,7 +82,7 @@ module.exports = (sequelize) => {
       as: 'cart'
     });
 
-   Product.hasOne(CartItem, {
+   Product.hasMany(CartItem, {
       foreignKey: 'productId',
       as: 'cartItem'
     });

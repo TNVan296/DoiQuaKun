@@ -20,12 +20,9 @@ module.exports = (sequelize) => {
       },
       userId: {
         type: DataTypes.INTEGER,
-        allowNull: true, // Cho phép null nếu đây là giỏ hàng của guest
+        allowNull: true, 
       },
-      guestId: {
-        type: DataTypes.UUID, // Sử dụng UUID để lưu guestId
-        allowNull: true, // Cho phép null nếu đây là giỏ hàng của user đã đăng nhập
-      },
+    
     }, 
     {
       tableName: 'carts',

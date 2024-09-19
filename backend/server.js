@@ -1,7 +1,7 @@
 const express = require('express');
 const path = require('path');
 const cors = require('cors');
-const db = require('./models/database');
+const db = require('./models/index');
 const swaggerUi = require('swagger-ui-express');
 const swaggerDocs = require('./swagger');
 
