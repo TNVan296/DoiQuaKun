@@ -1,5 +1,4 @@
 const { DataTypes } = require('sequelize');
-const { products } = require('../database');
 
 module.exports = (sequelize) => {
   const Cart = sequelize.define(
@@ -9,36 +8,24 @@ module.exports = (sequelize) => {
         allowNull: false,
         autoIncrement: true,
         primaryKey: true,
-        type: DataTypes.INTEGER
+        type: DataTypes.INTEGER,
       },
-      status:
-      {
+      status: {
         allowNull: false,
-        type: DataTypes.STRING(255)
+        type: DataTypes.STRING(255),
       },
-      // Thưởng sửa
-      // points:
-      // {
-      //   allowNull: false,
-      //   type: DataTypes.INTEGER
-      // },
       total_items: {
         allowNull: false,
-        type: DataTypes.INTEGER
+        type: DataTypes.INTEGER,
       },
-      userId:
-      {
-        allowNull: false,
-        type: DataTypes.INTEGER
+      userId: {
+        type: DataTypes.INTEGER,
+        allowNull: true, // Cho phép null nếu đây là giỏ hàng của guest
       },
-      // // Thưởng sửa
-      // shipAddress:
-      // {
-      //   allowNull: false,
-      //   type: DataTypes.STRING(255)
-      // },
-     
-     
+      guestId: {
+        type: DataTypes.UUID, // Sử dụng UUID để lưu guestId
+        allowNull: true, // Cho phép null nếu đây là giỏ hàng của user đã đăng nhập
+      },
     }, 
     {
       tableName: 'carts',
