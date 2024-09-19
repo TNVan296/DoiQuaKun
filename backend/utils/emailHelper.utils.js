@@ -15,7 +15,7 @@ const transporter = nodemailer.createTransport({
 // Hàm gửi email
 const sendOtpToEmail = async (userEmail, otp) => {
   const mailOptions = {
-    from: '"Your App" <no-reply@yourapp.com>',
+    from: '"DoiQuaKun" <thuongnva2923@gmail.com>',
     to: userEmail,
     subject: "Login Verification Code",
     text: `Your login OTP is: ${otp}`,
