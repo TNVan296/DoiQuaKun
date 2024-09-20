@@ -5,5 +5,6 @@ const cartController = require('../controllers/cart.controller');
 
  
 router.post('/add', cartController.handleAddCartItem);
+router.post('/remove',cartController.handleRemoveCartItem);
 
 module.exports = router;
