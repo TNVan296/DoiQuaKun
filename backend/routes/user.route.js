@@ -16,7 +16,7 @@ const { authenticateToken } = require('../middlewares/authenticateToken.middlewa
  *           schema:
  *             type: object
  *             properties:
- *               username:
+ *               email:
  *                 type: string
  *                 example: thuong4g@gmail.com
  *     responses:
@@ -44,14 +44,14 @@ router.post('/login', login);
  *           schema:
  *             type: object
  *             properties:
- *               username:
+ *               email:
  *                 type: string
  *                 example: thuong4g@gmail.com
  *     responses:
  *       201:
  *         description: User registered
  *       400: 
- *         description: Invalid username
+ *         description: User already exists
  */
 
 // Route đăng ký user
