@@ -1,9 +1,9 @@
 const { Op } = require('sequelize');
-const db = require('../models/index');
+const db = require('../sequelize/database.js');
 
 const searchProducts = async (name) => {
   try {
-    return await db.products.findAll({
+    return await db.Product.findAll({
       where: {
         name: {
           [Op.like]: `%${name}%`
@@ -18,12 +18,12 @@ const searchProducts = async (name) => {
 
 const getProductById = async (id) => {
   try {
-    return await db.products.findByPk(id, {
+    return await db.Product.findByPk(id, {
       include: [
-        { model: db.pictures, as: 'picture' },
-        { model: db.colors, as: 'color' },
-        { model: db.sizes, as: 'size' },
-        { model: db.productsCategories, as: 'category' }
+        { model: db.Picture, as: 'picture' },
+        { model: db.Color, as: 'color' },
+        { model: db.Size, as: 'size' },
+        { model: db.ProductCategory, as: 'category' }
       ],
       attributes: { exclude: ['createdAt', 'updatedAt', 'id'] }
     });
@@ -35,12 +35,12 @@ const getProductById = async (id) => {
 
 const getAllProducts = async () => {
   try {
-    return await db.products.findAll({
+    return await db.Product.findAll({
       include: [
-        { model: db.pictures, as: 'picture' },
-        { model: db.colors, as: 'color' },
-        { model: db.sizes, as: 'size' },
-        { model: db.productsCategories, as: 'category' }
+        { model: db.Picture, as: 'picture' },
+        { model: db.Color, as: 'color' },
+        { model: db.Size, as: 'size' },
+        { model: db.ProductCategory, as: 'category' }
       ],
       attributes: { exclude: ['createdAt', 'updatedAt'] }
     });

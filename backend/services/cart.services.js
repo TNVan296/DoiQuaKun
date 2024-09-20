@@ -1,18 +1,18 @@
-const db = require('../models/index');
+const db = require('../sequelize/database.js');
 
 const addCartItem = async (productId, userId, quantity = 1) => {
     try {
       console.log('Adding item to cart:', { productId, userId, quantity });
   
       // Tìm giỏ hàng của user
-      let cart = await db.carts.findOne({
+      let cart = await db.Cart.findOne({
         where: { userId, status: 'active' },
-        include: [{ model: db.cartItems, as: 'cartItems' }]
+        include: [{ model: db.CartItem, as: 'cartItems' }]
       });
   
       if (!cart) {
         console.log('No cart found, creating a new one.');
-        cart = await db.carts.create({
+        cart = await db.cart.create({
           userId,
           status: 'active',
           total_items: 0
@@ -20,7 +20,7 @@ const addCartItem = async (productId, userId, quantity = 1) => {
       }
   
       // Kiểm tra xem sản phẩm đã có trong giỏ hàng chưa
-      let cartItem = await db.cartItems.findOne({
+      let cartItem = await db.CartItem.findOne({
         where: { cartId: cart.id, productId }
       });
   

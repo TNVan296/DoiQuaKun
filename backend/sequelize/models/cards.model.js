@@ -3,15 +3,20 @@ const { DataTypes } = require('sequelize');
 module.exports = (sequelize) => {
   const Card = sequelize.define(
     'Card', 
-    {
-      // 
+    { 
       id: {
         allowNull: false,
         autoIncrement: true,
         primaryKey: true,
         type: DataTypes.INTEGER
       },
-      point:
+      
+      name: {
+        allowNull: false,
+        type: DataTypes.STRING(255)
+      },
+
+      points:
       {
         allowNull: false,
         type: DataTypes.INTEGER
@@ -30,6 +35,11 @@ module.exports = (sequelize) => {
       {
         allowNull: false,
         type: DataTypes.DATE
+      },
+      walletId:
+      {
+        allowNull: true,
+        type: DataTypes.INTEGER
       }
     }, 
     {

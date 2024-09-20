@@ -26,10 +26,6 @@ app.use(morgan('dev'))
 
 app.use('/public', express.static(path.join(__dirname, 'public')));
 
-// Đăng ký Swagger UI
-app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocs));
-
-// Router
 const api = require('./routes/index.js');
 app.use('/api', api);
 

@@ -22,7 +22,6 @@ module.exports = (sequelize) => {
         allowNull: false,
         type: DataTypes.INTEGER
       },
-      // 
       pictureId: {
         allowNull: false,
         type: DataTypes.INTEGER
