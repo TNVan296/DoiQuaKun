@@ -1,68 +1,64 @@
-const nodemailer = require('nodemailer');
-const { sendEmail } = require('../utils/emailHelper.utils');
+const dotenv = require('dotenv');
+dotenv.config();
+// const bcrypt = require('bcryptjs')
+const { accessToken } = require('../utils/jwtToken.utils');
+const { UserRegister, UserLogin, UserVerify } = require('../services/user.service');
 
-// Lưu OTP tạm thời (hoặc sử dụng Redis, DB)
-const otpStore = {};
-
-const generateOTP = () => {
-  // Tạo mã OTP 6 chữ số
-  return Math.floor(100000 + Math.random() * 900000);
-};
-
-
-const sendOtpToEmail = async (req, res) => {
-  const { email } = req.body;
-
-  if (!email || !email.includes('@')) {
-    return res.status(400).send('Invalid email format');
-  }
-
-  // Tạo OTP
-  const otp = generateOTP();
-
-  // Luu OTP (5p hết (milisec))
-  otpStore[email] = {otp, expires: Date.now() + 300000};
-
-  // Gửi OTP qua email
+const register =  async (req, res) => {
   try {
-    await sendEmail(email, otp);
-    res.status(200).send('OTP sent to email');
+    const newUserObject = {
+      email: req.body.email,
+    }
+    console.log(req.body)
+    const newEmail = await UserRegister(newUserObject);
+    // console.log(newEmail)
+    // console.log(newEmail.id)
+    if (newEmail && newEmail.id) {
+      console.log(`New User is ${email} registered successfully !`)
+      res.status(201).send({ message: 'User registered successfully !' });
+    } else {
+      console.log('Không tạo được hoặc người dùng đã tồn tại !!')
+    }
   } catch (error) {
-    // console.error(error);
-    res.status(500).send('Failed to send OTP');
+    console.log(error)
+    res.status(400).send({ message: 'User already exists' });
   }
-};
+}
+
+const login = async (req, res) => {
+  const { email } = req.body;
+  // trường hợp username viết tào lao
+  if (!email) {
+    return res.status(400).send({ message: 'Invalid email' });
+  }
+  const logInEmail = await UserLogin({ email });
+  if (logInEmail) {
+    return res.status(200).send({ message: 'OTP sent to your email' });
+  } else {
+    return res.status(400).send({ message: 'User not exist !' })
+  }
+}
 
 // Hàm xác thực OTP
-const verifyOtp = (req, res) => {
+const verifyOtp = async (req, res) => {
   const { email, otp } = req.body;
-
-  if (!email || !otp) {
-    return res.status(400).send('Email and OTP are required');
+  const emailVerify = await UserVerify({ email, otp });
+  if (!emailVerify.success) {
+    return res.status(400).send({ message: emailVerify.message });
   }
-
-  const storedOtpData = otpStore[email];
-
-  // Kiểm tra xem OTP có tồn tại và còn hợp lệ không
-  if (!storedOtpData) {
-    return res.status(400).send('OTP not found, please request again');
-  }
-
-  const { otp: storedOtp, expiresIn } = storedOtpData;
-
-  if (Date.now() > expiresIn) {
-    return res.status(400).send('OTP has expired, please request a new one');
-  }
-
-  if (storedOtp !== parseInt(otp)) {
-    return res.status(400).send('Invalid OTP');
-  }
-
-  // Xác thực thành công, có thể tiến hành tạo session hoặc token
-  res.status(200).send('OTP verified, login successful');
+  return res.status(200).send({ message: emailVerify.message, token: emailVerify.data });
 };
+
+const profileUser = async (req, res) => {
+  if (!req.user) {
+    return res.status(401).send({ message: 'Unauthorized' });
+  }
+  res.json({ user: req.user });
+}
 
 module.exports = {
-  sendOtpToEmail,
-  verifyOtp
-};
+  verifyOtp,
+  register,
+  login,
+  profileUser
+}

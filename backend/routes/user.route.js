@@ -1,13 +1,14 @@
 const express = require('express');
 const router = express.Router();
-const { sendOtpToEmail, verifyOtp } = require('../controllers/user.controller');
+const { login, register, profileUser, verifyOtp } = require('../controllers/user.controller');
+const { authenticateToken } = require('../middlewares/authenticateToken.middleware');
 
 /**
  * @swagger
- * /api/users/sendOtp:
+ * /api/users/login:
  *   post:
- *     summary: Send OTP
- *     description: User submits email
+ *     summary: Login user
+ *     description: User login
  *     requestBody:
  *       required: true
  *       content:
@@ -15,20 +16,62 @@ const { sendOtpToEmail, verifyOtp } = require('../controllers/user.controller');
  *           schema:
  *             type: object
  *             properties:
- *               email:
+ *               username:
  *                 type: string
  *                 example: thuong4g@gmail.com
  *     responses:
  *       200:
- *         description: OTP sent
+ *         description: Login successful
  *       400: 
- *         description: Invalid email format
+ *         description: Invalid username
  *       500:
- *         description: Failed to send OTP
+ *         description: Failed to login
  */
 
 // Route gửi OTP qua email
-router.post('/sendOtp', sendOtpToEmail);
+router.post('/login', login);
+
+/**
+ * @swagger
+ * /api/users/register:
+ *   post:
+ *     summary: Register user
+ *     description: User register
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               username:
+ *                 type: string
+ *                 example: thuong4g@gmail.com
+ *     responses:
+ *       201:
+ *         description: User registered
+ *       400: 
+ *         description: Invalid username
+ */
+
+// Route đăng ký user
+router.post('/register', register);
+
+/**
+ * @swagger
+ * /api/users/profile:
+ *   get:
+ *     summary: Get user profile
+ *     description: User profile
+ *     responses:
+ *       200:
+ *         description: User profile
+ *       401:
+ *         description: Unauthorized
+ */
+
+// Route xem profile user
+router.get('/profile', authenticateToken ,profileUser);
 
 /**
  * @swagger

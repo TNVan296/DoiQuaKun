@@ -1,39 +1,34 @@
 const db = require("../models/database.js");
-const District = db.District;
-// const Op = db.Sequelize.Op;
+const Product = db.Product;
 
 exports.findOne = (req, res) => {
   const id = req.params.id;
-  District.findByPk(id)
+  Product.findByPk(id)
   .then(data => {
     if (data) {
       res.send(data);
     } else {
       res.status(404).send({
-        message: `Cannot find district with id=${id}.`
+        message: `Cannot find that product with id=${id}.`
       });
     }
   })
   .catch(err => {
     res.status(500).send({
-      message: "Error retrieving district with id=" + id
+      message: "Error retrieving product with id=" + id
     });
   });
 };
-exports.findAll = (req,res) => {
-  const cityId = req.query.cityId;
-  District.findAll({
-    where: {
-      cityId: cityId
-    }
-  })
+
+exports.findAll = (req, res) => {
+  Product.findAll()
   .then(data => {
     res.send(data);
   })
   .catch(err => {
     res.status(500).send({
       message:
-        err.message || "Some error occurred while retrieving district."
+        err.message || "Some error occurred while retrieving city."
     });
   });
 }

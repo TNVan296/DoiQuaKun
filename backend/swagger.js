@@ -1,25 +1,38 @@
 const swaggerJsDoc = require('swagger-jsdoc');
 
+// Cấu hình Swagger
 const swaggerOptions = {
   swaggerDefinition: {
     openapi: '3.0.0',
     info: {
-      title: 'Your API Title',
+      title: 'API Documentation',
       version: '1.0.0',
-      description: 'API documentation for your application',
-      contact: {
-        name: 'Your Name',
-        email: 'your.email@example.com',
-      },
+      description: 'API for Dong Dien Thieu Nhi',
     },
     servers: [
       {
         url: 'http://localhost:3000',
       },
     ],
+    components: {
+      securitySchemes: {
+        BearerAuth: {
+          type: 'http',
+          scheme: 'bearer',
+          bearerFormat: 'JWT', // Tùy chọn, thường dùng với JWT
+        },
+      },
+    },
+    security: [
+      {
+        BearerAuth: [], // Áp dụng bảo mật cho tất cả các API
+      },
+    ],
   },
-  apis: ['./routes/*.js'], // Đường dẫn đến các file chứa comment Swagger
+  apis: ['./routes/*.js'], // Đường dẫn tới các file chứa định nghĩa API
 };
 
+// Khởi tạo Swagger
 const swaggerDocs = swaggerJsDoc(swaggerOptions);
+
 module.exports = swaggerDocs;

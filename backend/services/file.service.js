@@ -1,4 +1,4 @@
-const { File } = require('../models/index');
+const { File } = require('../models/database.js');
 
 const createFile = async (file) => {
   const fileRecord = await File.create({
