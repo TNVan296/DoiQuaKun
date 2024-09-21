@@ -27,7 +27,35 @@ const cartRemoveResponseTemplate = (cartItem) => {
   };
 };
 
+const cartCheckoutResponseTemplate = (cart, totalPoints) => {
+  return {
+    data: {
+      cart: {
+        id: cart.id,
+        userId: cart.userId,
+        totalItems: cart.totalItems,
+        totalPoints: cart.totalPoints,
+        status: cart.status,
+      },
+      totalPointsPaid: totalPoints,
+      message: 'Thanh toán giỏ hàng thành công',
+    }
+  };
+};
+
+const cartCheckoutErrorResponseTemplate = (errorMessage) => {
+  return {
+    error: {
+      message: errorMessage,
+    }
+  };
+};
+
 module.exports = {
   cartAddResponseTemplate,
-  cartRemoveResponseTemplate
+  cartRemoveResponseTemplate,
+  cartCheckoutResponseTemplate,
+  cartCheckoutErrorResponseTemplate,
 };
+
+

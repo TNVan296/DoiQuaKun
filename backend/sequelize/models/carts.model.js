@@ -17,6 +17,12 @@ module.exports = (sequelize) => {
       totalItems: {
         allowNull: false,
         type: DataTypes.INTEGER,
+        defaultValue: 0,
+      },
+      totalPoints: {
+        allowNull: false,
+        type: DataTypes.INTEGER,
+        defaultValue: 0,
       },
       userId: {
         type: DataTypes.INTEGER,
