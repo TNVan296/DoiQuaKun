@@ -1,5 +1,4 @@
 const { DataTypes } = require('sequelize');
-const { products } = require('./products.model')
 
 module.exports = (sequelize) => {
   const Cart = sequelize.define(
@@ -9,22 +8,21 @@ module.exports = (sequelize) => {
         allowNull: false,
         autoIncrement: true,
         primaryKey: true,
-        type: DataTypes.INTEGER
+        type: DataTypes.INTEGER,
       },
-      status:
-      {
+      status: {
         allowNull: false,
-        type: DataTypes.STRING(255)
+        type: DataTypes.STRING(255),
       },
       totalItems: {
         allowNull: false,
-        type: DataTypes.INTEGER
+        type: DataTypes.INTEGER,
       },
-      userId:
-      {
-        allowNull: false,
-        type: DataTypes.INTEGER
+      userId: {
+        type: DataTypes.INTEGER,
+        allowNull: true, 
       },
+    
     }, 
     {
       tableName: 'carts',

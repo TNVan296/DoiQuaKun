@@ -1,10 +1,15 @@
 const { DataTypes } = require('sequelize');
-const { carts } = require('./carts.model')
 
 module.exports = (sequelize) => {
   const CartItem = sequelize.define(
     'CartItem', 
-    {
+    { 
+      id: {
+        allowNull: false,
+        autoIncrement: true,
+        primaryKey: true,
+        type: DataTypes.INTEGER
+      },
       cartId: {
         allowNull: false,
         type: DataTypes.INTEGER

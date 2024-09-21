@@ -11,11 +11,14 @@ const swaggerDocs = require('./swagger');
 
 const app = express();
 
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
 app.use(cors());
 
-app.use(morgan('combined'));
+app.use('/public', express.static(path.join(__dirname, 'public')));
 
-app.use(express.json());
+// Khởi tạo Swagger
+app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocs));
 
 app.use(express.urlencoded({ extended: true }));
 app.use(cors());
@@ -23,10 +26,6 @@ app.use(morgan('dev'))
 
 app.use('/public', express.static(path.join(__dirname, 'public')));
 
-// Đăng ký Swagger UI
-app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocs));
-
-// Router
 const api = require('./routes/index.js');
 app.use('/api', api);
 

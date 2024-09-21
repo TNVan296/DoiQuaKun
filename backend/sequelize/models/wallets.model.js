@@ -10,12 +10,6 @@ module.exports = (sequelize) => {
         primaryKey: true,
         type: DataTypes.INTEGER
       },
-      // 
-      cardId:
-      {
-        allowNull: false,
-        type: DataTypes.INTEGER
-      },
       points:
       {
         allowNull: false,
@@ -26,7 +20,6 @@ module.exports = (sequelize) => {
         allowNull: false,
         type: DataTypes.INTEGER
       },
-      // Thưởng thêm
       status:
       {
         allowNull: false,

@@ -1,4 +1,4 @@
-const db = require("../models");
+const db = require("../sequelize/database.js");
 const City = db.City;
 
 const FindAllCities = () => {

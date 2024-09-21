@@ -14,7 +14,7 @@ module.exports = (sequelize) => {
         allowNull: false,
         type: DataTypes.STRING(255)
       },
-    },
+    }, 
     {
       tableName: 'pictures',
       underscored: true,
