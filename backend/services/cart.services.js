@@ -84,7 +84,51 @@ const removeCartItem = async (productId, userId, quantity = 1) => {
     }
 };
 
+const checkoutCart = async (userId) => {
+    try {
+      const cart = await db.Cart.findOne({
+        where: { userId, status: 'active' },
+        include: [{ model: db.CartItem, as: 'cartItems' }]
+      });
+  
+      if (!cart) {
+        throw new Error('No active cart found');
+      }
+  
+      const totalPoints = cart.totalPoints;  
+      if (totalPoints === undefined) {
+        throw new Error('Total points not found in cart'); // Thêm kiểm tra cho totalPoints
+      }
+  
+      const wallet = await db.Wallet.findOne({
+        where: { userId }
+      });
+  
+      if (!wallet) {
+        throw new Error('Wallet not found for this user');
+      }
+  
+      if (wallet.points < totalPoints) {
+        throw new Error('Insufficient points in wallet');
+      }
+  
+      wallet.points -= totalPoints;
+      await wallet.save();
+  
+      cart.status = 'complete';
+      await cart.save();
+  
+      return { cart, totalPointsPaid: totalPoints };
+    } catch (error) {
+      console.error('Checkout error:', error.message); // Log lỗi
+      throw new Error('Checkout failed');
+    }
+  };
+  
+
+
 module.exports = {
     addCartItem,
     removeCartItem,
+    checkoutCart,
 };
