@@ -52,7 +52,7 @@ module.exports = (sequelize) => {
       as: 'user'
     });
 
-    User.hasOne(Cart, {
+    User.hasMany(Cart, {
       foreignKey: 'userId',
       as: 'cart'
     });
