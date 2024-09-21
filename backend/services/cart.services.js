@@ -120,7 +120,6 @@ const checkoutCart = async (userId) => {
   
       return { cart, totalPointsPaid: totalPoints };
     } catch (error) {
-      console.error('Checkout error:', error.message); // Log lỗi
       throw new Error('Checkout failed');
     }
   };
