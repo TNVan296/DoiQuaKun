@@ -11,37 +11,32 @@ module.exports = (sequelize) => {
         type: DataTypes.INTEGER
       },
       name: {
-        allowNull: true,
-        type: DataTypes.STRING(255)
-      },
-      email: {
         allowNull: false,
         type: DataTypes.STRING(255)
       },
       detailAddress:
       {
-        allowNull: true,
+        allowNull: false,
         type: DataTypes.STRING(255)
       },
       phoneNumber:
       {
-        allowNull: true,
+        allowNull: false,
         type: DataTypes.STRING(255)
       },
-      // 
       cityAdress:
       {
-        allowNull: true,
+        allowNull: false,
         type: DataTypes.STRING(255)
       },
       provinceAdress:
       {
-        allowNull: true,
+        allowNull: false,
         type: DataTypes.STRING(255)
       },
       districtAdress:
       {
-        allowNull: true,
+        allowNull: false,
         type: DataTypes.STRING(255)
       },
       otp:

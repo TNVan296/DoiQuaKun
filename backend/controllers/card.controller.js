@@ -1,7 +1,6 @@
 const cardService = require('../services/card.services');
 async function handleAddCardPoints(req, res) {
     try {
-        console.log('Request Body:', req.body); // Log dữ liệu nhận được
 
         const { cardName, userId } = req.body;
 

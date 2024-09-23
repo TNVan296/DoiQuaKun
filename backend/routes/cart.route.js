@@ -6,11 +6,14 @@ const cartController = require('../controllers/cart.controller');
  * @swagger
  * tags:
  *   name: Cart
- *   description: API endpoints for managing the shopping cart.
- *
- * /cart:
+ *   description: Cart management and checkout
+ */
+
+/**
+ * @swagger
+ * /api/cart/add:
  *   post:
- *     summary: Add points to a cart item.
+ *     summary: Add item to cart
  *     tags: [Cart]
  *     requestBody:
  *       required: true
@@ -19,45 +22,76 @@ const cartController = require('../controllers/cart.controller');
  *           schema:
  *             type: object
  *             properties:
- *               cardName:
- *                 type: string
- *                 description: The name of the card to be added to the cart.
- *                 example: "Gift Card"
+ *               productId:
+ *                 type: integer
+ *                 example: 1
  *               userId:
- *                 type: string
- *                 description: The ID of the logged-in user. (Optional)
- *                 example: "user123"
- *               guestId:
- *                 type: string
- *                 description: The ID of the guest user. (Optional)
- *                 example: "guest456"
+ *                 type: integer
+ *                 example: 1
+ *               quantity:
+ *                 type: integer
+ *                 example: 2
  *     responses:
  *       200:
- *         description: Successfully added card points to the cart.
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 cartItem:
- *                   type: object
- *                   description: The cart item added or updated.
- *                 guestId:
- *                   type: string
- *                   description: The guest ID if applicable.
+ *         description: Item added to cart successfully
  *       400:
- *         description: Bad request. The input data is invalid or missing.
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 message:
- *                   type: string
- *                   description: Error message.
- *                   example: "Sản phẩm không tồn tại."
- *
+ *         description: Failed to add item to cart
  */
-router.post('/cart', cartController.handleAddCartItem);
+router.post('/add', cartController.handleAddCartItem);
+
+/**
+ * @swagger
+ * /api/cart/remove:
+ *   post:
+ *     summary: Remove item from cart
+ *     tags: [Cart]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               productId:
+ *                 type: integer
+ *                 example: 1
+ *               userId:
+ *                 type: integer
+ *                 example: 1
+ *               quantity:
+ *                 type: integer
+ *                 example: 2
+ *     responses:
+ *       200:
+ *         description: Item removed from cart successfully
+ *       400:
+ *         description: Failed to remove item from cart
+ */
+router.post('/remove', cartController.handleRemoveCartItem);
+
+
+/**
+ * @swagger
+ * /api/cart/checkout:
+ *   post:
+ *     summary: Checkout the cart
+ *     tags: [Cart]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               userId:
+ *                 type: integer
+ *                 example: 1
+ *     responses:
+ *       200:
+ *         description: Checkout successful
+ *       400:
+ *         description: Checkout failed
+ */
+router.post('/checkout', cartController.handleCheckout);
 
 module.exports = router;

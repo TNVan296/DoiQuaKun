@@ -6,7 +6,6 @@ const sequelize = new Sequelize(dbConfig.DB, dbConfig.USER, dbConfig.PASSWORD, {
   host: dbConfig.HOST,
   port: dbConfig.PORT,
   dialect: dbConfig.dialect,
-  operatorsAliases: false,
 
   pool: {
     max: dbConfig.pool.max,
@@ -30,7 +29,6 @@ db.Cart = require('./models/carts.model.js')(sequelize, Sequelize);
 db.Wallet = require('./models/wallets.model.js')(sequelize, Sequelize);
 db.User = require('./models/users.model.js')(sequelize, Sequelize);
 db.CartItem = require('./models/cartItems.model.js')(sequelize, Sequelize);
-db.Delivery = require('./models/deliveries.model.js')(sequelize, Sequelize);
 
 // db.City = require('./models/city.model.js')(sequelize, Sequelize);
 // db.District = require('./models/district.model.js')(sequelize, Sequelize)
