@@ -1,6 +1,14 @@
 const dotenv = require('dotenv');
 dotenv.config();
-const { UserRegister, UserLogin, UserVerify, UserProfile } = require('../services/user.service');
+const {
+  UserRegister,
+  UserLogin,
+  UserVerify,
+  UserProfile,
+  UserUpdateProfile,
+  // UserRequestOtp
+} = require('../services/user.service');
+const { generateHTML } = require('swagger-ui-express');
 
 const register =  async (req, res) => {
   try {
@@ -38,6 +46,19 @@ const login = async (req, res) => {
   }
 }
 
+// hàm tạo và gửi OTP
+// const getOtp = async (req, res) => {
+//   try {
+//     const userObject = {
+//       email: req.body.email
+//     }
+//     const newOTP = UserRequestOtp(userObject)
+//     return res.status(200).send({ message: newOTP.message, data: newOTP.data });
+//   } catch (error) {
+//     return res.status(400).send({ message: 'Something went wrong' });
+//   }
+// }
+
 // Hàm xác thực OTP
 const verifyOtp = async (req, res) => {
   try {
@@ -49,10 +70,9 @@ const verifyOtp = async (req, res) => {
     if (emailVerify.success == false) {
       return res.status(400).send({ message: emailVerify.message });
     } else {
-      return res.status(200).send({ message: emailVerify.message, token: emailVerify.data });
+      return res.status(200).send({ token: emailVerify.data, message: emailVerify.message });
     }
   } catch (error) {
-    console.log(error)
     return res.status(400).send({ message: 'Something went wrong' });
   }
 };
@@ -62,7 +82,6 @@ const getProfileUser = async (req, res) => {
     const userObject = {
       user: req.user,
     }
-    // console.log(userObject)
     // trường hợp middleware chưa xác thực
     if (!userObject) {
       return res.status(401).send({ message: 'Unauthorized' });
@@ -77,9 +96,30 @@ const getProfileUser = async (req, res) => {
   }
 }
 
+const updateProfileUser = async (req, res) => {
+  try {
+    const userObject = {
+      user: req.body,
+    }
+    // trường hợp middleware chưa xác thực
+    if (!userObject) {
+      return res.status(401).send({ message: 'Unauthorized' });
+    }
+    const profileUser = await UserUpdateProfile(userObject);
+    if (!profileUser.success) {
+      return res.status(400).send({ message: profileUser.message });
+    }
+    return res.status(200).send({ message: profileUser.message, data: profileUser.data });
+  } catch (error) {
+    return res.status(400).send({ message: 'Something went wrong !' });
+  }
+}
+
 module.exports = {
   verifyOtp,
   register,
   login,
-  getProfileUser
+  // getOtp,
+  getProfileUser,
+  updateProfileUser
 }
