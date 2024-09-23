@@ -1,15 +1,17 @@
-const { File } = require('../models/database.js');
+const { Picture } = require('../sequelize/database');
 
 const createFile = async (file) => {
-  const fileRecord = await File.create({
-    name: file.originalname,
-    path: `/media/uploads/${file.filename}`,
-    createdAt: new Date()
-  });
-
-  return fileRecord;
+  try {
+    const newFile = await Picture.create({
+      name: file.originalname,
+      path: file.path,
+    });
+    return newFile;
+  } catch (error) {
+    throw new Error('Không thể lưu thông tin file vào cơ sở dữ liệu');
+  }
 };
 
 module.exports = {
-  createFile
+  createFile,  // Export đúng cách hàm createFile
 };
