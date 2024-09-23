@@ -4,8 +4,7 @@ const db = require('../sequelize/database.js');
 const { Sequelize } = require('sequelize');
 const { sendOtpToEmail } = require('../utils/emailHelper.utils')
 const { accessToken } = require('../utils/jwtToken.utils');
-
-const otpStore = {};
+// const { generateOTP } = require('../utils/otpRequest.utils.js')
 
 const UserRegister = async (newUserObject) => {
   try {
@@ -19,64 +18,120 @@ const UserRegister = async (newUserObject) => {
       email: newUserObject.email,
       createdAt: new Date(),
     });
-    // console.log(`New User is ${newUser.email} registered successfully !`);
-    return { success: true, data: newUser };
+    return { success: true, data: newUser, message: `New User is ${newUser.email} registered successfully !` };
   } catch (error) {
     console.error('Error while registering user:', error);
     return null;
   }
 }
 
-const UserLogin = async (email) => {
+const UserLogin = async (userObject) => {
   try {
   // trường hợp user đã tồn tại hay chưa
-    const user = await db.User.findOne({ where: { email: email } });
+  const user = await db.User.findOne({ where: { email: userObject.email } });
     if (!user) {
-      return { success: false, message: 'User not found' };
+      await UserRegister(userObject);
+      return await UserLogin(userObject);
     }
-    // Tạo OTP
-    const otp = Math.floor(100000 + Math.random() * 900000);
-    // Luu OTP (5p hết (milisec))
-    otpStore[user] = { otp, expires: Date.now() + 300000 };
+    // Tạo OTP và lưu OTP (sau 5p sẽ hết hạn)
+    const newOtp = await user.set({
+      otp: Math.floor(100000 + Math.random() * 900000),
+      expireIn: Date.now() + 300000,
+    })
+    await newOtp.save();
     // Gửi OTP qua email
-    const mailSend = sendOtpToEmail(user.email, otp);
-    return { success: true, data: user };
+    const mailSend = sendOtpToEmail(user.email, newOtp.otp);
+    return { success: true, message: 'OTP sent to your email' };
   } catch (error) {
-    // console.error('Error while logging in user:', error);
     return { success: false, message: 'Error while logging in user' };
   }
 }
 
-const UserVerify = async (email, otp) => {
+// // trường hợp nodemailer và mailtrap không phản hồi thì gọi API này để lấy OTP
+// const UserRequestOtp = async (userObject) => {
+//   try {
+//     const newOTP = generateOTP()
+//     const userOTP = await db.User.update({
+//       otp: newOTP.otp,
+//       expireIn: newOTP.expireIn
+//     })
+//     await userOTP.save();
+//     console.log(userOTP)
+//     return { success: true, data: userOTP, message: 'OTP created !' };
+//   } catch (error) {
+//     return { success: false, message: 'Error while requesting OTP' };
+//   }
+// }
+
+const UserVerify = async (userObject) => {
   try {
-    if (!email || !otp) {
-      return { success: false, message: 'Email and OTP are required' };
+    // trường hợp user đã tồn tại hay chưa
+    const user = await db.User.findOne({
+      where: {
+        email: userObject.email },
+      }
+    );
+    if (!user) {
+      return { success: false, message: 'User does not exist' };
+    } else {
+      // Kiểm tra xem OTP có tồn tại và còn hợp lệ không
+      if (!user.otp) {
+        return { success: false, message: 'OTP not found, please request again' };
+      }
+      if (user.expireIn < Date.now()) {
+        return { success: false, message: 'OTP has expired, please request a new one' };
+      }
+      if (user.otp !== parseInt(userObject.otp)) {
+        return { success: false, message: 'Invalid OTP' };
+      }
+      // Xác thực được đăng ký
+      const token = accessToken(userObject, process.env.JWT_SECRET);
+      return { success: true, data: token, message: 'OTP verified, login successful' };
     }
-    const storedOtpData = otpStore[email];
-
-    // Kiểm tra xem OTP có tồn tại và còn hợp lệ không
-    if (!storedOtpData) {
-      return { success: false, message: 'OTP not found, please request again' };
-    }
-
-    const { otp: storedOtp, expires } = storedOtpData;
-    if (Date.now() > expires) {
-      return { success: false, message: 'OTP has expired, please request a new one' };
-    }
-    if (storedOtpData.otp !== parseInt(otp)) {
-      return { success: false, message: 'Invalid OTP' };
-    }
-    // Xác thực được đăng ký
-    const token = accessToken(email, process.env.JWT_SECRET);
-    return { success: true, data: token };
   } catch (error) {
-    // console.error('Error while verifying user:', error);
     return { success: false, message: 'Error while verifying user' };
+  }
+}
+
+const UserProfile = async (userObject) => {
+  try {
+    const user = await db.User.findOne({ where: { email: userObject.user.email } });
+    if (!user) {
+      return { success: false, message: 'User does not exist' };
+    }
+    return { success: true, data: user, message: 'User profile fetched successfully' };
+  } catch (error) {
+    return { success: false, message: 'Error while fetching user profile' };
+  }
+}
+
+const UserUpdateProfile = async (userObject) => {
+  try {
+    const user = await db.User.findOne({ where: { email: userObject.user.email } });
+    if (!user) {
+      return { success: false, message: 'User does not exist' };
+    }
+    const updatedUser = await user.set({
+      name: userObject.user.name,
+      phoneNumber: userObject.user.phoneNumber,
+      detailAddress: userObject.user.detailAddress,
+      cityAdress: userObject.user.cityAdress,
+      wardAddress: userObject.user.wardAddress,
+      districtAdress: userObject.user.districtAdress,
+      updateAt: new Date(),
+    })
+    await updatedUser.save();
+    return { success: true, data: updatedUser, message: 'User profile updated successfully' };
+  } catch (error) {
+    return { success: false, message: 'Error while updating user profile' };
   }
 }
 
 module.exports = {
    UserRegister,
    UserLogin,
-   UserVerify
+  //  UserRequestOtp,
+   UserVerify,
+   UserProfile,
+   UserUpdateProfile
 };
