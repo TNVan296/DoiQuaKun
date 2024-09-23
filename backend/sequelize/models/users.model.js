@@ -43,6 +43,16 @@ module.exports = (sequelize) => {
       {
         allowNull: true,
         type: DataTypes.STRING(255)
+      },
+      otp:
+      {
+        allowNull: true,
+        type: DataTypes.INTEGER
+      },
+      expireIn:
+      {
+        allowNull: true,
+        type: DataTypes.DATE
       }
     },
     {
