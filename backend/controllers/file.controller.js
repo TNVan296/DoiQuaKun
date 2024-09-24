@@ -1,58 +1,34 @@
+const { upload } = require('../config/multer.config'); // Import cấu hình multer
 const { createFile } = require('../services/file.service');
-const fs = require('fs');
 
-const { YYYYMMDD_HHMM } = require("../utils/datetime.utils");
-const upload = async (req, res) => {
-  try {
-    if (!req.file) {
-      return res.status(400).send({ message: 'Please upload a file' });
-    }
-
-    const file = await createFile(req.file);
-    res.status(200).send(file);
-  } catch (err) {
-    res.status(500).send({ message: err.message });
-  }
-};
-
-const getListFiles = (req, res) => {
-  const directoryPath = __basedir + "/resources/static/assets/uploads/";
-
-  fs.readdir(directoryPath, function (err, files) {
+const uploadFile = async (req, res) => {
+  upload(req, res, async (err) => {
     if (err) {
-      res.status(500).send({
-        message: "Unable to scan files!",
-      });
+      return res.status(500).json({ message: 'Upload file thất bại', error: err.message });
     }
+    try {
+      const files = req.files; // Lấy mảng các file từ req.files
+      if (!files || files.length === 0) {
+        return res.status(400).json({ message: 'Không có file nào được tải lên' });
+      }
 
-    let fileInfos = [];
+      const uploadedFiles = [];
+      for (const file of files) {
+        const filePath = `public/${file.filename}`;
+        const newFile = await createFile({ ...file, path: filePath }); 
+        uploadedFiles.push(newFile);
+      }
 
-    files.forEach((file) => {
-      fileInfos.push({
-        name: file,
-        url: baseUrl + file,
+      return res.status(201).json({
+        message: 'Upload file thành công',
+        files: uploadedFiles, // Trả về danh sách các file đã upload thành công
       });
-    });
-
-    res.status(200).send(fileInfos);
-  });
-};
-
-const download = (req, res) => {
-  const fileName = req.params.name;
-  const directoryPath = __basedir + "/resources/static/assets/uploads/";
-
-  res.download(directoryPath + fileName, fileName, (err) => {
-    if (err) {
-      res.status(500).send({
-        message: "Could not download the file. " + err,
-      });
+    } catch (error) {
+      return res.status(500).json({ message: 'Lưu thông tin file thất bại', error: error.message });
     }
   });
 };
 
 module.exports = {
-  upload,
-  getListFiles,
-  download,
+  uploadFile,
 };
