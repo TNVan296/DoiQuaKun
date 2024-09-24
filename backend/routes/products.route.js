@@ -106,6 +106,46 @@ router.get('/search', productController.searchProducts);
  * */
 router.get('/:id', productController.getProductById);
 
+/**
+ * @swagger
+ * /api/products:
+ *   get:
+ *     summary: Lấy tất cả sản phẩm
+ *     responses:
+ *       200:
+ *         description: Danh sách sản phẩm đã được lấy được
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: array
+ *               items:
+ *                 type: object
+ *                 properties:
+ *                   id:
+ *                     type: integer
+ *                     example: 1
+ *                   name:
+ *                     type: string 
+ *                     example: "Sản phẩm A"
+ *                   colorId:
+ *                     type: integer
+ *                     example: 2
+ *                   sizeId:
+ *                     type: integer
+ *                     example: 1
+ *                   pictureId:
+ *                     type: integer
+ *                     example: 5
+ *                   categoryId:
+ *                     type: integer
+ *                     example: 3
+ *                   exchangePoint:
+ *                     type: integer
+ *                     example: 100
+ *       500:
+ *         description: Lỗi máy chủ
+ * */
+
 router.get('/', productController.getAllProducts);
 
 module.exports = router;

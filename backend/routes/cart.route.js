@@ -69,7 +69,6 @@ router.post('/add', cartController.handleAddCartItem);
  */
 router.post('/remove', cartController.handleRemoveCartItem);
 
-
 /**
  * @swagger
  * /api/cart/checkout:
