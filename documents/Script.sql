@@ -9,6 +9,8 @@ select * from products p;
 select * from product_categories pc ;
 select * from colors c ;
 select * from pictures p ;
+select * from users u ;
+
 
 INSERT INTO pictures (name, created_at, updated_at)
 VALUES 
