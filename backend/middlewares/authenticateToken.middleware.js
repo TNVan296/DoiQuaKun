@@ -4,7 +4,6 @@ dotenv.config();
 
 const db = require('../sequelize/database.js');
 
-// Middleware xác thực JWT
 const authenticateToken = (req, res, next) => {
   const authHeader = req.headers['authorization'];
   const token = authHeader && authHeader.split(' ')[1];
