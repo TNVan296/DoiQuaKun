@@ -5,7 +5,7 @@ const {
   login,
   verifyOtp,
   getProfileUser,
-  updateProfileUser
+  updateProfileUser,
 } = require('../controllers/user.controller');
 const { authenticateToken } = require('../middlewares/authenticateToken.middleware');
 
@@ -117,15 +117,15 @@ router.get('/profile', authenticateToken, getProfileUser);
  *               detailAddress:
  *                 type: string
  *                 example: "123 Nguyễn Trãi"
- *               cityAddress:
- *                 type: string
- *                 example: "TP. Hồ Chí Minh"
+ *               cityId:
+ *                 type: integer
+ *                 example: 1
  *               wardAddress:
  *                 type: string
  *                 example: "Phường 1"
- *               districtAddress:
- *                 type: string
- *                 example: "Quận 1"
+ *               districtId:
+ *                 type: integer
+ *                 example: 1
  *     responses:
  *       200:
  *         description: Cập nhật profile thành công
@@ -133,6 +133,5 @@ router.get('/profile', authenticateToken, getProfileUser);
  *         description: Lỗi khi cập nhật profile
  */
 router.put('/profile', authenticateToken, updateProfileUser);
-
 
 module.exports = router;
