@@ -35,7 +35,7 @@ app.listen(process.env.PORT, function () {
   console.log('Swagger Docs available at http://localhost:3000/api-docs');
 });
 
-// db.sequelize.sync({ force: false  })
+// db.sequelize.sync({ force: false})
 //   .then(() => {
 //     console.log('Đồng bộ cơ sở dữ liệu thành công.');
 //   })

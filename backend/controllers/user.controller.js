@@ -10,6 +10,7 @@ const {
 } = require('../services/user.service');
 const { generateHTML } = require('swagger-ui-express');
 
+// Hàm đăng ký người dùng
 const register =  async (req, res) => {
   try {
     const newUserObject = {
@@ -26,6 +27,7 @@ const register =  async (req, res) => {
   }
 }
 
+// Hàm đăng nhập người dùng
 const login = async (req, res) => {
   try {
     const userObject = {
@@ -46,19 +48,6 @@ const login = async (req, res) => {
   }
 };
 
-// hàm tạo và gửi OTP
-// const getOtp = async (req, res) => {
-//   try {
-//     const userObject = {
-//       email: req.body.email
-//     }
-//     const newOTP = UserRequestOtp(userObject)
-//     return res.status(200).send({ message: newOTP.message, data: newOTP.data });
-//   } catch (error) {
-//     return res.status(400).send({ message: 'Something went wrong' });
-//   }
-// }
-
 // Hàm xác thực OTP
 const verifyOtp = async (req, res) => {
   try {
@@ -77,6 +66,7 @@ const verifyOtp = async (req, res) => {
   }
 };
 
+// Hàm lấy profile người dùng
 const getProfileUser = async (req, res) => {
   try {
     const userObject = {
@@ -96,6 +86,7 @@ const getProfileUser = async (req, res) => {
   }
 }
 
+// Hàm cập nhật profile người dùng
 const updateProfileUser = async (req, res) => {
   try {
     const userObject = {
@@ -115,11 +106,13 @@ const updateProfileUser = async (req, res) => {
   }
 }
 
+
+
+// Export các controller
 module.exports = {
   verifyOtp,
   register,
   login,
-  // getOtp,
   getProfileUser,
-  updateProfileUser
+  updateProfileUser,
 }

@@ -28,20 +28,20 @@ module.exports = (sequelize) => {
         allowNull: true,
         type: DataTypes.STRING(255)
       },
-      cityAdress:
+     districtId:
       {
         allowNull: true,
-        type: DataTypes.STRING(255)
+        type: DataTypes.INTEGER
       },
-      wardAddress:
+      cityId:
       {
         allowNull: true,
-        type: DataTypes.STRING(255)
+        type: DataTypes.INTEGER
       },
-      districtAdress:
+      wardId:
       {
         allowNull: true,
-        type: DataTypes.STRING(255)
+        type: DataTypes.INTEGER
       },
       otp:
       {

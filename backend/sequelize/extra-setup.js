@@ -1,5 +1,7 @@
+const { District, City } = require("./database");
+
 module.exports = (sequelize) => {
-    const { Color, Size, Product, ProductCategory, Picture ,Cart,User,Wallet,Card,CartItem} = sequelize.models;
+    const { Color, Size, Product, ProductCategory, Picture ,Cart,User,Wallet,Card,CartItem,District,City,Ward} = sequelize.models;
   
     // Một Picture có nhiều Products
     Picture.hasMany(Product, {
@@ -92,5 +94,55 @@ module.exports = (sequelize) => {
       as: 'product'
     });
 
+    User.hasMany(District, {  
+      foreignKey: 'userId',
+      as: 'districts'
+    });
+  
+    District.belongsTo(User, {
+      foreignKey: 'userId',
+      as: 'user'
+    });
+
+    User.hasMany(City, {  
+      foreignKey: 'userId',
+      as: 'cities'
+    });
+  
+    City.belongsTo(User, {
+      foreignKey: 'userId',
+      as: 'user'
+    });
+
+    User.hasMany(Ward,{
+      foreignKey: 'userId',
+      as: 'wards'
+    });
+    Ward.belongsTo(User, {
+      foreignKey: 'userId',
+      as: 'user'
+    });
+
+    City.hasMany(District, {
+      foreignKey: 'cityId',
+      as: 'districts'
+    });
+  
+    District.belongsTo(City, {
+      foreignKey: 'cityId',
+      as: 'city'
+    });
+
+    District.hasMany(Ward, {
+      foreignKey: 'districtId',
+      as: 'wards'
+    });
+
+    Ward.belongsTo(District, {
+      foreignKey: 'districtId',
+      as: 'district'
+    });
+
+    
   };
   
