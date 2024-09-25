@@ -84,7 +84,6 @@ const UserVerify = async (userObject) => {
       if (user.otp !== parseInt(userObject.otp)) {
         return { success: false, message: 'Invalid OTP' };
       }
-      // Xác thực được đăng ký
       const token = accessToken(userObject, process.env.JWT_SECRET);
       return { success: true, data: token, message: 'OTP verified, login successful' };
     }
