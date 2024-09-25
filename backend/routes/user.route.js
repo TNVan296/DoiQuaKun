@@ -3,20 +3,17 @@ const router = express.Router();
 const {
   register,
   login,
-  // getOtp,
   verifyOtp,
   getProfileUser,
   updateProfileUser
 } = require('../controllers/user.controller');
 const { authenticateToken } = require('../middlewares/authenticateToken.middleware');
 
-
 /**
  * @swagger
  * /api/users/register:
  *   post:
- *     summary: Register user
- *     description: User register
+ *     summary: Đăng ký người dùng mới
  *     requestBody:
  *       required: true
  *       content:
@@ -26,23 +23,20 @@ const { authenticateToken } = require('../middlewares/authenticateToken.middlewa
  *             properties:
  *               email:
  *                 type: string
- *                 example: thuong4g@gmail.com
+ *                 example: example@example.com
  *     responses:
  *       201:
- *         description: User registered
- *       400: 
- *         description: User already exists
-*/
-
-// Route đăng ký user
+ *         description: Đăng ký thành công
+ *       400:
+ *         description: Lỗi khi đăng ký
+ */
 router.post('/register', register);
 
 /**
  * @swagger
  * /api/users/login:
  *   post:
- *     summary: Login user
- *     description: User login
+ *     summary: Đăng nhập người dùng
  *     requestBody:
  *       required: true
  *       content:
@@ -52,50 +46,20 @@ router.post('/register', register);
  *             properties:
  *               email:
  *                 type: string
- *                 example: thuong4g@gmail.com
+ *                 example: example@example.com
  *     responses:
  *       200:
- *         description: Login successful
- *       400: 
- *         description: Invalid username
- *       500:
- *         description: Failed to login
-*/
-// Route gửi OTP qua email
+ *         description: Đăng nhập thành công
+ *       400:
+ *         description: Lỗi đăng nhập
+ */
 router.post('/login', login);
-
-// /**
-//  * @swagger
-//  * /api/users/getOtp:
-//  *   post:
-//  *     summary: Get OTP
-//  *     description: User submits email
-//  *     requestBody:
-//  *       required: true
-//  *       content:
-//  *         application/json:
-//  *           schema:
-//  *             type: object
-//  *             properties:
-//  *               email:
-//  *                 type: string
-//  *                 example: thuong4g@gmail.com
-//  *     responses:
-//  *       200:
-//  *         description: OTP created
-//  *       400:
-//  *         description: Invalid email format
-//  */
-
-// // Route tạo OTP
-// router.post('/getOtp', getOtp)
 
 /**
  * @swagger
  * /api/users/verifyOtp:
  *   post:
- *     summary: Verify OTP
- *     description: User submits OTP
+ *     summary: Xác thực OTP
  *     requestBody:
  *       required: true
  *       content:
@@ -105,58 +69,38 @@ router.post('/login', login);
  *             properties:
  *               email:
  *                 type: string
- *                 example: thuong4g@gmail.com
+ *                 example: example@example.com
  *               otp:
  *                 type: integer
  *                 example: 123456
  *     responses:
  *       200:
- *         description: OTP verified
+ *         description: Xác thực OTP thành công
  *       400:
- *         description: Invalid email format
+ *         description: OTP không hợp lệ
  */
-
-// Route xác thực OTP
 router.post('/verifyOtp', verifyOtp);
 
 /**
  * @swagger
  * /api/users/profile:
  *   get:
- *     summary: Get user profile
- *     description: Retrieve the profile of the authenticated user.
+ *     summary: Lấy profile người dùng
  *     tags:
  *       - Users
  *     responses:
  *       200:
- *         description: User profile retrieved successfully.
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 id:
- *                   type: integer
- *                 name:
- *                   type: string
- *                 email:
- *                   type: string
+ *         description: Lấy profile thành công
  *       401:
- *         description: Unauthorized, invalid or missing access token.
+ *         description: Không có quyền truy cập
  */
-
-// Route xem profile user
 router.get('/profile', authenticateToken, getProfileUser);
-
 
 /**
  * @swagger
  * /api/users/profile:
  *   put:
- *     summary: Update user profile
- *     description: Update the profile of the authenticated user.
- *     tags:
- *       - Users
+ *     summary: Cập nhật profile người dùng
  *     requestBody:
  *       required: true
  *       content:
@@ -166,41 +110,29 @@ router.get('/profile', authenticateToken, getProfileUser);
  *             properties:
  *               name:
  *                 type: string
- *                 example: Nguyễn Gia Thưởng
- *               email:
- *                 type: string
- *                 example: thuong4g@gmail.com
+ *                 example: John Doe
  *               phoneNumber:
  *                 type: string
- *                 example: 0935542939
+ *                 example: "0909123456"
  *               detailAddress:
  *                 type: string
- *                 example: Đồng Tâm
+ *                 example: "123 Nguyễn Trãi"
  *               cityAddress:
  *                 type: string
- *                 example: TP. HCM
+ *                 example: "TP. Hồ Chí Minh"
  *               wardAddress:
  *                 type: string
- *                 example: P. Trung Mỹ Tây
+ *                 example: "Phường 1"
  *               districtAddress:
  *                 type: string
- *                 example: Q.12
+ *                 example: "Quận 1"
  *     responses:
  *       200:
- *         description: User profile updated successfully.
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 message:
- *                   type: string
- *                   example: "Profile updated successfully"
+ *         description: Cập nhật profile thành công
  *       400:
- *         description: Invalid request body.
+ *         description: Lỗi khi cập nhật profile
  */
-
-// Route cập nhật profile user
 router.put('/profile', authenticateToken, updateProfileUser);
+
 
 module.exports = router;

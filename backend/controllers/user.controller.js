@@ -30,21 +30,21 @@ const login = async (req, res) => {
   try {
     const userObject = {
       email: req.body.email,
-    }
-    // trường hợp email viết tào lao
-    if (!userObject) {
-      return res.status(400).send({ message: 'Invalid email' });
+    };
+    if (!userObject.email) {
+      return res.status(400).send({ message: 'Email không hợp lệ' });
     }
     const logInEmail = await UserLogin(userObject);
-    if (logInEmail.success == true) {
+    if (logInEmail.success === true) {
       return res.status(200).send({ message: logInEmail.message });
     } else {
       return res.status(400).send({ message: logInEmail.message });
     }
+
   } catch (error) {
-    return res.status(400).send({ message: 'Something went wrong' });
+    return res.status(500).send({ message: 'Có lỗi xảy ra trong quá trình đăng nhập.' });
   }
-}
+};
 
 // hàm tạo và gửi OTP
 // const getOtp = async (req, res) => {
