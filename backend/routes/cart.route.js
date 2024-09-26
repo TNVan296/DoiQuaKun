@@ -1,13 +1,37 @@
 const express = require('express');
 const router = express.Router();
 const cartController = require('../controllers/cart.controller');
+const { authenticateToken } = require('../middlewares/authenticateToken.middleware');
 
 /**
  * @swagger
- * tags:
- *   name: Cart
- *   description: Cart management and checkout
+ * /api/cart/:
+ *   get:
+ *     summary: Get cart items
+ *     tags: [Cart]
+ *     responses:
+ *       200:
+ *         description: Cart items retrieved successfully
+ *       400:
+ *         description: Failed to retrieve cart items
  */
+
+router.get('/', authenticateToken, cartController.getCart);
+
+/**
+ * @swagger
+ * /api/cart/points:
+ *   get:
+ *     summary: Get cart points
+ *     tags: [Cart]
+ *     responses:
+ *       200:
+ *         description: Cart points retrieved successfully
+ *       400:
+ *         description: Failed to retrieve cart points
+ */
+
+router.get('/points', authenticateToken, cartController.getCartPoints);
 
 /**
  * @swagger
@@ -37,7 +61,7 @@ const cartController = require('../controllers/cart.controller');
  *       400:
  *         description: Failed to add item to cart
  */
-router.post('/add', cartController.handleAddCartItem);
+router.post('/add', authenticateToken, cartController.handleAddCartItem);
 
 /**
  * @swagger
@@ -67,7 +91,7 @@ router.post('/add', cartController.handleAddCartItem);
  *       400:
  *         description: Failed to remove item from cart
  */
-router.post('/remove', cartController.handleRemoveCartItem);
+router.post('/remove', authenticateToken, cartController.handleRemoveCartItem);
 
 /**
  * @swagger
@@ -91,6 +115,6 @@ router.post('/remove', cartController.handleRemoveCartItem);
  *       400:
  *         description: Checkout failed
  */
-router.post('/checkout', cartController.handleCheckout);
+router.post('/checkout', authenticateToken, cartController.handleCheckout);
 
 module.exports = router;

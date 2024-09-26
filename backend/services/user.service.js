@@ -12,6 +12,15 @@ const UserRegister = async (newUserObject) => {
     const newUser = await db.User.create({
       email: newUserObject.email,
       createdAt: new Date(),
+      updateAt: new Date()
+    });
+    // khi tạo 1 user mới liền lập tức tạo cho họ 1 ví người dùng
+    const userWallet = await db.Wallet.create({
+      userId: newUser.id,
+      points: 0,
+      status: 'active',
+      createAt: new Date(),
+      updateAt: new Date()
     });
     return { success: true, data: newUser, message: `New User is ${newUser.email} registered successfully!` };
   } catch (error) {
@@ -27,14 +36,12 @@ const UserLogin = async (userObject) => {
       await UserRegister(userObject);
       return await UserLogin(userObject);
     }
-
     const newOtp = await user.set({
       otp: Math.floor(100000 + Math.random() * 900000),
       expireIn: Date.now() + 300000,
     });
     await newOtp.save();
-
-    await sendOtpToEmail(user.email, newOtp.otp);
+    const mailSend = sendOtpToEmail(user.email, newOtp.otp);
     return { success: true, message: 'OTP sent to your email' };
   } catch (error) {
     return { success: false, message: 'Error while logging in user' };
@@ -78,11 +85,9 @@ const UserProfile = async (userObject) => {
 const UserUpdateProfile = async (userObject) => {
   try {
     const user = await db.User.findOne({ where: { email: userObject.user.email } });
-    
     if (!user) {
       return { success: false, message: 'User does not exist' };
     }
-
     const updatedUser = await user.update({
       name: userObject.user.name,
       phoneNumber: userObject.user.phoneNumber,
@@ -92,7 +97,6 @@ const UserUpdateProfile = async (userObject) => {
       wardId: userObject.user.wardId,
       updateAt: new Date(),
     });
-
     return { success: true, data: updatedUser, message: 'User profile updated successfully' };
   } catch (error) {
     return { success: false, message: 'Error while updating user profile' };

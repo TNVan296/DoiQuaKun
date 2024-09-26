@@ -14,6 +14,8 @@ const { authenticateToken } = require('../middlewares/authenticateToken.middlewa
  * /api/users/register:
  *   post:
  *     summary: Đăng ký người dùng mới
+  *     tags:
+ *       - Users
  *     requestBody:
  *       required: true
  *       content:
@@ -37,6 +39,8 @@ router.post('/register', register);
  * /api/users/login:
  *   post:
  *     summary: Đăng nhập người dùng
+  *     tags:
+ *       - Users
  *     requestBody:
  *       required: true
  *       content:
@@ -60,6 +64,8 @@ router.post('/login', login);
  * /api/users/verifyOtp:
  *   post:
  *     summary: Xác thực OTP
+ *     tags:
+ *       - Users
  *     requestBody:
  *       required: true
  *       content:
@@ -101,6 +107,8 @@ router.get('/profile', authenticateToken, getProfileUser);
  * /api/users/profile:
  *   put:
  *     summary: Cập nhật profile người dùng
+ *     tags:
+ *       - Users
  *     requestBody:
  *       required: true
  *       content:
@@ -110,7 +118,10 @@ router.get('/profile', authenticateToken, getProfileUser);
  *             properties:
  *               name:
  *                 type: string
- *                 example: John Doe
+ *                 example: Trà
+ *               email:
+ *                 type: string
+ *                 example: thuong4g@gmail.com
  *               phoneNumber:
  *                 type: string
  *                 example: "0909123456"
@@ -120,9 +131,9 @@ router.get('/profile', authenticateToken, getProfileUser);
  *               cityId:
  *                 type: integer
  *                 example: 1
- *               wardAddress:
+ *               wardId:
  *                 type: string
- *                 example: "Phường 1"
+ *                 example: 1
  *               districtId:
  *                 type: integer
  *                 example: 1

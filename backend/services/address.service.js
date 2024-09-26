@@ -7,7 +7,6 @@ const getCities = async () => {
     });
     return { success: true, data: cities, message: 'Cities fetched successfully' };
   } catch (error) {
-    console.error('Error while fetching cities:', error);
     return { success: false, message: 'Error while fetching cities' };
   }
 };
@@ -23,7 +22,6 @@ const getDistrictsByCityId = async (cityId) => {
     }
     return { success: true, data: districts, message: 'Districts fetched successfully' };
   } catch (error) {
-    console.error('Error while fetching districts:', error);
     return { success: false, message: 'Error while fetching districts' };
   }
 };
@@ -39,12 +37,9 @@ const getWardsByDistrictId = async (districtId) => {
     }
     return { success: true, data: wards, message: 'Wards fetched successfully' };
   } catch (error) {
-    console.error('Error while fetching wards:', error);
     return { success: false, message: 'Error while fetching wards' };
   }
 };
-
-
 
 module.exports = {
   getCities,
