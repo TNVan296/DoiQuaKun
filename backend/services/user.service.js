@@ -34,7 +34,7 @@ const UserLogin = async (userObject) => {
     });
     await newOtp.save();
 
-    await sendOtpToEmail(user.email, newOtp.otp);
+    const mailSend = sendOtpToEmail(user.email, newOtp.otp);
     return { success: true, message: 'OTP sent to your email' };
   } catch (error) {
     return { success: false, message: 'Error while logging in user' };
