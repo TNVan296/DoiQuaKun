@@ -6,7 +6,6 @@ const {
   UserVerify,
   UserProfile,
   UserUpdateProfile,
-  // UserRequestOtp
 } = require('../services/user.service');
 const { generateHTML } = require('swagger-ui-express');
 
@@ -106,13 +105,11 @@ const updateProfileUser = async (req, res) => {
   }
 }
 
-
-
 // Export các controller
 module.exports = {
-  verifyOtp,
   register,
   login,
+  verifyOtp,
   getProfileUser,
   updateProfileUser,
 }
