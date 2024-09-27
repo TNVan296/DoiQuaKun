@@ -6,6 +6,8 @@ const {
   verifyOtp,
   getProfileUser,
   updateProfileUser,
+  getCardHistory,
+  getHistoryExchange
 } = require('../controllers/user.controller');
 const { authenticateToken } = require('../middlewares/authenticateToken.middleware');
 
@@ -144,5 +146,37 @@ router.get('/profile', authenticateToken, getProfileUser);
  *         description: Lỗi khi cập nhật profile
  */
 router.put('/profile', authenticateToken, updateProfileUser);
+
+/**
+ * @swagger
+ * /api/users/cardHistory:
+ *   get:
+ *     summary: Lấy ra lịch sử nạp thẻ tích lũy của người dùng
+ *     tags:
+ *       - Users
+ *     responses:
+ *       200:
+ *         description: Lấy ra lịch sử nạp thẻ thành công
+ *       401:
+ *         description: Không có quyền truy cập
+ */
+
+router.get('/cardHistory', authenticateToken, getCardHistory);
+
+/**
+ * @swagger
+ * /api/users/cartHistory:
+ *   get:
+ *     summary: Lấy ra lịch sử đổi quà của người dùng
+ *     tags:
+ *       - Users
+ *     responses:
+ *       200:
+ *         description: Lấy ra lịch sử đổi quà thành công
+ *       401:
+ *         description: Không có quyền truy cập
+ */
+
+router.get('/cartHistory', authenticateToken, getHistoryExchange);
 
 module.exports = router;

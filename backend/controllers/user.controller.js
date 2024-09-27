@@ -6,6 +6,8 @@ const {
   UserVerify,
   UserProfile,
   UserUpdateProfile,
+  GetCardHistory,
+  GetHistoryExchange
 } = require('../services/user.service');
 const { generateHTML } = require('swagger-ui-express');
 
@@ -105,6 +107,36 @@ const updateProfileUser = async (req, res) => {
   }
 }
 
+const getCardHistory = async (req, res) => {
+  try {
+    const userObject = {
+      user: req.user,
+    }
+    const cardHistory = await GetCardHistory(userObject);
+    if (!cardHistory.success) {
+      return res.status(400).send({ message: cardHistory.message });
+    }
+    return res.status(200).send({ message: cardHistory.message, data: cardHistory.data });
+  } catch (error) {
+    return res.status(400).send({ message: 'Something went wrong !' });
+  }
+}
+
+const getHistoryExchange = async (req, res) => {
+  try {
+    const userObject = {
+      user: req.user,
+    }
+    const historyExchange = await GetHistoryExchange(userObject);
+    if (!historyExchange.success) {
+      return res.status(400).send({ message: historyExchange.message });
+    }
+    return res.status(200).send({ message: historyExchange.message, data: historyExchange.data });
+  } catch (error) {
+    return res.status(400).send({ message: 'Something went wrong !' });
+  }
+}
+
 // Export các controller
 module.exports = {
   register,
@@ -112,4 +144,6 @@ module.exports = {
   verifyOtp,
   getProfileUser,
   updateProfileUser,
+  getCardHistory,
+  getHistoryExchange
 }
