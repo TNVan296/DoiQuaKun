@@ -148,4 +148,6 @@ router.get('/:id', productController.getProductById);
 
 router.get('/', productController.getAllProducts);
 
+router.get('/category/:id', productController.getProductsByCategoryId);
+
 module.exports = router;
