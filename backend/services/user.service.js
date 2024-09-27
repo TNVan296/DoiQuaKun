@@ -103,10 +103,51 @@ const UserUpdateProfile = async (userObject) => {
   }
 };
 
+const GetCardHistory = async (userObject) => {
+  try {
+    const user = await db.User.findOne({ where: { email: userObject.user.email } });
+    if (!user) {
+      return { success: false, message: 'User does not exist' };
+    }
+    const walletUser = await db.Wallet.findOne({ where: { userId: user.id } });
+    if (!walletUser) {
+      return { success: false, message: 'Wallet does not exist' };
+    }
+    const cardHistory = await db.Card.findAll({ where: { walletId: walletUser.id, status: 'inactive' } });
+    return { success: true, data: cardHistory, message: 'User card history fetched successfully' };
+  } catch (error) {
+    return { success: false, message: 'Error while fetching user card history' };
+  }
+};
+
+const GetHistoryExchange = async (userObject) => {
+  try {
+    const user = await db.User.findOne({ where: { email: userObject.user.email } });
+    if (!user) {
+      return { success: false, message: 'User does not exist' };
+    }
+    const cartHistoryExchange = await db.Cart.findOne({
+      where : { userId: user.id, status: 'complete' },
+      include: [
+        {
+          model: db.CartItem,
+          as: 'cartItems',
+          include: [{ model: db.Product, as: 'product' }],
+        },
+      ]
+    });
+    return { success: true, data: cartHistoryExchange, message: 'User history exchange fetched successfully' };
+  } catch (error) {
+    return { success: false, message: 'Error while fetching user history exchange' };
+  }
+};
+
 module.exports = {
   UserRegister,
   UserLogin,
   UserVerify,
   UserProfile,
   UserUpdateProfile,
+  GetCardHistory,
+  GetHistoryExchange
 };

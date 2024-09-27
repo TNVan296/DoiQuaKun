@@ -148,6 +148,33 @@ router.get('/:id', productController.getProductById);
 
 router.get('/', productController.getAllProducts);
 
+/**
+ * @swagger
+ * /api/products/category/{id}:
+ *   get:
+ *     summary: Lấy tất cả sản phẩm theo ID chuyên mục
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         description: ID chuyên mục
+ *         schema:
+ *           type: integer
+ *     responses:
+ *       200:
+ *         description: Danh sách sản phẩm đã được lấy được
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: array
+ *               items:
+ *                 type: object
+ *                 properties:
+ *                   id:
+ *                     type: integer
+ *                     example: 32
+ */
+
 router.get('/category/:id', productController.getProductsByCategoryId);
 
 module.exports = router;
