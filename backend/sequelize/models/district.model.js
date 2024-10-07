@@ -20,9 +20,12 @@ module.exports = (sequelize, Sequelize) => {
         key: 'id'
       }
     }
-  }, {
+  },
+  {
+    tableName: 'districts',
     underscored: true,
     timestamps: false
-  });
+  }
+);
   return District;
 };
