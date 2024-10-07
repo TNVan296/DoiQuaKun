@@ -12,10 +12,13 @@ module.exports = (sequelize, Sequelize) => {
       type: DataTypes.STRING,
       allowNull: false
     }
-  }, {
+  },
+  {
+    tableName: 'cities',
     underscored: true,
     timestamps: false
-  });
+  }
+);
 
   return City;
 };

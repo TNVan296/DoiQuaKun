@@ -20,7 +20,7 @@ module.exports = (sequelize) => {
       },
     },
   }, {
-    tableName: 'wards', // Tên bảng trong cơ sở dữ liệu
+    tableName: 'wards',
     underscored: true,
     timestamps: false,
   });
