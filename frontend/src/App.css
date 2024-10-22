@@ -17,7 +17,7 @@ body {
   top: 0;
   left: 0;
   z-index: 1000;
-  width: 100vw;
+  width: 100%;
   padding: .5rem 1rem;
 }
 
@@ -41,6 +41,7 @@ body {
   background-image: url("../src/assets/onboarding_1.png");
   background-repeat: no-repeat;
   background-size: cover;
+  display: flex;
 }
 
 .onboarding_1 img {
@@ -58,9 +59,10 @@ body {
   font-family: iCiel Crocante;
   font-weight: bold;
   font-style: normal;
-  font-size: 50px;
+  font-size: 40px;
   line-height: 55px;
   color: #FFFFFF;
+  text-transform: uppercase;
   text-shadow: 2px 0 #fdbd35, -2px 2px 0 #fdbd35, 2px -2px 0 #fdbd35, -2px -2px 0 #fdbd35, 0px 2px 0 #fdbd35, 0px -2px 0 #fdbd35, -2px 0px 0 #fdbd35, 2px 0px 0 #fdbd35, 4px 4px 0 #fdbd35, -4px 4px 0 #fdbd35, 4px -4px 0 #fdbd35, -4px -4px 0 #fdbd35, 0px 4px 0 #fdbd35, 0px -4px 0 #fdbd35, -4px 0px 0 #fdbd35, 4px 0px 0 #fdbd35, 2px 4px 0 #fdbd35, -2px 4px 0 #fdbd35, 2px -4px 0 #fdbd35, -2px -4px 0 #fdbd35, 4px 2px 0 #fdbd35, -4px 2px 0 #fdbd35, 4px -2px 0 #fdbd35, -4px -2px 0 #fdbd35;
   margin-bottom: 1rem;
 }
@@ -116,14 +118,76 @@ body {
   margin-top: 20px;
 }
 
+.onboarding_4 {
+  min-height: 100vh;
+  margin-left: 0;
+  margin-right: 0;
+  background-image: url("../src/assets/onboarding_4.png");
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position: center;
+}
+
+.step-title {
+  font-style: normal;
+  font-weight: bolder;
+  font-size: 25px;
+  line-height: 30px;
+  color: #FFFFFF;
+  margin-top: 10px;
+  margin-bottom: 0;
+}
+
+.step-desc {
+  font-family: Quicksand;
+  font-style: normal;
+  font-weight: normal;
+  font-size: 17px;
+  line-height: 21px;
+  letter-spacing: -0.02em;
+  color: #272727;
+}
+
 .footer {
-  height: 640px;
+  height: 100vh;
   color: #fff;
   background-image: url("../src/assets/footer.png");
   background-repeat: no-repeat;
   background-size: cover;
 }
 
-.info {
+.wrapper {
+  margin-left: 115px;
+  margin-right: 115px;
+  padding-top: 185px; 
+}
+
+.wrapper-info {
   margin-top: 32px;
+}
+
+.footer .wrapper .wrapper-info .info p:first-child {
+  margin-top: 0;
+  margin-bottom: 1rem;
+  font-style: normal;
+  font-weight: bolder;
+  font-size: 22px;
+  line-height: 30px;
+  color: #FFFFFF;
+}
+
+.footer .wrapper .wrapper-info .info p {
+  margin-top: 0;
+  margin-bottom: 1rem;
+  font-style: normal;
+  font-weight: 500;
+  font-size: 15px;
+  line-height: 21px;
+  letter-spacing: -0.02em;
+  color: #FFFFFF;
+}
+
+.footer .wrapper .wrapper-info .info svg {
+  display: inline-block;
+  margin: 0 5px;
 }
