@@ -1,5 +1,6 @@
+import PropTypes from 'prop-types'
 
-function Header() {
+function Header({ openLoginModal }) {
   return (
     <div className='navbar flex justify-between items-center px-0'>
       <div className='logo cursor-pointer'>
@@ -15,19 +16,23 @@ function Header() {
       <div className='user-items'>
         <ul className='flex mx-auto'>
           <li className="li-item text-lg font-medium">
-            <a href="">
+            <button onClick={ openLoginModal }>
               <i className='far fa-user'></i>
-            </a>
+            </button>
           </li>
           <li className="li-item text-lg font-medium">
-            <a href="">
+            <button id="cart">
               <i className='fas fa-shopping-bag'></i>
-            </a>
+            </button>
           </li>
         </ul>
       </div>
     </div>
   )
+}
+
+Header.propTypes = {
+  openLoginModal: PropTypes.func
 }
 
 export default Header
