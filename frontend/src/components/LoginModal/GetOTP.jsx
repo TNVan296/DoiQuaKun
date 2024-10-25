@@ -1,6 +1,6 @@
 import PropTypes from 'prop-types'
 
-const LoginWindow = ({ showModal, handleClose }) => {
+const GetOTP = ({ showModal, handleClose }) => {
   return (
     <div className={`login-modal ${showModal ? 'block' : 'hidden'}`}>
       <div className="modal-content">
@@ -13,15 +13,15 @@ const LoginWindow = ({ showModal, handleClose }) => {
             <input id="phone-number" type="tel" placeholder="Số điện thoại" className="onboarding_input focus:outline-none focus:border-[#00AAEC] focus:border-[3px]" />
           </div>
         </div>
-        <button type="submit" className="onboarding_button_2 text-white bg-[#00AAEC] w-[150px] mx-auto">Xác nhận</button>
+        <button type="submit" className="onboarding_button_2 text-white bg-[#00AAEC] w-[150px] mx-auto mt-0">Xác nhận</button>
       </div>
     </div>
   )
 }
 
-LoginWindow.propTypes = {
+GetOTP.propTypes = {
   showModal: PropTypes.bool,
   handleClose: PropTypes.func
 }
 
-export default LoginWindow
+export default GetOTP
