@@ -10,8 +10,8 @@ function VerifyOTP({ showModal, handleClose }) {
         </span>
         <div className="modal-form text-center px-3">
           <h1 className="text-[#00AAEC] font-bold text-2xl mb-2">Nhập mật khẩu</h1>
-          <p className='text-[#6c757d] font-medium text-xl mb-4'>Mật khẩu đã gửi cho bạn từ lần đăng nhập trước qua tổng đài DoiQuaKun</p>
-          <div className="form flex justify-center gap-4 p-0">
+          <p className='text-[#6c757d] font-medium text-lg mb-3'>Mật khẩu đã gửi cho bạn từ lần đăng nhập trước qua tổng đài DoiQuaKun</p>
+          <div className="form flex justify-center gap-4 p-0 mb-3">
             <input id="otp-1" type="tel" maxLength={1} onInput={nextInput} className="otp-input focus:outline-none focus:border-[#00AAEC] focus:border-[3px]" />
             <input id="otp-2" type="tel" maxLength={1} onInput={nextInput} className="otp-input focus:outline-none focus:border-[#00AAEC] focus:border-[3px]" />
             <input id="otp-3" type="tel" maxLength={1} onInput={nextInput} className="otp-input focus:outline-none focus:border-[#00AAEC] focus:border-[3px]" />
