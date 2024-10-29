@@ -2,28 +2,35 @@ import { useState } from 'react'
 import Header from '~/components/Header/Header'
 import HomeContent from '~/pages/Home/HomeContent/HomeContent'
 import Footer from '~/components/Footer/Footer'
-// import GetOTP from '~/components/LoginModal/GetOTP'
-// import VerifyOTP from '~/components/LoginModal/VerifyOTP'
-import Logout from '~/components/LoginModal/Logout'
+import GetOTP from '~/components/LoginModal/GetOTP'
+import VerifyOTP from '~/components/LoginModal/VerifyOTP'
+// import Logout from '~/components/LoginModal/Logout'
 
 function Home() {
-  const [showLoginModal, setShowLoginModal] = useState(false)
-  const openLoginModal = () => {
-    setShowLoginModal(true)
+  const [showGetOtpModal, setShowGetOtpModal] = useState(false)
+  const [showVerifyModal, setShowVerifyModal] = useState(false)
+  const openModal = () => {
+    setShowGetOtpModal(true)
   }
 
-  const closeLoginModal = () => {
-    setShowLoginModal(false)
+  const showVerifyOtpModal = () => {
+    setShowGetOtpModal(false)
+    setShowVerifyModal(true)
+  }
+
+  const closeModal = () => {
+    setShowGetOtpModal(false)
+    setShowVerifyModal(false)
   }
 
   return (
     <div className='container mx-auto'>
-      <Header openLoginModal={openLoginModal}/>
+      <Header openModal={openModal}/>
       <HomeContent />
       <Footer />
-      {/* {showLoginModal && <GetOTP showModal={showLoginModal} handleClose={closeLoginModal} />} */}
-      {/* {showLoginModal && <VerifyOTP showModal={showLoginModal} handleClose={closeLoginModal} />} */}
-      {showLoginModal && <Logout showModal={showLoginModal} handleClose={closeLoginModal} />}
+      {showGetOtpModal && <GetOTP showModal={showGetOtpModal} handleClose={closeModal} showVerifyOtpModal={showVerifyOtpModal} />}
+      {showVerifyModal && <VerifyOTP showModal={showVerifyOtpModal} handleClose={closeModal} />}
+      {/* {showLoginModal && <Logout showModal={showLoginModal} handleClose={closeModal} />} */}
     </div>
   )
 }
