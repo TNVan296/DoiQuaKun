@@ -1,7 +1,17 @@
+import { useState } from 'react'
 import PropTypes from 'prop-types'
 import { nextInput } from '~/utils/otpInput'
 
-function VerifyOTP({ showModal, handleClose }) {
+function VerifyOTP({ showModal, handleClose, loginSuccess }) {
+  const [otpInputValues, setOtpInputValues] = useState(Array(6).fill(''))
+  const handleButtonClick = () => {
+    const trueOtp = '111111' // OTP tạm thời
+    if (otpInputValues.join('') == trueOtp) {
+      loginSuccess()
+    } else {
+      alert('Mã OTP đã sai, vui lòng nhập sai !')
+    }
+  }
   return (
     <div className={`login-modal ${showModal ? 'block' : 'hidden'}`}>
       <div className="modal-content">
@@ -12,14 +22,18 @@ function VerifyOTP({ showModal, handleClose }) {
           <h1 className="text-[#00AAEC] font-bold text-2xl mb-2">Nhập mật khẩu</h1>
           <p className='text-[#6c757d] font-medium text-lg mb-3'>Mật khẩu đã gửi cho bạn từ lần đăng nhập trước qua tổng đài DoiQuaKun</p>
           <div className="form flex justify-center gap-4 p-0 mb-3">
-            <input id="otp-1" type="tel" maxLength={1} onInput={nextInput} className="otp-input focus:outline-none focus:border-[#00AAEC] focus:border-[3px]" />
-            <input id="otp-2" type="tel" maxLength={1} onInput={nextInput} className="otp-input focus:outline-none focus:border-[#00AAEC] focus:border-[3px]" />
-            <input id="otp-3" type="tel" maxLength={1} onInput={nextInput} className="otp-input focus:outline-none focus:border-[#00AAEC] focus:border-[3px]" />
-            <input id="otp-4" type="tel" maxLength={1} onInput={nextInput} className="otp-input focus:outline-none focus:border-[#00AAEC] focus:border-[3px]" />
-            <input id="otp-5" type="tel" maxLength={1} onInput={nextInput} className="otp-input focus:outline-none focus:border-[#00AAEC] focus:border-[3px]" />
-            <input id="otp-6" type="tel" maxLength={1} onInput={nextInput} className="otp-input focus:outline-none focus:border-[#00AAEC] focus:border-[3px]" />
+            {[...Array(6)].map((_, i) => (
+              <input
+                key={i}
+                id={`otp-${i}`}
+                type="tel"
+                maxLength={1}
+                onInput={(e) => nextInput(e, i, setOtpInputValues)}
+                className="otp-input focus:outline-none focus:border-[#00AAEC] focus:border-[3px]"
+              />
+            ))}
           </div>
-          <button type="submit" className="onboarding_button_2 text-white bg-[#00AAEC] w-[150px] mx-auto mt-0">Xác nhận</button>
+          <button onClick={handleButtonClick} type="submit" className="onboarding_button_2 text-white bg-[#00AAEC] w-[150px] mx-auto mt-0">Xác nhận</button>
         </div>
       </div>
     </div>
@@ -27,8 +41,9 @@ function VerifyOTP({ showModal, handleClose }) {
 }
 
 VerifyOTP.propTypes = {
-  showModal: PropTypes.bool,
-  handleClose: PropTypes.func
+  showModal: PropTypes.func,
+  handleClose: PropTypes.func,
+  loginSuccess: PropTypes.func
 }
 
 export default VerifyOTP

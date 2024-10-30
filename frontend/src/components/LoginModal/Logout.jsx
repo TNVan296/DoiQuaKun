@@ -1,6 +1,10 @@
 import PropTypes from 'prop-types'
 
-function Logout({ showModal, handleClose }) {
+function Logout({ showModal, handleClose, logOutSuccess }) {
+
+  const logOutUser = () => {
+    logOutSuccess()
+  }
   return (
     <div className={`login-modal ${showModal ? 'block' : 'hidden'}`}>
       <div className="modal-content logout">
@@ -10,8 +14,8 @@ function Logout({ showModal, handleClose }) {
         <div className="modal-form text-center px-3">
           <h1 className="text-[#00AAEC] font-bold text-2xl mb-2">Bạn muốn đăng xuất ?</h1>
           <div className="form flex gap-4 p-0 justify-between my-5">
-            <button type="submit" className="onboarding_button_2 text-white bg-[#00AAEC] w-[150px] mx-auto mt-0">Xác nhận</button>
-            <button type="submit" className="onboarding_button_2 text-[#00AAEC] bg-[#fff] w-[150px] mx-auto mt-0">Không</button>
+            <button onClick={logOutUser} type="submit" className="onboarding_button_2 text-white bg-[#00AAEC] w-[150px] mx-auto mt-0">Xác nhận</button>
+            <button onClick={handleClose} type="submit" className="onboarding_button_2 text-[#00AAEC] bg-[#fff] w-[150px] mx-auto mt-0">Không</button>
           </div>
         </div>
       </div>
@@ -20,8 +24,9 @@ function Logout({ showModal, handleClose }) {
 }
 
 Logout.propTypes = {
-  showModal: PropTypes.bool.isRequired,
-  handleClose: PropTypes.func.isRequired
+  showModal: PropTypes.bool,
+  handleClose: PropTypes.func,
+  logOutSuccess: PropTypes.func
 }
 
 export default Logout

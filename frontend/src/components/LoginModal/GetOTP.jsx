@@ -34,7 +34,7 @@ const GetOTP = ({ showModal, handleClose, showVerifyOtpModal }) => {
 }
 
 GetOTP.propTypes = {
-  showModal: PropTypes.bool,
+  showModal: PropTypes.func,
   handleClose: PropTypes.func,
   showVerifyOtpModal: PropTypes.func
 }
