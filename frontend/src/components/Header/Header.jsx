@@ -1,6 +1,6 @@
 import PropTypes from 'prop-types'
 
-function Header({ openModal }) {
+function Header({ openModal, hasUser, openLogOutModal }) {
   return (
     <div className='navbar flex justify-between items-center px-0'>
       <div className='logo cursor-pointer'>
@@ -25,6 +25,13 @@ function Header({ openModal }) {
               <i className='fas fa-shopping-bag'></i>
             </button>
           </li>
+          {hasUser &&
+            <li className="li-item text-lg font-medium">
+              <button onClick={ openLogOutModal }>
+                <i className='fas fa-sign-out-alt'></i>
+              </button>
+            </li>
+          }
         </ul>
       </div>
     </div>
@@ -32,7 +39,9 @@ function Header({ openModal }) {
 }
 
 Header.propTypes = {
-  openModal: PropTypes.func
+  openModal: PropTypes.func,
+  hasUser: PropTypes.bool,
+  openLogOutModal: PropTypes.func
 }
 
 export default Header
