@@ -262,3 +262,19 @@ body {
 .logout {
   height: 190px;
 }
+
+.gift_card {
+  display: flex;
+  flex-direction: column;
+  background-color: #fff;
+  border: 1px solid rgba(0,0,0,.125);
+  border-radius: .5rem
+}
+
+.shadow {
+  box-shadow: 0 .5rem 1rem rgba(0,0,0,.15)!important;
+}
+
+.gift_card .gift_card_body .gift_rating .fa-star {
+  color: orange;
+}

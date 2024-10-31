@@ -1,16 +1,16 @@
-import { useEffect, useState } from 'react'
+import { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import Header from '~/components/Header/Header'
 import Footer from '~/components/Footer/Footer'
-import HomeContent from '../Home/HomeContent/HomeContent'
 import GetOTP from '~/components/LoginModal/GetOTP'
 import VerifyOTP from '~/components/LoginModal/VerifyOTP'
 import Logout from '~/components/LoginModal/Logout'
+import GiftContent from '~/pages/Gifts/GiftContent/GiftContent'
 
-function Redemption() {
+function Gifts() {
   const [showGetOtpModal, setShowGetOtpModal] = useState(false)
   const [showVerifyModal, setShowVerifyModal] = useState(false)
-  const [showLogOut, setShowLogOut] = useState(false)
+  const [showLogOutModal, setShowLogOutModal] = useState(false)
   const [hasUser, setHasUser] = useState(false)
   const navigate = useNavigate()
 
@@ -19,17 +19,18 @@ function Redemption() {
   }
 
   const openLogOutModal = () => {
-    setShowLogOut(true)
-  }
-  const closeModal = () => {
-    setShowGetOtpModal(false)
-    setShowVerifyModal(false)
-    setShowLogOut(false)
+    setShowLogOutModal(true)
   }
 
   const showVerifyOtpModal = () => {
     setShowGetOtpModal(false)
     setShowVerifyModal(true)
+  }
+
+  const closeModal = () => {
+    setShowGetOtpModal(false)
+    setShowVerifyModal(false)
+    setShowLogOutModal(false)
   }
 
   const logInSuccess = () => {
@@ -64,13 +65,15 @@ function Redemption() {
   return (
     <div className='container mx-auto'>
       <Header moveToContact={moveToContact} hasUser={hasUser} openModal={openModal} openLogOutModal={openLogOutModal}/>
-      <HomeContent hasUser={hasUser} />
+      <div className='content pt-[80px]'>
+        <GiftContent />
+      </div>
       <Footer />
       {showGetOtpModal && <GetOTP showModal={showGetOtpModal} handleClose={closeModal} showVerifyOtpModal={showVerifyOtpModal} />}
       {showVerifyModal && <VerifyOTP showModal={showVerifyOtpModal} handleClose={closeModal} logInSuccess={logInSuccess} />}
-      {showLogOut && <Logout showModal={showLogOut} handleClose={closeModal} logOutSuccess={logOutSuccess} />}
+      {showLogOutModal && <Logout showModal={showLogOutModal} handleClose={closeModal} logOutSuccess={logOutSuccess} />}
     </div>
   )
 }
 
-export default Redemption
+export default Gifts

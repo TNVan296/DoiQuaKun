@@ -2,12 +2,12 @@ import { useState } from 'react'
 import PropTypes from 'prop-types'
 import { nextInput } from '~/utils/otpInput'
 
-function VerifyOTP({ showModal, handleClose, loginSuccess }) {
+function VerifyOTP({ showModal, handleClose, logInSuccess }) {
   const [otpInputValues, setOtpInputValues] = useState(Array(6).fill(''))
   const handleButtonClick = () => {
     const trueOtp = '111111' // OTP tạm thời
     if (otpInputValues.join('') == trueOtp) {
-      loginSuccess()
+      logInSuccess()
     } else {
       alert('Mã OTP đã sai, vui lòng nhập sai !')
     }
@@ -43,7 +43,7 @@ function VerifyOTP({ showModal, handleClose, loginSuccess }) {
 VerifyOTP.propTypes = {
   showModal: PropTypes.func,
   handleClose: PropTypes.func,
-  loginSuccess: PropTypes.func
+  logInSuccess: PropTypes.func
 }
 
 export default VerifyOTP
