@@ -264,6 +264,7 @@ body {
 }
 
 .gift_card {
+  text-align: center;
   display: flex;
   flex-direction: column;
   background-color: #fff;
@@ -277,4 +278,43 @@ body {
 
 .gift_card .gift_card_body .gift_rating .fa-star {
   color: orange;
+}
+
+.gift_title {
+  font-family: Quicksand;
+  font-style: normal;
+  font-weight: bold;
+  font-size: 20px;
+  line-height: 24px;
+  color: #272727;
+  margin-top: 20px;
+  margin-bottom: 10px;
+}
+
+.gift_price {
+  font-family: Baloo;
+  font-style: normal;
+  font-weight: bold;
+  font-size: 25px;
+  line-height: 25px;
+  color: #00AAEC;
+  margin-bottom: 10px;
+}
+
+.gift_detail_button {
+  font-family: Quicksand;
+  font-style: normal;
+  font-weight: bold;
+  font-size: 20px;
+  line-height: 24px;
+  color: #FFFFFF;
+  text-decoration: none;
+  margin-top: 20px;
+  margin-bottom: 20px;
+  padding: 10px 20px;
+  background: #00AAEC;
+  border-radius: 20px;
+  border: 1px solid #00AAEC;
+  cursor: pointer;
+  text-transform: uppercase;
 }
