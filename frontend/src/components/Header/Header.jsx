@@ -5,7 +5,7 @@ function Header({ openModal, hasUser, openLogOutModal, moveToContact }) {
   const navigate = useNavigate()
 
   const openProfile = () => {
-    // navigate('/profile')
+    navigate('/profile')
   }
 
   const moveToHome = () => {
@@ -27,9 +27,9 @@ function Header({ openModal, hasUser, openLogOutModal, moveToContact }) {
       </div>
       <div className='items'>
         <ul className='flex mx-auto'>
-          <li className='li-item text-lg font-medium hover:font-bold'><a href="" onClick={moveToRedemption}>Chương trình chuyển đổi</a></li>
-          <li className='li-item text-lg font-medium hover:font-bold'><a href="" onClick={moveToGifts}>Quà siêu Kun</a></li>
-          <li className='li-item text-lg font-medium hover:font-bold'><a href="" onClick={moveToContact}>Liên hệ</a></li>
+          <li className='li-item text-lg font-[Quicksand] font-medium hover:font-bold'><a href="" onClick={moveToRedemption}>Chương trình chuyển đổi</a></li>
+          <li className='li-item text-lg font-[Quicksand] font-medium hover:font-bold'><a href="" onClick={moveToGifts}>Quà siêu Kun</a></li>
+          <li className='li-item text-lg font-[Quicksand] font-medium hover:font-bold'><a href="" onClick={moveToContact}>Liên hệ</a></li>
         </ul>
       </div>
       <div className='user-items'>

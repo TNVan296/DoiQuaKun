@@ -58,7 +58,7 @@ function HomeContent({ hasUser }) {
           <p className='shadow-text'>BA BƯỚC ĐỔI QUÀ KUN</p>
         </div>
         <div className='content-wrapper pt-[50px] pl-[150px]'>
-          <div className='steps-wrapper grid grid-cols-[60px_505px] items-center gap-5'>
+          <div className='steps-wrapper grid grid-cols-[60px_550px] items-center gap-5'>
             <img src='../src/assets/onboarding_4_step1.png' />
             <p className='step-title'>Đăng ký tài khoản bằng SĐT</p>
             <svg className='justify-self-center' width="2" height="65" viewBox="0 0 2 65" fill="none" xmlns="http://www.w3.org/2000/svg">
