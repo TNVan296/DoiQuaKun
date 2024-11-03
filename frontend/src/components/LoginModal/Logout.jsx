@@ -1,7 +1,6 @@
 import PropTypes from 'prop-types'
 
 function Logout({ showModal, handleClose, logOutSuccess }) {
-
   const logOutUser = () => {
     logOutSuccess()
   }

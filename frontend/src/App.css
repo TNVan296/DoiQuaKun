@@ -57,7 +57,7 @@ body {
 
 .shadow-text {
   font-family: iCiel Crocante;
-  font-weight: bold;
+  font-weight: normal;
   font-style: normal;
   font-size: 40px;
   line-height: 55px;
@@ -95,7 +95,7 @@ body {
 .text-title {
   font-family: Roboto;
   font-style: normal;
-  font-weight: normal;
+  font-weight: 500;
   font-size: 20px;
   line-height: 20px;
   padding-top: 40px;
@@ -129,8 +129,9 @@ body {
 }
 
 .step-title {
+  font-family: iCiel Panton;
   font-style: normal;
-  font-weight: bolder;
+  font-weight: bold;
   font-size: 25px;
   line-height: 30px;
   color: #FFFFFF;
@@ -142,7 +143,7 @@ body {
   font-family: Quicksand;
   font-style: normal;
   font-weight: normal;
-  font-size: 17px;
+  font-size: 18px;
   line-height: 21px;
   letter-spacing: -0.02em;
   color: #272727;
@@ -317,4 +318,184 @@ body {
   border: 1px solid #00AAEC;
   cursor: pointer;
   text-transform: uppercase;
+}
+
+.profile_detail_title h1 {
+  font-family: iCiel Crocante;
+  font-style: normal;
+  font-weight: normal;
+  font-size: 35px;
+  line-height: 50px;
+  color: #000000;
+  text-transform: uppercase;
+}
+
+.solid {
+  border: 1px solid #c4c4c4;
+  margin-top: 25px;
+  margin-bottom: 25px;
+}
+
+.profile_info {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  padding: 25px 15px;
+}
+
+.navigation_col {
+  border-right: 1px solid #c4c4c4;
+}
+
+.profile_img {
+  width: 150px;
+  height: 150px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.profile_name {
+  font-family: iCiel Crocante;
+  font-style: normal;
+  font-weight: normal;
+  font-size: 20px;
+  line-height: 30px;
+  color: #414141;
+  text-transform: uppercase;
+}
+
+.navigation_list {
+  width: 170px;
+}
+
+.navigation_item {
+  text-decoration: none;
+  color: #414141;
+  font-style: normal;
+  font-weight: normal;
+  font-size: 18px;
+  line-height: 25px;
+}
+
+.navigation_item:hover {
+  color: #00AAEC;
+}
+
+.navigation_menu a.active {
+  color: #00AAEC;
+}
+
+.back_button {
+  width: 60px;
+  height: 40px;
+  background-color: #6c757d;
+  border-color: #6c757d;
+  color: #fff;
+  font-size: 18px;
+  font-weight: bold;
+  border-radius: 10px;
+  margin-bottom: 45px;
+}
+
+.info_content h1 {
+  font-family: iCiel Crocante;
+  font-style: normal;
+  font-weight: normal;
+  font-size: 25px;
+  line-height: 40px;
+  text-transform: uppercase;
+}
+
+.info_content p {
+  font-family: Quicksand;
+  font-style: normal;
+  font-weight: normal;
+  font-size: 15px;
+  line-height: 25px;
+  color: #414141;
+  margin-bottom: 2rem;
+}
+
+.form_group {
+  display: flex;
+  flex-direction: row;
+  margin-bottom: 2rem;
+  gap: 1rem;
+}
+
+.form_control {
+  display: block;
+  padding: 0.5rem 0.75rem;
+  font-size: 1rem;
+  font-weight: 400;
+  line-height: 1.5;
+  color: #495057;
+  background-color: #fff;
+  background-clip: padding-box;
+  border: 1px solid #ced4da;
+  border-radius: 0.5rem;
+  transition: border-color .15s ease-in-out,box-shadow .15s ease-in-out;
+}
+
+.form_control:disabled {
+  background-color: #e9ecef;
+  opacity: 1;
+}
+
+.form_control_radio {
+  display: flex;
+  flex-direction: row;
+  gap: 1rem;
+  font-size: 1rem;
+  font-weight: 400;
+  line-height: 1.5;
+}
+
+.form_check {
+  display: block;
+  padding: 0.5rem 0.75rem;
+  flex-grow: 1;
+}
+
+.form_button {
+  padding: 10px 20px;
+  color: #00AAEC;
+  background-color: #FFFFFF;
+  border: 1px solid #00AAEC;
+  border-style: solid;
+  border-radius: 20px;
+  font-family: Quicksand;
+  font-size: 20px;
+  font-style: normal;
+  font-weight: bold;
+  line-height: 25px;
+  margin-top: 20px;
+}
+
+.coupon_wrapper_item {
+  border: 1px solid #c4c4c4;
+  margin-left: 10px;
+  margin-right: 10px;
+  padding: 10px 5px;
+  border-radius: 10px;
+  font-family: Quicksand;
+  font-size: 15px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: 21px;
+  letter-spacing: -0.02em;
+  color: #414141;
+}
+
+.coupon_table {
+  width: 100%;
+  border-bottom: 1px solid #111;
+}
+
+.coupon_table_item {
+  border-bottom: 1px solid #111;
+  font-size: 20px;
+  font-weight: bold;
+  line-height: 35px;
+  color: #111;
 }

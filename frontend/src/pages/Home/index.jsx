@@ -36,7 +36,7 @@ function Home() {
     setHasUser(true)
     localStorage.setItem('hasUser', 'true')
     closeModal()
-    // navigate('/redemption')
+    navigate('/profile')
   }
 
   const logOutSuccess = () => {
