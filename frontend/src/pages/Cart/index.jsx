@@ -1,13 +1,11 @@
-import { useEffect, useState } from 'react'
-import { useNavigate, Routes, Route } from 'react-router-dom'
+import { useState, useEffect } from 'react'
+import { useNavigate } from 'react-router-dom'
 import Header from '~/components/Header/Header'
 import Footer from '~/components/Footer/Footer'
 import Logout from '~/components/LoginModal/Logout'
-import Account from '~/pages/Profile/Account/Account'
-import Coupons from '~/pages/Profile/Coupons/Coupons'
-import History from '~/pages/Profile/History/History'
+import CartContent from '~/pages/Cart/CartContent/CartContent'
 
-function User() {
+function Cart() {
   const [showLogOutModal, setShowLogOutModal] = useState(false)
   const [hasUser, setHasUser] = useState(false)
   const navigate = useNavigate()
@@ -35,15 +33,11 @@ function User() {
   return (
     <div className='container mx-auto'>
       <Header hasUser={hasUser} openLogOutModal={() => setShowLogOutModal(true)}/>
-      <Routes>
-        <Route path='/account' element={<Account />} />
-        <Route path='/coupons' element={<Coupons />} />
-        <Route path='/history' element={<History />} />
-      </Routes>
+      <CartContent />
       <Footer />
       {showLogOutModal && <Logout showModal={showLogOutModal} handleClose={() => setShowLogOutModal(false)} logOutSuccess={() => logOutSuccess()} />}
     </div>
   )
 }
 
-export default User
+export default Cart

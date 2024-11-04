@@ -14,13 +14,6 @@ function Home() {
   const [hasUser, setHasUser] = useState(false)
   const navigate = useNavigate()
 
-  const openModal = () => {
-    setShowGetOtpModal(true)
-  }
-  const openLogOutModal = () => {
-    setShowLogOutModal(true)
-  }
-
   const showVerifyOtpModal = () => {
     setShowGetOtpModal(false)
     setShowVerifyModal(true)
@@ -36,21 +29,14 @@ function Home() {
     setHasUser(true)
     localStorage.setItem('hasUser', 'true')
     closeModal()
-    navigate('/profile')
+    navigate('/profile/account')
   }
 
   const logOutSuccess = () => {
     setHasUser(false)
-    localStorage.removeItem('hasUser')
-    closeModal()
-    navigate('/')
-  }
-
-  const moveToContact = () => {
-    window.scrollTo({
-      top: document.documentElement.scrollHeight,
-      behavior: 'smooth'
-    })
+    localStorage.setItem('hasUser', 'false')
+    setShowLogOutModal(false)
+    navigate('/home')
   }
 
   useEffect(() => {
@@ -63,7 +49,7 @@ function Home() {
 
   return (
     <div className='container mx-auto'>
-      <Header moveToContact={moveToContact} hasUser={hasUser} openModal={openModal} openLogOutModal={openLogOutModal}/>
+      <Header hasUser={hasUser} openModal={() => setShowGetOtpModal(true)} openLogOutModal={() => setShowLogOutModal(true)}/>
       <HomeContent hasUser={hasUser} />
       <Footer />
       {showGetOtpModal && <GetOTP showModal={showGetOtpModal} handleClose={closeModal} showVerifyOtpModal={showVerifyOtpModal} />}
