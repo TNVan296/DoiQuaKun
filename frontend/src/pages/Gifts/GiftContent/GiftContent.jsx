@@ -26,7 +26,7 @@ function GiftContent() {
                   <span className='fa fa-star'></span>
                   <span className='fa fa-star'></span>
                 </p>
-                <button className='gift_detail_button'>xem chi tiết</button>
+                <button className='gift_detail_button font_Quicksand'>xem chi tiết</button>
               </a>
             </div>
           </div>

@@ -9,6 +9,22 @@ body {
   background-color: #fff;
 }
 
+.font_iCiel_Crocante {
+  font-family: iCiel Crocante;
+}
+
+.font_iCiel_Panton {
+  font-family: iCiel Panton;
+}
+
+.font_Quicksand {
+  font-family: Quicksand;
+}
+
+.font_Baloo {
+  font-family: Baloo;
+}
+
 .navbar {
   height: 80px;
   background-color: #1b1464;
@@ -303,7 +319,6 @@ body {
 }
 
 .gift_detail_button {
-  font-family: Quicksand;
   font-style: normal;
   font-weight: bold;
   font-size: 20px;
@@ -320,7 +335,7 @@ body {
   text-transform: uppercase;
 }
 
-.profile_detail_title h1 {
+.header_title h1 {
   font-family: iCiel Crocante;
   font-style: normal;
   font-weight: normal;
@@ -355,7 +370,6 @@ body {
 }
 
 .profile_name {
-  font-family: iCiel Crocante;
   font-style: normal;
   font-weight: normal;
   font-size: 20px;
@@ -398,7 +412,6 @@ body {
 }
 
 .info_content h1 {
-  font-family: iCiel Crocante;
   font-style: normal;
   font-weight: normal;
   font-size: 25px;
@@ -407,7 +420,6 @@ body {
 }
 
 .info_content p {
-  font-family: Quicksand;
   font-style: normal;
   font-weight: normal;
   font-size: 15px;
@@ -464,7 +476,6 @@ body {
   border: 1px solid #00AAEC;
   border-style: solid;
   border-radius: 20px;
-  font-family: Quicksand;
   font-size: 20px;
   font-style: normal;
   font-weight: bold;
@@ -498,4 +509,13 @@ body {
   font-weight: bold;
   line-height: 35px;
   color: #111;
+}
+
+.empty_cart {
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 1.25rem;
 }

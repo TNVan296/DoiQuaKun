@@ -1,46 +1,38 @@
 import PropTypes from 'prop-types'
 import { useNavigate } from 'react-router-dom'
 
-function Header({ openModal, hasUser, openLogOutModal, moveToContact }) {
+function Header({ openModal, hasUser, openLogOutModal }) {
   const navigate = useNavigate()
 
-  const openProfile = () => {
-    navigate('/profile')
-  }
-
-  const moveToHome = () => {
-    navigate('/')
-  }
-
-  const moveToRedemption = () => {
-    navigate('/redemption')
-  }
-
-  const moveToGifts = () => {
-    navigate('/gifts')
+  const moveToContact = (e) => {
+    e.preventDefault()
+    window.scrollTo({
+      top: document.documentElement.scrollHeight,
+      behavior: 'smooth'
+    })
   }
 
   return (
     <div className='navbar flex justify-between items-center px-0'>
       <div className='logo cursor-pointer'>
-        <img src='../src/assets/logo.png' alt='Logo' onClick={ moveToHome } />
+        <img src='../src/assets/logo.png' alt='Logo' onClick={() => navigate('/home') } />
       </div>
       <div className='items'>
         <ul className='flex mx-auto'>
-          <li className='li-item text-lg font-[Quicksand] font-medium hover:font-bold'><a href="" onClick={moveToRedemption}>Chương trình chuyển đổi</a></li>
-          <li className='li-item text-lg font-[Quicksand] font-medium hover:font-bold'><a href="" onClick={moveToGifts}>Quà siêu Kun</a></li>
-          <li className='li-item text-lg font-[Quicksand] font-medium hover:font-bold'><a href="" onClick={moveToContact}>Liên hệ</a></li>
+          <li className='li-item text-lg font-[Quicksand] font-medium hover:font-bold'><a href="" onClick={() => navigate('/home')}>Chương trình chuyển đổi</a></li>
+          <li className='li-item text-lg font-[Quicksand] font-medium hover:font-bold'><a href="" onClick={() => navigate('/gifts')}>Quà siêu Kun</a></li>
+          <li className='li-item text-lg font-[Quicksand] font-medium hover:font-bold'><a href="" onClick={(e) => moveToContact(e)}>Liên hệ</a></li>
         </ul>
       </div>
       <div className='user-items'>
         <ul className='flex mx-auto'>
           <li className="li-item text-lg font-medium">
-            <button onClick={hasUser ? openProfile : openModal }>
+            <button onClick={hasUser ? () => navigate('/profile/account') : openModal }>
               <i className='far fa-user'></i>
             </button>
           </li>
           <li className="li-item text-lg font-medium">
-            <button id="cart">
+            <button onClick={hasUser ? () => navigate('/cart') : openModal }>
               <i className='fas fa-shopping-bag'></i>
             </button>
           </li>
@@ -60,9 +52,7 @@ function Header({ openModal, hasUser, openLogOutModal, moveToContact }) {
 Header.propTypes = {
   openModal: PropTypes.func,
   hasUser: PropTypes.bool,
-  openLogOutModal: PropTypes.func,
-  move: PropTypes.func,
-  moveToContact: PropTypes.func
+  openLogOutModal: PropTypes.func
 }
 
 export default Header
