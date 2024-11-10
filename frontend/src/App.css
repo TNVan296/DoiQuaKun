@@ -9,6 +9,10 @@ body {
   background-color: #fff;
 }
 
+.font_iCiel_Panton {
+  font-family: iCiel Panton;
+}
+
 .font_iCiel_Crocante {
   font-family: iCiel Crocante;
 }
@@ -72,7 +76,6 @@ body {
 }
 
 .shadow-text {
-  font-family: iCiel Crocante;
   font-weight: normal;
   font-style: normal;
   font-size: 40px;
@@ -91,7 +94,6 @@ body {
   padding: 10px 20px;
   color: #FFFFFF;
   line-height: 25px;
-  font-family: Quicksand;
   font-size: 20px;
   font-style: normal;
   font-weight: bold;
@@ -109,7 +111,6 @@ body {
 }
 
 .text-title {
-  font-family: Roboto;
   font-style: normal;
   font-weight: 500;
   font-size: 20px;
@@ -126,7 +127,6 @@ body {
   border: 1px solid #00AAEC;
   border-style: solid;
   border-radius: 20px;
-  font-family: Quicksand;
   font-size: 20px;
   font-style: normal;
   font-weight: bold;
@@ -145,7 +145,6 @@ body {
 }
 
 .step-title {
-  font-family: iCiel Panton;
   font-style: normal;
   font-weight: bold;
   font-size: 25px;
@@ -156,7 +155,6 @@ body {
 }
 
 .step-desc {
-  font-family: Quicksand;
   font-style: normal;
   font-weight: normal;
   font-size: 18px;
@@ -297,8 +295,11 @@ body {
   color: orange;
 }
 
+.gift_detail_wrapper .gift_rating .fa-star {
+  color: orange;
+}
+
 .gift_title {
-  font-family: Quicksand;
   font-style: normal;
   font-weight: bold;
   font-size: 20px;
@@ -309,7 +310,6 @@ body {
 }
 
 .gift_price {
-  font-family: Baloo;
   font-style: normal;
   font-weight: bold;
   font-size: 25px;
@@ -518,4 +518,97 @@ body {
   justify-content: center;
   align-items: center;
   gap: 1.25rem;
+}
+
+.gift_detail_color_item {
+  cursor: pointer;
+  padding: 5px;
+  border: 1px solid lightgray;
+  color: #8F8F8F;
+  font-size: 15px;
+  line-height: 25px;
+  margin-right: 20px;
+}
+
+.gift_detail_color_item:hover {
+  color: #green;
+  border: 1px solid green;
+}
+
+.gift_detail_color_item_active {
+  color: #green;
+  border: 1px solid green;
+}
+
+.gift_detail_quantity_counter {
+  border: 1px solid #272727;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1.25rem;
+  display: flex;
+  flex-direction: row;
+  padding: 5px;
+}
+
+.gift_detail_quantity_counter_button {
+  width: 40px;
+  height: 40px;
+  background-color: #fff;
+  border: 1px solid #272727;
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 25px;
+  color: #272727;
+}
+
+.gift_detail_quantity_counter_input {
+  width: 50px;
+  height: 40px;
+  border-radius: 10px;
+  text-align: center;
+  font-size: 25px;
+  font-weight: bold;
+  color: #272727;
+  padding-left: 10px;
+}
+
+/* Hide the arrows on Chrome, Safari, Edge, and Opera */
+.gift_detail_quantity_counter_input::-webkit-outer-spin-button,
+.gift_detail_quantity_counter_input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+/* Hide the arrows on Firefox */
+.gift_detail_quantity_counter_input[type="number"] {
+  -moz-appearance: textfield;
+}
+
+.gift_notes_title {
+  margin-bottom: 5px;
+}
+
+.gift_notes {
+  text-align: justify;
+  margin-bottom: 5px;
+}
+
+.slick_track {
+  width: 580px;
+  margin-left: auto;
+  margin-right: auto;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
+  grid-gap: 1rem;
+  margin-bottom: 20px;
+}
+
+.slick_track_item {
+  border: 1px solid lightgray;
+  border-radius: 10px;
+  cursor: pointer;
 }
