@@ -8,6 +8,7 @@ import CartContent from '~/pages/Cart/CartContent/CartContent'
 function Cart() {
   const [showLogOutModal, setShowLogOutModal] = useState(false)
   const [hasUser, setHasUser] = useState(false)
+  const [hasCartItem, setHasCartItem] = useState(true)
   const navigate = useNavigate()
 
   const logOutSuccess = () => {
@@ -33,7 +34,7 @@ function Cart() {
   return (
     <div className='container mx-auto'>
       <Header hasUser={hasUser} openLogOutModal={() => setShowLogOutModal(true)}/>
-      <CartContent />
+      <CartContent hasCartItem={hasCartItem} />
       <Footer />
       {showLogOutModal && <Logout showModal={showLogOutModal} handleClose={() => setShowLogOutModal(false)} logOutSuccess={() => logOutSuccess()} />}
     </div>

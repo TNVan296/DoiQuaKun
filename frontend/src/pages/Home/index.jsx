@@ -12,6 +12,7 @@ function Home() {
   const [showVerifyModal, setShowVerifyModal] = useState(false)
   const [showLogOutModal, setShowLogOutModal] = useState(false)
   const [hasUser, setHasUser] = useState(false)
+  const [hasCartItem, setHasCartItem] = useState(false)
   const navigate = useNavigate()
 
   const showVerifyOtpModal = () => {
@@ -49,8 +50,8 @@ function Home() {
 
   return (
     <div className='container mx-auto'>
-      <Header hasUser={hasUser} openModal={() => setShowGetOtpModal(true)} openLogOutModal={() => setShowLogOutModal(true)}/>
-      <HomeContent hasUser={hasUser} />
+      <Header hasUser={hasUser} hasCartItem={hasCartItem} openModal={() => setShowGetOtpModal(true)} openLogOutModal={() => setShowLogOutModal(true)}/>
+      <HomeContent hasUser={hasUser} openModal={() => setShowGetOtpModal(true)} />
       <Footer />
       {showGetOtpModal && <GetOTP showModal={showGetOtpModal} handleClose={closeModal} showVerifyOtpModal={showVerifyOtpModal} />}
       {showVerifyModal && <VerifyOTP showModal={showVerifyOtpModal} handleClose={closeModal} logInSuccess={logInSuccess} />}

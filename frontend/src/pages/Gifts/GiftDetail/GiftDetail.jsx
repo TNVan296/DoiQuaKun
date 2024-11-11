@@ -1,12 +1,24 @@
-import { useState } from 'react'
+import { useState, useContext } from 'react'
+import { useNavigate } from 'react-router-dom'
+import CartContent from '~/pages/Cart/CartContent/CartContent'
 
 function GiftDetail() {
-  const [changeImage, setChangeImage] = useState('')
-  const [selectorColor, setSelectorColor] = useState('')
+  const [itemImage, setItemImage] = useState('')
+  const [selectColor, setSelectColor] = useState('')
   const [quantity, setQuantity] = useState(1)
+  const { addItemToCart } = useContext(CartContent)
+  const navigate = useNavigate()
+
+  const handleAddToCart = () => {
+    addItemToCart({
+      image: itemImage,
+      color: selectColor,
+      quantity: quantity
+    })
+  }
 
   const handleColorChange = (color) => {
-    setSelectorColor(color)
+    setSelectColor(color)
   }
 
   const handleQuantityChange = (event) => {
@@ -26,16 +38,17 @@ function GiftDetail() {
   }
 
   const handleImageChange = (index) => {
-    setChangeImage(index)
+    setItemImage(index)
   }
+
   return (
     <>
       <div className="py-[80px] mx-[100px] mb-[115px]">
         <div className="gift_detail flex flex-row gap-10">
           <div className="w-1/2 px-5">
             <div className='gift_detail_img_wrapper mb-5'>
-              <img className="gift_detail_img" src={`../src/assets/${changeImage ? changeImage : 'tuirut_tonghop.jpg'}`} />
-              <button className='form_button font_iCiel_Crocante w-[230px] mt-0 absolute top-[510px] left-[485px]'>đổi quà ngay</button>
+              <img className="gift_detail_img" src={`../src/assets/${itemImage ? itemImage : 'tuirut_tonghop.jpg'}`} />
+              <button onClick={() => navigate('/cart')} className='form_button font_iCiel_Crocante w-[230px] mt-0 absolute top-[510px] left-[485px]'>đổi quà ngay</button>
             </div>
             <div className='gift_detail_side_img_wrapper'>
               <div className='slick_track'>
@@ -79,21 +92,21 @@ function GiftDetail() {
                     <div id="gift_detail_color_list" className="flex flex-row">
                       <input type="radio" hidden id="gift_detail_color_1" name="gift_detail_color" />
                       <label htmlFor="gift_detail_color_1"
-                        className={`gift_detail_color_item ${selectorColor === 'green' ? 'gift_detail_color_item_active' : ''}`}
+                        className={`gift_detail_color_item ${selectColor === 'green' ? 'gift_detail_color_item_active' : ''}`}
                         onClick={() => handleColorChange('green')}
                       >
                         <p>Xanh lá</p>
                       </label>
                       <input type="radio" hidden id="gift_detail_color_2" name="gift_detail_color" />
                       <label htmlFor="gift_detail_color_2"
-                        className={`gift_detail_color_item ${selectorColor === 'red' ? 'gift_detail_color_item_active' : ''}`}
+                        className={`gift_detail_color_item ${selectColor === 'red' ? 'gift_detail_color_item_active' : ''}`}
                         onClick={() => handleColorChange('red')}
                       >
                         <p>Đỏ</p>
                       </label>
                       <input type="radio" hidden id="gift_detail_color_3" name="gift_detail_color" />
                       <label htmlFor="gift_detail_color_3"
-                        className={`gift_detail_color_item ${selectorColor === 'black' ? 'gift_detail_color_item_active' : ''}`}
+                        className={`gift_detail_color_item ${selectColor === 'black' ? 'gift_detail_color_item_active' : ''}`}
                         onClick={() => handleColorChange('black')}
                       >
                         <p>Đen</p>
@@ -121,7 +134,7 @@ function GiftDetail() {
                 </div>
               </div>
               <div className='container button mb-[15px] flex justify-between'>
-                <button className='gift_detail_button font_iCiel_Panton'>Thêm vào giỏ quà</button>
+                <button onClick={handleAddToCart} className='gift_detail_button font_iCiel_Panton'>Thêm vào giỏ quà</button>
                 <button className='gift_detail_button font_iCiel_Panton'>Đổi quà ngay</button>
               </div>
               <div className='container description mb-[15px]'>

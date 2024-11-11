@@ -1,7 +1,7 @@
 import PropTypes from 'prop-types'
 import GiftContent from '~/pages/Gifts/GiftContent/GiftContent'
 
-function HomeContent({ hasUser }) {
+function HomeContent({ hasUser, openModal }) {
   return (
     <div className='content pt-[80px]'>
       <div className='onboarding_1'>
@@ -99,7 +99,7 @@ function HomeContent({ hasUser }) {
           <div id='item-list' className='flex mx-[100px] mb-[115px]'></div>
           <div className='text-center div-not-login px-[15px]'>
             <h4 className='text-2xl font-medium mb-2]'>Bạn chưa đăng nhập, hãy đăng nhập ngay để xem các phần quà nhé !</h4>
-            <button className='onboarding_button_2 font_Quicksand text-white bg-[#00AAEC] p-[10px_50px]'>Đăng nhập</button>
+            <button onClick={() => openModal()} className='onboarding_button_2 font_Quicksand text-white bg-[#00AAEC] p-[10px_50px]'>Đăng nhập</button>
           </div>
         </>
       }
@@ -111,7 +111,8 @@ function HomeContent({ hasUser }) {
 }
 
 HomeContent.propTypes = {
-  hasUser: PropTypes.bool
+  hasUser: PropTypes.bool,
+  openModal: PropTypes.func
 }
 
 export default HomeContent

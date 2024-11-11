@@ -1,8 +1,11 @@
 import PropTypes from 'prop-types'
 import { useNavigate } from 'react-router-dom'
+import { useContext } from 'react'
+import { CartContext } from '~/pages/Cart/CartProvider/CartProvider'
 
-function Header({ openModal, hasUser, openLogOutModal }) {
+function Header({ openModal, hasUser, hasCartItem, openLogOutModal }) {
   const navigate = useNavigate()
+  const { cartItems } = useContext(CartContext)
 
   const moveToContact = (e) => {
     e.preventDefault()
@@ -33,7 +36,15 @@ function Header({ openModal, hasUser, openLogOutModal }) {
           </li>
           <li className="li-item text-lg font-medium">
             <button onClick={hasUser ? () => navigate('/cart') : openModal }>
-              <i className='fas fa-shopping-bag'></i>
+              {hasCartItem ?
+                <span>
+                  <i className='fas fa-shopping-bag'></i>
+                  <span className='cart-item-count'>{cartItems.length}</span>
+                </span>
+                :
+                <>
+                  <i className='fas fa-shopping-bag'></i>
+                </>}
             </button>
           </li>
           {hasUser &&
@@ -52,7 +63,9 @@ function Header({ openModal, hasUser, openLogOutModal }) {
 Header.propTypes = {
   openModal: PropTypes.func,
   hasUser: PropTypes.bool,
-  openLogOutModal: PropTypes.func
+  hasCartItem: PropTypes.bool,
+  openLogOutModal: PropTypes.func,
+  cartItemCount: PropTypes.number
 }
 
 export default Header
