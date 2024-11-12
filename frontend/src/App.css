@@ -299,6 +299,10 @@ body {
   color: orange;
 }
 
+.gift_card_body .gift_rating .fa-star {
+  color: orange;
+}
+
 .gift_title {
   font-style: normal;
   font-weight: bold;
@@ -641,5 +645,56 @@ body {
   display: flex;
   flex-direction: column;
   align-items: end;
+}
 
+.item_list_carousel {
+  width: 100%;
+  overflow: hidden;
+}
+
+.items_carousel {
+  display: flex;
+  align-items: center;
+  position: relative;
+}
+
+.carousel_track {
+  display: flex;
+  transition: transform 0.5s ease;
+}
+
+.item_carousel_item {
+  /* Hiển thị 4 sản phẩm mỗi lần (100% / 4) */
+  flex: 0 0 25%;
+  padding: 10px;
+  text-align: center;
+  border: 1px solid lightgray;
+  border-radius: 5px;
+}
+
+.item_carousel_prev, .item_carousel_next {
+  background: black;
+  border-radius: 5px;
+  width: 20px;
+  font-size: 24px;
+  color: white;
+  position: absolute;
+  top: 55%;
+  /* transform: translate(0, -50%) */
+}
+
+.item_carousel_prev {
+  position: absolute;
+  left: 0;
+  z-index: 1;
+}
+
+.item_carousel_next {
+  position: absolute;
+  right: 0;
+  z-index: 1;
+}
+
+.border_right {
+  border-right: 1px solid lightgray;
 }
