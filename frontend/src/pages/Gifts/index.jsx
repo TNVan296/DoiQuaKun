@@ -7,6 +7,7 @@ import VerifyOTP from '~/components/LoginModal/VerifyOTP'
 import Logout from '~/components/LoginModal/Logout'
 import GiftContent from '~/pages/Gifts/GiftContent/GiftContent'
 import GiftDetail from '~/pages/Gifts/GiftDetail/GiftDetail'
+import ExchangedPoints from '~/components/BottomNav/ExchangedPoints'
 
 function Gifts() {
   const [showGetOtpModal, setShowGetOtpModal] = useState(false)
@@ -77,6 +78,7 @@ function Gifts() {
       {showGetOtpModal && <GetOTP showModal={showGetOtpModal} handleClose={closeModal} showVerifyOtpModal={showVerifyOtpModal} />}
       {showVerifyModal && <VerifyOTP showModal={showVerifyOtpModal} handleClose={closeModal} logInSuccess={logInSuccess} />}
       {showLogOutModal && <Logout showModal={showLogOutModal} handleClose={closeModal} logOutSuccess={logOutSuccess} />}
+      <ExchangedPoints />
     </div>
   )
 }

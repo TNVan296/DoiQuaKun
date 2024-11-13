@@ -4,6 +4,7 @@ import Header from '~/components/Header/Header'
 import Footer from '~/components/Footer/Footer'
 import Logout from '~/components/LoginModal/Logout'
 import CartContent from '~/pages/Cart/CartContent/CartContent'
+import ExchangedPoints from '~/components/BottomNav/ExchangedPoints'
 
 function Cart() {
   const [showLogOutModal, setShowLogOutModal] = useState(false)
@@ -37,6 +38,7 @@ function Cart() {
       <CartContent hasCartItem={hasCartItem} />
       <Footer />
       {showLogOutModal && <Logout showModal={showLogOutModal} handleClose={() => setShowLogOutModal(false)} logOutSuccess={() => logOutSuccess()} />}
+      <ExchangedPoints />
     </div>
   )
 }

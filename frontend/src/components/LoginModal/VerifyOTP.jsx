@@ -4,14 +4,32 @@ import { nextInput } from '~/utils/otpInput'
 
 function VerifyOTP({ showModal, handleClose, logInSuccess }) {
   const [otpInputValues, setOtpInputValues] = useState(Array(6).fill(''))
-  const handleButtonClick = () => {
-    const trueOtp = '111111' // OTP tạm thời
-    if (otpInputValues.join('') == trueOtp) {
-      logInSuccess()
-    } else {
-      alert('Mã OTP đã sai, vui lòng nhập sai !')
+
+  const handleButtonClick = async () => {
+    try {
+      const userEmail = localStorage.getItem('userEmail')
+      const otp = parseInt(otpInputValues.join(''), 10)
+      console.log(userEmail, otp)
+      const response = await fetch('http://localhost:3000/api/users/verifyOtp', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ email: userEmail, otp: otp })
+      })
+      if (response.ok) {
+        const data = await response.json()
+        console.log(data)
+        logInSuccess()
+      } else {
+        alert('Mã OTP đã sai, vui lòng nhập sai !')
+      }
+    } catch (error) {
+      console.error('Error logging in:', error)
+      alert('An error occurred. Please try again later.')
     }
   }
+
   return (
     <div className={`login-modal ${showModal ? 'block' : 'hidden'}`}>
       <div className="modal-content">

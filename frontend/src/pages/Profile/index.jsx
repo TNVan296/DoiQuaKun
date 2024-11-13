@@ -6,6 +6,7 @@ import Logout from '~/components/LoginModal/Logout'
 import Account from '~/pages/Profile/Account/Account'
 import Coupons from '~/pages/Profile/Coupons/Coupons'
 import History from '~/pages/Profile/History/History'
+import ExchangedPoints from '~/components/BottomNav/ExchangedPoints'
 
 function User() {
   const [showLogOutModal, setShowLogOutModal] = useState(false)
@@ -42,6 +43,7 @@ function User() {
       </Routes>
       <Footer />
       {showLogOutModal && <Logout showModal={showLogOutModal} handleClose={() => setShowLogOutModal(false)} logOutSuccess={() => logOutSuccess()} />}
+      <ExchangedPoints />
     </div>
   )
 }
