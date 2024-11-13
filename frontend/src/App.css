@@ -698,3 +698,27 @@ body {
 .border_right {
   border-right: 1px solid lightgray;
 }
+
+.bottom_nav {
+  position: fixed;
+  bottom: 0;
+  right: 0;
+  left: 0;
+  z-index: 1030;
+  width: 300px;
+  height: 60px;
+  background-color: whitesmoke;
+  border-radius: 5px;
+  box-shadow: 0px -2px 10px 3px rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 10px;
+}
+
+.bottom_nav_container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: .5rem;
+}

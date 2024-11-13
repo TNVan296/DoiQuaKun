@@ -6,13 +6,14 @@ import Footer from '~/components/Footer/Footer'
 import GetOTP from '~/components/LoginModal/GetOTP'
 import VerifyOTP from '~/components/LoginModal/VerifyOTP'
 import Logout from '~/components/LoginModal/Logout'
+import ExchangedPoints from '~/components/BottomNav/ExchangedPoints'
 
 function Home() {
   const [showGetOtpModal, setShowGetOtpModal] = useState(false)
   const [showVerifyModal, setShowVerifyModal] = useState(false)
   const [showLogOutModal, setShowLogOutModal] = useState(false)
   const [hasUser, setHasUser] = useState(false)
-  const [hasCartItem, setHasCartItem] = useState(false)
+  // const [hasCartItem, setHasCartItem] = useState(false)
   const navigate = useNavigate()
 
   const showVerifyOtpModal = () => {
@@ -50,12 +51,13 @@ function Home() {
 
   return (
     <div className='container mx-auto'>
-      <Header hasUser={hasUser} hasCartItem={hasCartItem} openModal={() => setShowGetOtpModal(true)} openLogOutModal={() => setShowLogOutModal(true)}/>
+      <Header hasUser={hasUser} openModal={() => setShowGetOtpModal(true)} openLogOutModal={() => setShowLogOutModal(true)}/>
       <HomeContent hasUser={hasUser} openModal={() => setShowGetOtpModal(true)} />
       <Footer />
       {showGetOtpModal && <GetOTP showModal={showGetOtpModal} handleClose={closeModal} showVerifyOtpModal={showVerifyOtpModal} />}
       {showVerifyModal && <VerifyOTP showModal={showVerifyOtpModal} handleClose={closeModal} logInSuccess={logInSuccess} />}
       {showLogOutModal && <Logout showModal={showLogOutModal} handleClose={closeModal} logOutSuccess={logOutSuccess} />}
+      {hasUser && <ExchangedPoints />}
     </div>
   )
 }
