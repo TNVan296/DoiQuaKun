@@ -27,18 +27,22 @@ function Home() {
     setShowLogOutModal(false)
   }
 
-  const logInSuccess = () => {
+  const logInSuccess = (data) => {
     setHasUser(true)
     localStorage.setItem('hasUser', 'true')
+    localStorage.setItem('accessToken', data.token.accessToken)
+    localStorage.setItem('refreshToken', data.token.refreshToken)
     closeModal()
-    navigate('/profile/account')
+    window.location.href = '/profile/account'
+    // navigate('/profile/account')
   }
 
   const logOutSuccess = () => {
     setHasUser(false)
     localStorage.setItem('hasUser', 'false')
+    localStorage.removeItem('accessToken')
+    localStorage.removeItem('refreshToken')
     setShowLogOutModal(false)
-    navigate('/home')
   }
 
   useEffect(() => {
