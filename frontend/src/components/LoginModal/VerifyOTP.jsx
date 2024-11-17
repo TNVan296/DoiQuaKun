@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import PropTypes from 'prop-types'
-import { nextInput } from '~/utils/otpInput'
+import { nextInput } from '~/utils/otpInput.js'
+import { fetchWithAuthToken } from '~/utils/fetchWithAuthToken.js'
 
 function VerifyOTP({ showModal, handleClose, logInSuccess }) {
   const [otpInputValues, setOtpInputValues] = useState(Array(6).fill(''))
@@ -9,8 +10,7 @@ function VerifyOTP({ showModal, handleClose, logInSuccess }) {
     try {
       const userEmail = localStorage.getItem('userEmail')
       const otp = parseInt(otpInputValues.join(''), 10)
-      console.log(userEmail, otp)
-      const response = await fetch('http://localhost:3000/api/users/verifyOtp', {
+      const response = fetchWithAuthToken('http://localhost:3000/api/users/verifyOtp', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'
@@ -19,8 +19,7 @@ function VerifyOTP({ showModal, handleClose, logInSuccess }) {
       })
       if (response.ok) {
         const data = await response.json()
-        console.log(data)
-        logInSuccess()
+        logInSuccess(data)
       } else {
         alert('Mã OTP đã sai, vui lòng nhập sai !')
       }

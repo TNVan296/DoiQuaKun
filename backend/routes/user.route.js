@@ -9,7 +9,7 @@ const {
   getCardHistory,
   getHistoryExchange
 } = require('../controllers/user.controller');
-const { authenticateToken } = require('../middlewares/authenticateToken.middleware');
+const { authenticateToken, generateRefreshToken } = require('../middlewares/authenticateToken.middleware');
 
 /**
  * @swagger
@@ -52,7 +52,7 @@ router.post('/register', register);
  *             properties:
  *               email:
  *                 type: string
- *                 example: example@example.com
+ *                 example: thuong4g@gmail.com
  *     responses:
  *       200:
  *         description: Đăng nhập thành công
@@ -60,6 +60,33 @@ router.post('/register', register);
  *         description: Lỗi đăng nhập
  */
 router.post('/login', login);
+
+/**
+ * @swagger
+ * /api/users/token:
+ *   post:
+ *     summary: Tái tạo Access Token
+ *     tags:
+ *       - Users
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               refreshToken:
+ *                 type: string
+ *                 example: "eyJhbGciOiJIUzI1NiIsInR5..."
+ *     responses:
+ *       200:
+ *         description: Access Token được tái tạo thành công
+ *       401:
+ *         description: Refresh Token không hợp lệ
+ *       403:
+ *         description: Refresh Token đã hết hạn hoặc không hợp lệ
+ */
+router.post('/token', generateRefreshToken)
 
 /**
  * @swagger

@@ -52,6 +52,16 @@ module.exports = (sequelize) => {
       {
         allowNull: true,
         type: DataTypes.DATE
+      },
+      refreshToken:
+      {
+        allowNull: true,
+        type: DataTypes.TEXT
+      },
+      tokenIssuedAt:
+      {
+        allowNull: true,
+        type: DataTypes.DATE
       }
     },
     {

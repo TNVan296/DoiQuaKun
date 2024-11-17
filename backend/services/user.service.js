@@ -1,6 +1,6 @@
 const db = require('../sequelize/database.js');
 const { sendOtpToEmail } = require('../utils/emailHelper.utils');
-const { accessToken } = require('../utils/jwtToken.utils');
+const { createAccessToken, createRefreshToken } = require('../utils/jwtToken.utils');
 
 const UserRegister = async (newUserObject) => {
   try {
@@ -31,6 +31,7 @@ const UserRegister = async (newUserObject) => {
 
 const UserLogin = async (userObject) => {
   try {
+    console.log('userObject', userObject);
     const user = await db.User.findOne({ where: { email: userObject.email } });
     if (!user) {
       await UserRegister(userObject);
@@ -54,17 +55,24 @@ const UserVerify = async (userObject) => {
     if (!user) {
       return { success: false, message: 'User does not exist' };
     }
-
+    
     if (!user.otp || user.expireIn < Date.now()) {
       return { success: false, message: 'OTP not found or expired, please request again' };
     }
-
+    
     if (user.otp !== parseInt(userObject.otp)) {
       return { success: false, message: 'Invalid OTP' };
     }
+    
+    const accessToken = createAccessToken(userObject, process.env.AT_SECRET);
+    const refreshToken = createRefreshToken(userObject, process.env.RT_SECRET);
+    
+    await user.update({ refreshToken: refreshToken });
 
-    const token = accessToken(userObject, process.env.JWT_SECRET);
-    return { success: true, data: token, message: 'OTP verified, login successful' };
+    return {
+      success: true,
+      data: { accessToken, refreshToken },
+      message: 'OTP verified, login successful' };
   } catch (error) {
     return { success: false, message: 'Error while verifying user' };
   }

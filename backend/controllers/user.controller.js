@@ -43,7 +43,6 @@ const login = async (req, res) => {
     } else {
       return res.status(400).send({ message: logInEmail.message });
     }
-
   } catch (error) {
     return res.status(500).send({ message: 'Có lỗi xảy ra trong quá trình đăng nhập.' });
   }

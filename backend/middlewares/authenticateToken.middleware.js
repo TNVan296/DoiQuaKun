@@ -1,23 +1,62 @@
 const jwt = require('jsonwebtoken')
+const db = require('../sequelize/database.js');
+const { createAccessToken, createRefreshToken } = require('../utils/jwtToken.utils.js');
 const dotenv = require('dotenv');
 dotenv.config();
 
-const db = require('../sequelize/database.js');
-
-const authenticateToken = (req, res, next) => {
+const authenticateToken = async (req, res, next) => {
   const authHeader = req.headers['authorization'];
   const token = authHeader && authHeader.split(' ')[1];
   if (!token) {
     return res.status(401).json({ message: 'Token required' });
   }
-  jwt.verify(token, process.env.JWT_SECRET, async (err, user) => {
-    if (err) {
-      return res.status(403).json({ message: 'Invalid token' });
+  try {
+    const decoded = jwt.verify(token, process.env.AT_SECRET);
+    const loggedUser = await db.User.findOne({ where: { email: decoded.email } });
+
+    if (!loggedUser) {
+      return res.status(403).json({ message: 'User not found' });
     }
-    const loggedUser = await db.User.findOne({ where: { email: user.email } });
+
     req.user = loggedUser;
     next();
-  });
+  } catch (err) {
+    return res.status(403).json({ message: 'Token is invalid or expired' });
+  }
 };
 
-module.exports = { authenticateToken }
+const generateRefreshToken = async (req, res) => {
+  const { refreshToken: clientRefreshToken } = req.body;
+
+  if (!clientRefreshToken) {
+    return res.status(401).json({ message: 'Refresh token required' });
+  }
+
+  try {
+    const decoded = jwt.verify(clientRefreshToken, process.env.RT_SECRET);
+    const loggedUser = await db.User.findOne({ where: { email: decoded.email } });
+
+    if (!loggedUser || loggedUser.refreshToken !== clientRefreshToken) {
+      return res.status(403).json({ message: 'Invalid refresh token' });
+    }
+
+    // Tạo access token mới
+    const newAccessToken = createAccessToken(loggedUser, process.env.AT_SECRET);
+
+    // Tạo refresh token mới nếu cần (dài hạn)
+    const newRefreshToken = createRefreshToken(loggedUser, process.env.RT_SECRET);
+
+    // Lưu refresh token mới vào cơ sở dữ liệu (nếu refresh lại)
+    loggedUser.refreshToken = newRefreshToken;
+    await loggedUser.save();
+
+    return res.status(200).json({
+      accessToken: newAccessToken,
+      refreshToken: newRefreshToken, // Gửi lại refreshToken mới nếu cần
+    });
+  } catch (err) {
+    return res.status(403).json({ message: 'Invalid or expired refresh token' });
+  }
+};
+
+module.exports = { authenticateToken, generateRefreshToken };
