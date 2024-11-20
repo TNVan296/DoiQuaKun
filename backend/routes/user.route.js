@@ -63,6 +63,34 @@ router.post('/login', login);
 
 /**
  * @swagger
+ * /api/users/verifyOtp:
+ *   post:
+ *     summary: Xác thực OTP
+ *     tags:
+ *       - Users
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               email:
+ *                 type: string
+ *                 example: thuong4g@gmail.com
+ *               otp:
+ *                 type: integer
+ *                 example: 379474
+ *     responses:
+ *       200:
+ *         description: Xác thực OTP thành công
+ *       400:
+ *         description: OTP không hợp lệ
+*/
+router.post('/verifyOtp', verifyOtp);
+
+/**
+ * @swagger
  * /api/users/token:
  *   post:
  *     summary: Tái tạo Access Token
@@ -87,34 +115,6 @@ router.post('/login', login);
  *         description: Refresh Token đã hết hạn hoặc không hợp lệ
  */
 router.post('/token', generateRefreshToken)
-
-/**
- * @swagger
- * /api/users/verifyOtp:
- *   post:
- *     summary: Xác thực OTP
- *     tags:
- *       - Users
- *     requestBody:
- *       required: true
- *       content:
- *         application/json:
- *           schema:
- *             type: object
- *             properties:
- *               email:
- *                 type: string
- *                 example: example@example.com
- *               otp:
- *                 type: integer
- *                 example: 123456
- *     responses:
- *       200:
- *         description: Xác thực OTP thành công
- *       400:
- *         description: OTP không hợp lệ
- */
-router.post('/verifyOtp', verifyOtp);
 
 /**
  * @swagger

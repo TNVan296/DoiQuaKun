@@ -14,6 +14,10 @@ module.exports = (sequelize) => {
         allowNull: true,
         type: DataTypes.STRING(255)
       },
+      gender: {
+        allowNull: true,
+        type: DataTypes.BOOLEAN
+      },
       email: {
         allowNull: false,
         type: DataTypes.STRING(255)
@@ -48,21 +52,16 @@ module.exports = (sequelize) => {
         allowNull: true,
         type: DataTypes.INTEGER
       },
-      expireIn:
-      {
-        allowNull: true,
-        type: DataTypes.DATE
-      },
       refreshToken:
       {
         allowNull: true,
         type: DataTypes.TEXT
       },
-      tokenIssuedAt:
+      rtExpireIn:
       {
         allowNull: true,
         type: DataTypes.DATE
-      }
+      },
     },
     {
       tableName: 'users',

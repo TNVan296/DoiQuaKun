@@ -21,8 +21,10 @@ const { authenticateToken } = require('../middlewares/authenticateToken.middlewa
  *             properties:
  *               cardName:
  *                 type: string
- *                 description: The name of the card.
- *                 example: 'DQK_01'
+ *                 example: 'DQK_ADMIN'
+ *               walletId:
+ *                 type: integer
+ *                 example: 1
  *     responses:
  *       200:
  *         description: Points added to wallet successfully
