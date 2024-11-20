@@ -1,5 +1,4 @@
 import { useState, useEffect } from 'react'
-import { useNavigate } from 'react-router-dom'
 import Header from '~/components/Header/Header'
 import HomeContent from '~/pages/Home/HomeContent/HomeContent'
 import Footer from '~/components/Footer/Footer'
@@ -13,8 +12,6 @@ function Home() {
   const [showVerifyModal, setShowVerifyModal] = useState(false)
   const [showLogOutModal, setShowLogOutModal] = useState(false)
   const [hasUser, setHasUser] = useState(false)
-  // const [hasCartItem, setHasCartItem] = useState(false)
-  const navigate = useNavigate()
 
   const showVerifyOtpModal = () => {
     setShowGetOtpModal(false)
@@ -34,7 +31,6 @@ function Home() {
     localStorage.setItem('refreshToken', data.token.refreshToken)
     closeModal()
     window.location.href = '/profile/account'
-    // navigate('/profile/account')
   }
 
   const logOutSuccess = () => {
@@ -42,6 +38,7 @@ function Home() {
     localStorage.setItem('hasUser', 'false')
     localStorage.removeItem('accessToken')
     localStorage.removeItem('refreshToken')
+    localStorage.removeItem('userEmail')
     setShowLogOutModal(false)
   }
 

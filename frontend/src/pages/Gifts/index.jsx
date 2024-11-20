@@ -37,6 +37,9 @@ function Gifts() {
   const logOutSuccess = () => {
     setHasUser(false)
     localStorage.setItem('hasUser', 'false')
+    localStorage.removeItem('accessToken')
+    localStorage.removeItem('refreshToken')
+    localStorage.removeItem('userEmail')
     setShowLogOutModal(false)
     navigate('/home')
   }

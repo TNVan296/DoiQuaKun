@@ -6,15 +6,15 @@ export async function fetchWithAuthToken(url, options = {}) {
   if (!tokens) {
     alert('Session expired. Please log in again !')
     window.location.href = '/home'
-    return
   }
   options.headers = {
     ...options.headers,
     Authorization: `Bearer ${tokens}`
   }
   const response = await fetch(url, options)
-  if (!response.ok) {
+  if (response.ok) {
+    return response.json()
+  } else {
     console.log('Error response:', response.statusText)
   }
-  return response.json()
 }

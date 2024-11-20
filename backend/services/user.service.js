@@ -31,19 +31,23 @@ const UserRegister = async (newUserObject) => {
 
 const UserLogin = async (userObject) => {
   try {
-    console.log('userObject', userObject);
     const user = await db.User.findOne({ where: { email: userObject.email } });
+    
     if (!user) {
       await UserRegister(userObject);
       return await UserLogin(userObject);
     }
-    const newOtp = await user.set({
-      otp: Math.floor(100000 + Math.random() * 900000),
-      expireIn: Date.now() + 300000,
-    });
-    await newOtp.save();
-    const mailSend = sendOtpToEmail(user.email, newOtp.otp);
-    return { success: true, message: 'OTP sent to your email' };
+
+    if (user.otp) {
+      return { success: true, message: 'User already has OTP, please verify !' };
+    } else {
+      const newOtp = await user.set({
+        otp: Math.floor(100000 + Math.random() * 900000)
+      });
+      await newOtp.save();
+      const mailSend = sendOtpToEmail(user.email, newOtp.otp);
+      return { success: true, message: 'New OTP sent to your email' };
+    }
   } catch (error) {
     return { success: false, message: 'Error while logging in user' };
   }
@@ -56,8 +60,8 @@ const UserVerify = async (userObject) => {
       return { success: false, message: 'User does not exist' };
     }
     
-    if (!user.otp || user.expireIn < Date.now()) {
-      return { success: false, message: 'OTP not found or expired, please request again' };
+    if (!user.otp) {
+      return { success: false, message: 'OTP not found, please request again' };
     }
     
     if (user.otp !== parseInt(userObject.otp)) {
@@ -66,13 +70,12 @@ const UserVerify = async (userObject) => {
     
     const accessToken = createAccessToken(userObject, process.env.AT_SECRET);
     const refreshToken = createRefreshToken(userObject, process.env.RT_SECRET);
-    
-    await user.update({ refreshToken: refreshToken });
-
+    await user.update({ refreshToken: refreshToken, rtExpireIn: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000) });
     return {
       success: true,
       data: { accessToken, refreshToken },
-      message: 'OTP verified, login successful' };
+      message: 'OTP verified, login successful'
+    };
   } catch (error) {
     return { success: false, message: 'Error while verifying user' };
   }
@@ -99,6 +102,7 @@ const UserUpdateProfile = async (userObject) => {
     const updatedUser = await user.update({
       name: userObject.user.name,
       phoneNumber: userObject.user.phoneNumber,
+      gender: userObject.user.gender,
       detailAddress: userObject.user.detailAddress,
       cityId: userObject.user.cityId,
       districtId: userObject.user.districtId,

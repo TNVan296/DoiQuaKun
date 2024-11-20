@@ -4,10 +4,10 @@ const db = require('../sequelize/database.js');
 const addCardPoints = async (CardObject) => {
   try {
     if (!CardObject.card.cardName) {
-      return res.status(400).json({ message: 'Card name is required' });
+      return { success: false, message: 'Card name is required' };
     }
-    if (!CardObject.card.userId) {
-      return res.status(400).json({ message: 'User ID is required' });
+    if (!CardObject.card.walletId) {
+      return { success: false, message: 'Wallet Id is required' };
     }
     const card = await db.Card.findOne({ where: { name: CardObject.card.cardName } });
 
@@ -17,15 +17,15 @@ const addCardPoints = async (CardObject) => {
     if (card.status !== 'active') {
       throw new Error('Card is not active');
     }
-    const wallet = await db.Wallet.findOne({ where: { userId: CardObject.card.userId } });
-    if (!wallet) {
+    const userWallet = await db.Wallet.findOne({ where: { userId: CardObject.card.walletId } });
+    if (!userWallet) {
       throw new Error('Wallet not found');
+    } else {
+      await card.update({ status: 'inactive', walletId: userWallet.id });
+      console.log('vao day')
+      await userWallet.increment({ points: card.points });
+      return cardResponseTemplate(card);
     }
-
-    await card.update({ status: 'inactive', walletId: wallet.id });
-    await wallet.increment({ points: card.points });
-
-    return cardResponseTemplate(card);
   } catch (error) {
     throw error;
   }
