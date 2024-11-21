@@ -4,7 +4,19 @@ const getCartItems = async (userObject) => {
   try {
     const cart = await db.Cart.findOne({
       where: { userId: userObject.user.id, status: 'active' },
-      include: [{ model: db.CartItem, as: 'cartItems', include: [{ model: db.Product, as: 'product' }] }]
+      include:
+      [
+        { model: db.CartItem, as: 'cartItems', include:
+          [
+            { model: db.Product, as: 'product', include:
+              [
+                { model: db.Picture, as: 'picture' },
+                { model: db.Color, as: 'color' }
+              ]
+            }
+          ] 
+        }
+      ]
     })
     if (!cart) {
       return { success: false, message: 'Cart not found' };
