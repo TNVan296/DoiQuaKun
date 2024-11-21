@@ -14,10 +14,11 @@ const getCart = async (req, res) => {
       user: req.user,
     }
     const cart = await cartService.getCartItems(userObject);
-    if (!cart) {
+    if (!cart.success) {
       return res.status(400).json({ message: cart.message });
+    } else {
+      return res.status(200).send({ message: cart.message, data: cart.data });
     }
-    return res.status(200).send({ message: cart.message, data: cart.data });
   } catch (error) {
     handleError(res, error, 'Could not get cart');
   }

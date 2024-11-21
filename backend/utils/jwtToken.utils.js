@@ -6,7 +6,7 @@ const createAccessToken = (user, secretKey) => {
 }
 // Tạo Refresh Token
 const createRefreshToken = (user, secretKey) => {
-  return jwt.sign({ email: user.email }, secretKey, { expiresIn: '7d' });
+  return jwt.sign({ email: user.email }, secretKey, { expiresIn: '1d' });
 }
 
 module.exports = {
