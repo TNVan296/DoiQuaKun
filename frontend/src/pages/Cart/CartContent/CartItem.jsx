@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom'
 import PropTypes from 'prop-types'
 
 function CartItem({ hasCartItem, setHasCartItem }) {
-  const [products, setProducts] = useState({})
+  const [products, setProducts] = useState([])
   const [startIndex, setStartIndex] = useState(0)
   const itemsPerPage = 4
   const navigate = useNavigate()
@@ -55,7 +55,7 @@ function CartItem({ hasCartItem, setHasCartItem }) {
           }
         })
         const data = await response.json()
-        setProducts(data)
+        setProducts(data.data)
       }
       catch (error) {
         console.log(error)
@@ -145,7 +145,7 @@ function CartItem({ hasCartItem, setHasCartItem }) {
                   products.map((item) => (
                     <div key={item.id} className="item_carousel_item">
                       <a href="" onClick={() => navigate(`/gifts/${item.id}`)}>
-                        <img className="gift_card_img" src={`../src/assets/${item.picture.name}`} />
+                        <img className="gift_card_img" src={`../src/assets/${item.image}`} />
                       </a>
                       <div className="gift_card_body text-center">
                         <a href="" onClick={() => navigate(`/gifts/${item.id}`)}>

@@ -15,7 +15,6 @@ function CartContent() {
           }
         })
         setHasCartItem(response.data)
-        console.log(hasCartItem)
       }
       catch (error) {
         console.error(error)
