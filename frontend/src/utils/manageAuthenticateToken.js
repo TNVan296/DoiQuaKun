@@ -25,6 +25,8 @@ export async function ensureAccessToken() {
       localStorage.setItem('refreshToken', data.refreshToken)
       return data.accessToken
     } else {
+      localStorage.removeItem('hasUser')
+      localStorage.removeItem('userEmail')
       localStorage.removeItem('accessToken')
       localStorage.removeItem('refreshToken')
       return null

@@ -20,8 +20,9 @@ const getCartItems = async (userObject) => {
     })
     if (!cart) {
       return { success: false, message: 'Cart not found' };
+    } else {
+      return { success: true, data: cart, message: 'Cart fetched successfully' };
     }
-    return { success: true, data: cart, message: 'Cart fetched successfully' };
   } catch (error) {
     return { success: false, message: 'Error while fetching cart' };
   }
@@ -97,7 +98,6 @@ const addCartItem = async (cartObject) => {
     cart.totalItems += cartObject.cart.quantity;
     cart.totalPoints += productPrice * cartObject.cart.quantity;  
     await cart.save(); 
-
     return cart; 
   } catch (error) {
     throw new Error('Could not add item to cart'); 

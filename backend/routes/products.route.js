@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const productController = require('../controllers/products.controller');
+const { searchProducts, getAllProducts, getProductById, getProductsByCategory } = require('../controllers/products.controller');
 
 /**
  * @swagger
@@ -52,7 +52,7 @@ const productController = require('../controllers/products.controller');
  *       500:
  *         description: Lỗi máy chủ
  */
-router.get('/search', productController.searchProducts);
+router.get('/search', searchProducts);
 
 /**
  * @swagger
@@ -104,7 +104,7 @@ router.get('/search', productController.searchProducts);
  *       500:
  *         description: Lỗi máy chủ
  * */
-router.get('/:id', productController.getProductById);
+router.get('/:id', getProductById);
 
 /**
  * @swagger
@@ -146,35 +146,18 @@ router.get('/:id', productController.getProductById);
  *         description: Lỗi máy chủ
  * */
 
-router.get('/', productController.getAllProducts);
+router.get('/', getAllProducts);
 
-/**
- * @swagger
- * /api/products/category/{id}:
- *   get:
- *     summary: Lấy tất cả sản phẩm theo ID chuyên mục
- *     parameters:
- *       - in: path
- *         name: id
- *         required: true
- *         description: ID chuyên mục
- *         schema:
- *           type: integer
- *     responses:
- *       200:
- *         description: Danh sách sản phẩm đã được lấy được
- *         content:
- *           application/json:
- *             schema:
- *               type: array
- *               items:
- *                 type: object
- *                 properties:
- *                   id:
- *                     type: integer
- *                     example: 32
- */
+// /**
+//  * @swagger
+//  * /api/products/category:
+//  *   get:
+//  *     summary: Lấy tất cả sản phẩm theo chuyên mục
+//  *     responses:
+//  *       200:
+//  *         description: Danh sách sản phẩm đã được lấy được
+//  */
 
-router.get('/category/:id', productController.getProductsByCategoryId);
+// router.get('/category', getProductsByCategory);
 
 module.exports = router;

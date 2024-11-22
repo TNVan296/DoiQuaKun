@@ -1,21 +1,15 @@
-import { useState, useContext } from 'react'
-import { useNavigate } from 'react-router-dom'
-import CartContent from '~/pages/Cart/CartContent/CartContent'
+import { useState, useEffect } from 'react'
+import { useNavigate, useParams } from 'react-router-dom'
+import { fetchWithAuthToken } from '~/utils/fetchWithAuthToken.js'
 
 function GiftDetail() {
   const [itemImage, setItemImage] = useState('')
   const [selectColor, setSelectColor] = useState('')
   const [quantity, setQuantity] = useState(1)
-  const { addItemToCart } = useContext(CartContent)
-  const navigate = useNavigate()
+  const [productItem, setProductItem] = useState({})
+  const { giftId } = useParams()
 
-  const handleAddToCart = () => {
-    addItemToCart({
-      image: itemImage,
-      color: selectColor,
-      quantity: quantity
-    })
-  }
+  const navigate = useNavigate()
 
   const handleColorChange = (color) => {
     setSelectColor(color)
@@ -41,46 +35,68 @@ function GiftDetail() {
     setItemImage(index)
   }
 
+  const addToCart = async () => {
+    try {
+      const addProductToCart = await fetchWithAuthToken('http://localhost:3000/api/cart/add', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        }
+      })
+    } catch (error) {
+      console.log('Error adding product item to cart !', error)
+    }
+  }
+
+  useEffect(() => {
+    const fetchProductItem = async () => {
+      try {
+        const response = await fetchWithAuthToken(`http://localhost:3000/api/products/${giftId}`, {
+          method: 'GET',
+          headers: {
+            'Content-Type': 'application/json'
+          }
+        })
+        console.log(response)
+        setProductItem(response.data)
+      } catch (error) {
+        console.error('Error fetching product item:', error)
+      }
+    }
+    if (giftId) fetchProductItem()
+  }, [giftId])
+
   return (
     <>
       <div className="py-[80px] mx-[100px] mb-[115px]">
         <div className="gift_detail flex flex-row gap-10">
           <div className="w-1/2 px-5">
             <div className='gift_detail_img_wrapper mb-5'>
-              <img className="gift_detail_img" src={`../src/assets/${itemImage ? itemImage : 'tuirut_tonghop.jpg'}`} />
+              <img className="gift_detail_img" src={`../src/assets/${itemImage ? itemImage : productItem.image}`} />
               <button onClick={() => navigate('/cart')} className='form_button font_iCiel_Crocante w-[230px] mt-0 absolute top-[510px] left-[485px]'>đổi quà ngay</button>
             </div>
             <div className='gift_detail_side_img_wrapper'>
               <div className='slick_track'>
-                <img
-                  className="slick_track_item"
-                  src="../src/assets/tuirut_tonghop.jpg"
-                  onClick={() => handleImageChange('tuirut_tonghop.jpg')}
-                />
-                <img
-                  className="slick_track_item"
-                  src="../src/assets/tuirut_do.png"
-                  onClick={() => handleImageChange('tuirut_do.png')}
-                />
-                <img
-                  className="slick_track_item"
-                  src="../src/assets/tuirut_xanhla.png"
-                  onClick={() => handleImageChange('tuirut_xanhla.png')}
-                />
+                {productItem.products?.map((product) => (
+                  <img
+                    className="slick_track_item"
+                    key={product.pictureId}
+                    src={`../src/assets/${product.picture?.name}`}
+                    onClick={() => handleImageChange(product?.picture?.name)}
+                  />
+                ))}
               </div>
             </div>
           </div>
           <div className="w-1/2 px-5">
             <div className="gift_detail_wrapper">
               <div className="container mb-[15px]">
-                <p className='gift_title font_iCiel_Crocante mb-[20px] mt-0'>Balo KUN dây rút</p>
-                <p className='gift_price font_Baloo text-xl mb-[20px]'>1 Thẻ Siêu Quyền Năng</p>
+                <p className='gift_title font_iCiel_Crocante mb-[20px] mt-0'>{productItem.name}</p>
+                <p className='gift_price font_Baloo text-xl mb-[20px]'>{productItem.exchangePoint} Thẻ Siêu Quyền Năng</p>
                 <p className='gift_rating mb-[20px]'>
-                  <span className='fa fa-star fa-2x mr-[20px]'></span>
-                  <span className='fa fa-star fa-2x mr-[20px]'></span>
-                  <span className='fa fa-star fa-2x mr-[20px]'></span>
-                  <span className='fa fa-star fa-2x mr-[20px]'></span>
-                  <span className='fa fa-star fa-2x mr-[20px]'></span>
+                  {[...Array(5)].map((_, index) => (
+                    <span key={index} className='fa fa-star fa-2x mr-[20px]'></span>
+                  ))}
                 </p>
               </div>
               <div className='container color mb-[15px]'>
@@ -90,27 +106,17 @@ function GiftDetail() {
                   </div>
                   <div className="w-2/5">
                     <div id="gift_detail_color_list" className="flex flex-row">
-                      <input type="radio" hidden id="gift_detail_color_1" name="gift_detail_color" />
-                      <label htmlFor="gift_detail_color_1"
-                        className={`gift_detail_color_item ${selectColor === 'green' ? 'gift_detail_color_item_active' : ''}`}
-                        onClick={() => handleColorChange('green')}
-                      >
-                        <p>Xanh lá</p>
-                      </label>
-                      <input type="radio" hidden id="gift_detail_color_2" name="gift_detail_color" />
-                      <label htmlFor="gift_detail_color_2"
-                        className={`gift_detail_color_item ${selectColor === 'red' ? 'gift_detail_color_item_active' : ''}`}
-                        onClick={() => handleColorChange('red')}
-                      >
-                        <p>Đỏ</p>
-                      </label>
-                      <input type="radio" hidden id="gift_detail_color_3" name="gift_detail_color" />
-                      <label htmlFor="gift_detail_color_3"
-                        className={`gift_detail_color_item ${selectColor === 'black' ? 'gift_detail_color_item_active' : ''}`}
-                        onClick={() => handleColorChange('black')}
-                      >
-                        <p>Đen</p>
-                      </label>
+                      {productItem.products?.map((product) => (
+                        <>
+                          <input type="radio" key={product.colorId} hidden id={`gift_detail_color_${product.colorId}`} name="gift_detail_color" />
+                          <label htmlFor={`gift_detail_color_${product.colorId}`}
+                            className={`gift_detail_color_item ${selectColor === product.color?.name ? 'gift_detail_color_item_active' : ''}`}
+                            onClick={() => handleColorChange(product.color?.name)}
+                          >
+                            <p>{product.color?.name}</p>
+                          </label>
+                        </>
+                      ))}
                     </div>
                   </div>
                 </div>
@@ -134,8 +140,8 @@ function GiftDetail() {
                 </div>
               </div>
               <div className='container button mb-[15px] flex justify-between'>
-                <button onClick={handleAddToCart} className='gift_detail_button font_iCiel_Panton'>Thêm vào giỏ quà</button>
-                <button className='gift_detail_button font_iCiel_Panton'>Đổi quà ngay</button>
+                <button onClick={addToCart} className='gift_detail_button font_iCiel_Panton'>Thêm vào giỏ quà</button>
+                <button onClick={() => navigate('/cart')}className='gift_detail_button font_iCiel_Panton'>Đổi quà ngay</button>
               </div>
               <div className='container description mb-[15px]'>
                 <p className='gift_notes_title'>

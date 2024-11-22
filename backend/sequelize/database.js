@@ -22,6 +22,7 @@ db.sequelize = sequelize;
 db.Picture = require('./models/pictures.model.js')(sequelize, Sequelize);
 db.Color = require('./models/colors.model.js')(sequelize, Sequelize);
 db.Size = require('./models/sizes.model.js')(sequelize, Sequelize);
+db.Design = require('./models/designs.model.js')(sequelize, Sequelize);
 db.Product = require('./models/products.model.js')(sequelize, Sequelize);
 db.ProductCategory = require('./models/productsCategories.model.js')(sequelize,Sequelize);
 db.Card = require('./models/cards.model.js')(sequelize, Sequelize);
@@ -32,10 +33,6 @@ db.CartItem = require('./models/cartItems.model.js')(sequelize, Sequelize);
 db.District = require('./models/district.model.js')(sequelize, Sequelize);
 db.City = require('./models/city.model.js')(sequelize, Sequelize);
 db.Ward = require('./models/wards.model.js')(sequelize, Sequelize);
-
-// db.City = require('./models/city.model.js')(sequelize, Sequelize);
-// db.District = require('./models/district.model.js')(sequelize, Sequelize)
-// db.File = require('./models/file.model.js')(sequelize, Sequelize)
 
 require('./extra-setup.js')(sequelize);
 

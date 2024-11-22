@@ -1,13 +1,9 @@
 import { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
-import axios from 'axios'
+import PropTypes from 'prop-types'
 
-function CartItem() {
-  const [items, setItems] = useState([
-    { id: 1, quantity: 1 },
-    { id: 2, quantity: 1 }
-  ])
-  const [products, setProducts] = useState([])
+function CartItem({ hasCartItem, setHasCartItem }) {
+  const [products, setProducts] = useState({})
   const [startIndex, setStartIndex] = useState(0)
   const itemsPerPage = 4
   const navigate = useNavigate()
@@ -22,26 +18,26 @@ function CartItem() {
     )
   }
 
-  const handleQuantityChange = (id, event) => {
-    const newQuantity = parseInt(event.target.value) || 1
-    setItems(
-      items.map((item) =>
-        item.id === id ? { ...item, quantity: Math.max(1, newQuantity) } : item
+  const handleQuantityChange = (id, newQuantity) => {
+    setHasCartItem((prevState) => ({
+      ...prevState,
+      cartItems: prevState.cartItems.map((item) =>
+        item.id === id ? { ...item, quantity: Math.max(1, newQuantity)} : item
       )
-    )
+    }))
   }
 
   const increaseValue = (id) => {
-    setItems(
-      items.map((item) =>
+    setHasCartItem(
+      hasCartItem.cartItems?.map((item) =>
         item.id === id ? { ...item, quantity: item.quantity + 1 } : item
       )
     )
   }
 
   const decreaseValue = (id) => {
-    setItems(
-      items.map((item) =>
+    setHasCartItem(
+      hasCartItem.cartItems?.map((item) =>
         item.id === id && item.quantity > 1
           ? { ...item, quantity: item.quantity - 1 }
           : item
@@ -50,25 +46,38 @@ function CartItem() {
   }
 
   useEffect(() => {
-    axios
-      .get('http://localhost:3000/api/products')
-      .then((res) => setProducts(res.data))
-      .catch((err) => console.log(err))
+    const fetchProducts = async () => {
+      try {
+        const response = await fetch('http://localhost:3000/api/products', {
+          method: 'GET',
+          headers: {
+            'Content-Type': 'application/json'
+          }
+        })
+        const data = await response.json()
+        setProducts(data)
+      }
+      catch (error) {
+        console.log(error)
+        setProducts([])
+      }
+    }
+    fetchProducts()
   }, [])
 
   return (
     <>
       <div className="no_empty_cart">
         <div className="gift_cart_list">
-          {items.map((item) => (
+          {hasCartItem.cartItems?.map((item) => (
             <div key={item.id} className="gift_cart_container">
               <div className="gift_cart_img">
-                <img src="../src/assets/tuirut_xanhla.png" alt="Product Image" />
+                <img src={`../src/assets/${item.product.picture.name}`} alt="Product Image" />
               </div>
               <div className="gift_cart_info mr-[150px]">
-                <p className="gift_cart_title font_iCiel_Crocante">balo kun dây rút</p>
+                <p className="gift_cart_title font_iCiel_Crocante">{item.product.name}</p>
                 <p className="gift_cart_color">
-                  <b>Màu sắc:</b> Xanh lá
+                  <b>Màu sắc:</b> {item.product.color.name}
                 </p>
               </div>
               <div className="gift_cart_quantity mr-[100px]">
@@ -96,7 +105,7 @@ function CartItem() {
               </div>
               <div className="gift_cart_price">
                 <p className="font_Quicksand text-[lightseagreen] capitalize">
-                  <b>1 thẻ siêu quyền năng</b>
+                  <b>{item.product.exchangePoint} thẻ siêu quyền năng</b>
                 </p>
               </div>
             </div>
@@ -132,25 +141,26 @@ function CartItem() {
                 className="carousel_track"
                 style={{ transform: `translateX(-${startIndex * (100 / itemsPerPage)}%)` }}
               >
-                {products.map((item) => (
-                  <div key={item.id} className="item_carousel_item">
-                    <a href="" onClick={() => navigate(`/gifts/${item.id}`)}>
-                      <img className="gift_card_img" src={`../src/assets/${item.picture.name}`} />
-                    </a>
-                    <div className="gift_card_body text-center">
+                {products.length > 0 &&
+                  products.map((item) => (
+                    <div key={item.id} className="item_carousel_item">
                       <a href="" onClick={() => navigate(`/gifts/${item.id}`)}>
-                        <p className="gift_title font_Quicksand capitalize">{item.name}</p>
-                        <p className="gift_price font_Baloo">{item.exchangePoint}</p>
-                        <p className="gift_rating">
-                          {[...Array(5)].map((_, index) => (
-                            <span key={index} className="fa fa-star"></span>
-                          ))}
-                        </p>
-                        <button className="gift_detail_button font_Quicksand">Xem chi tiết</button>
+                        <img className="gift_card_img" src={`../src/assets/${item.picture.name}`} />
                       </a>
+                      <div className="gift_card_body text-center">
+                        <a href="" onClick={() => navigate(`/gifts/${item.id}`)}>
+                          <p className="gift_title font_Quicksand capitalize">{item.name}</p>
+                          <p className="gift_price font_Baloo">{item.exchangePoint} Thẻ Siêu Quyền Năng</p>
+                          <p className="gift_rating">
+                            {[...Array(5)].map((_, index) => (
+                              <span key={index} className="fa fa-star"></span>
+                            ))}
+                          </p>
+                          <button className="gift_detail_button font_Quicksand">Xem chi tiết</button>
+                        </a>
+                      </div>
                     </div>
-                  </div>
-                ))}
+                  ))}
               </div>
             </div>
             <button className="item_carousel_next" onClick={handleNext}>
@@ -257,6 +267,11 @@ function CartItem() {
       </div>
     </>
   )
+}
+
+CartItem.propTypes = {
+  hasCartItem: PropTypes.object,
+  setHasCartItem: PropTypes.func
 }
 
 export default CartItem

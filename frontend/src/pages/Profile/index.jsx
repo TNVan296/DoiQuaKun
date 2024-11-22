@@ -63,13 +63,14 @@ function User() {
     const isAccessToken = localStorage.getItem('accessToken')
     const fetchUserProfile = async () => {
       try {
-        const response = fetchWithAuthToken('http://localhost:3000/api/users/profile', {
+        const response = await fetchWithAuthToken('http://localhost:3000/api/users/profile', {
           method: 'GET',
           headers: {
             'Content-Type': 'application/json'
           }
         })
-        setUserProfile(response)
+        const data = await response.data
+        setUserProfile(data)
       } catch (error) {
         console.error(error)
       }
@@ -105,7 +106,7 @@ function User() {
               <div className='navigation_menu pt-8'>
                 <ul className="navigation_list">
                   <li className='mb-4'>
-                    <a href="" onClick={() => {navigate('/profile/account')}} className="navigation_item active">
+                    <a href="" onClick={() => {navigate('/profile/account')}} className="navigation_item">
                       <p>
                         <i className="pr-5 far fa-user"></i>
                         Tài khoản của tôi
