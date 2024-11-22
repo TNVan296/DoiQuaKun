@@ -1,76 +1,91 @@
 const { Op } = require('sequelize');
 const db = require('../sequelize/database.js');
 
-const searchProducts = async (name) => {
+const searchProduct = async (name) => {
   try {
-    return await db.Product.findAll({
+    const product = await db.Product.findAll({
       where: {
         name: {
           [Op.like]: `%${name}%`
         }
       }
     });
+    if (!product) {
+      return { success: false, message: 'Không tìm thấy sản phẩm nào có tên như vậy !' }
+    } else {
+      return { success: true, data: product, message: 'Tìm thấy sản phẩm thành công !' };
+    }
   } catch (error) {
     console.error('Lỗi khi thực hiện truy vấn tìm kiếm sản phẩm:', error);
     throw error;
   }
 };
 
-const getProductById = async (id) => {
+const getProductByID = async (id) => {
   try {
-    return await db.Product.findByPk(id, {
+    const productById = await db.ProductCategory.findByPk(id, {
       include: [
-        { model: db.Picture, as: 'picture' },
-        { model: db.Color, as: 'color' },
-        { model: db.Size, as: 'size' },
-        { model: db.ProductCategory, as: 'category' }
+        { model: db.Product, as: 'products', include: [
+          { model: db.Picture, as: 'picture' },
+          { model: db.Color, as: 'color' },
+          { model: db.Size, as: 'size' },
+          { model: db.Design, as: 'design' }
+        ]},
       ],
       attributes: { exclude: ['createdAt', 'updatedAt', 'id'] }
     });
+    if (!productById) {
+      return { success: false, message: 'Không tìm thấy sản phẩm nào có ID như vậy !' }
+    } else {
+      return { success: true, data: productById, message: 'Lấy sản phẩm thành công !' };
+    }
   } catch (error) {
     console.error('Lỗi khi truy vấn sản phẩm theo ID:', error);
     throw error;
   }
 };
 
-const getAllProducts = async () => {
+const getAllProductItems = async () => {
   try {
-    return await db.Product.findAll({
-      include: [
-        { model: db.Picture, as: 'picture' },
-        { model: db.Color, as: 'color' },
-        { model: db.Size, as: 'size' },
-        { model: db.ProductCategory, as: 'category' }
-      ],
+    const products = await db.ProductCategory.findAll({
       attributes: { exclude: ['createdAt', 'updatedAt'] }
     });
+    if (!products) {
+      return { success: false, message: 'Không tìm thấy sản phẩm !' }
+    } else {
+      return { success: true, data: products, message: 'Lấy sản phẩm thành công !' };
+    }
   } catch (error) {
     console.error('Lỗi khi truy vấn tất cả sản phẩm:', error);
     throw error;
   }
 };
 
-const getProductsByCategory = async (categoryId) => {
-  try {
-    return await db.Product.findAll({
-      include: [
-        { model: db.Picture, as: 'picture' },
-        { model: db.Color, as: 'color' },
-        { model: db.Size, as: 'size' },
-        { model: db.ProductCategory, as: 'category' }
-      ],
-      where: { categoryId },
-      attributes: { exclude: ['createdAt', 'updatedAt'] }
-    });
-  } catch (error) {
-    console.error('Lỗi khi truy vấn tất cả san pham theo chúng tình:', error);
-    throw error;
-  }
-};
+// const getProductCategories = async () => {
+//   try {
+//     const productByCategory = await db.Product.findOne({
+//       include: [
+//         { model: db.Picture, as: 'picture' },
+//         { model: db.Color, as: 'color' },
+//         { model: db.Size, as: 'size' },
+//         { model: db.Design, as: 'design' }
+//       ],
+//       attributes: { exclude: ['createdAt', 'updatedAt'] }
+//     });
+//     if (!productByCategory) {
+//       return { success: false, message: 'Không tìm thấy sản phẩm !' }
+//     } else {
+//       return { success: true, data: productByCategory, message: 'Lấy sản phẩm thành công !' };
+//     }
+//   } catch (error) {
+//     console.error('Lỗi khi truy vấn tất cả san pham theo chuyên mục:', error);
+//     throw error;
+//   }
+// };
 
 module.exports = {
-  searchProducts,
-  getProductById,
-  getAllProducts,
-  getProductsByCategory
+  searchProduct,
+  getProductByID,
+  getAllProductItems,
+  // getProductCategories
 };

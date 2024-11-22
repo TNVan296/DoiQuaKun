@@ -16,10 +16,7 @@ function Account() {
         },
         body: JSON.stringify(userProfile)
       })
-      const data = response.then(res => setUserProfile(res.data))
-      setUserProfile({
-        ...data
-      })
+      response.then(res => setUserProfile(res.data))
     } catch (error) {
       console.error(error)
     }
@@ -28,16 +25,13 @@ function Account() {
   useEffect(() => {
     const fetchUserProfile = async () => {
       try {
-        const response = fetchWithAuthToken('http://localhost:3000/api/users/profile', {
+        const response = await fetchWithAuthToken('http://localhost:3000/api/users/profile', {
           method: 'GET',
           headers: {
             'Content-Type': 'application/json'
           }
         })
-        const data = response.then(res => setUserProfile(res.data))
-        setUserProfile({
-          ...data
-        })
+        setUserProfile(response.data)
       } catch (error) {
         console.error(error)
       }

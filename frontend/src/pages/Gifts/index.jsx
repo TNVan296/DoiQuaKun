@@ -45,7 +45,8 @@ function Gifts() {
   }
 
   useEffect(() => {
-    if (localStorage.getItem('hasUser') === 'true') {
+    const isAccessToken = localStorage.getItem('accessToken')
+    if (isAccessToken) {
       setHasUser(true)
     } else {
       setHasUser(false)
@@ -58,20 +59,21 @@ function Gifts() {
       <div className='content pt-[80px]'>
         <Routes>
           <Route path='/' element=
-            {
-              hasUser ? <GiftContent /> :
-                <>
-                  <div className='onboarding_3 py-[80px]'>
-                    <div className='title-wrapper text-center'>
-                      <p className='shadow-text font_iCiel_Crocante'>quà siêu kun</p>
-                    </div>
+            {hasUser ?
+              <GiftContent />
+              :
+              <>
+                <div className='onboarding_3 py-[80px]'>
+                  <div className='title-wrapper text-center'>
+                    <p className='shadow-text font_iCiel_Crocante'>quà siêu kun</p>
                   </div>
-                  <div id='item-list' className='flex mx-[100px] mb-[115px]'></div>
-                  <div className='text-center div-not-login px-[15px] mb-[100px]'>
-                    <h4 className='text-2xl font-medium mb-2]'>Bạn chưa đăng nhập, hãy đăng nhập ngay để xem các phần quà nhé !</h4>
-                    <button onClick={() => setShowGetOtpModal(true)} className='onboarding_button_2 text-white bg-[#00AAEC] p-[10px_50px]'>Đăng nhập</button>
-                  </div>
-                </>
+                </div>
+                <div id='item-list' className='flex mx-[100px] mb-[115px]'></div>
+                <div className='text-center div-not-login px-[15px] mb-[100px]'>
+                  <h4 className='text-2xl font-medium mb-2]'>Bạn chưa đăng nhập, hãy đăng nhập ngay để xem các phần quà nhé !</h4>
+                  <button onClick={() => setShowGetOtpModal(true)} className='onboarding_button_2 text-white bg-[#00AAEC] p-[10px_50px]'>Đăng nhập</button>
+                </div>
+              </>
             }
           />
           <Route path='/:giftId' element={<GiftDetail />} />
@@ -81,7 +83,7 @@ function Gifts() {
       {showGetOtpModal && <GetOTP showModal={showGetOtpModal} handleClose={closeModal} showVerifyOtpModal={showVerifyOtpModal} />}
       {showVerifyModal && <VerifyOTP showModal={showVerifyOtpModal} handleClose={closeModal} logInSuccess={logInSuccess} />}
       {showLogOutModal && <Logout showModal={showLogOutModal} handleClose={closeModal} logOutSuccess={logOutSuccess} />}
-      <ExchangedPoints />
+      {hasUser && <ExchangedPoints />}
     </div>
   )
 }

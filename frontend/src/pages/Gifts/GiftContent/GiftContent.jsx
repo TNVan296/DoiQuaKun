@@ -1,4 +1,3 @@
-import axios from 'axios'
 import { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 
@@ -7,10 +6,23 @@ function GiftContent() {
   const navigate = useNavigate()
 
   useEffect(() => {
-    axios
-      .get('http://localhost:3000/api/products')
-      .then((res) => setProducts(res.data))
-      .catch((err) => console.log(err))
+    const fetchProducts = async () => {
+      try {
+        const response = await fetch('http://localhost:3000/api/products', {
+          method: 'GET',
+          headers: {
+            'Content-Type': 'application/json'
+          }
+        })
+        const data = await response.json()
+        setProducts(data.data)
+      }
+      catch (error) {
+        console.log(error)
+        setProducts([])
+      }
+    }
+    fetchProducts()
   }, [])
 
   return (
@@ -22,12 +34,16 @@ function GiftContent() {
       </div>
       <div id='item-list' className='grid grid-cols-4 gap-8 mx-[100px] mb-[115px]'>
         {products.map((product) => (
-          <div id={`item-${product.id}`} key={product.id} className='gift_card shadow'>
-            <a href="" onClick={() => navigate(`/gifts/${product.id}`) }>
-              <img className="gift_card_img" src={`../src/assets/${product.picture.name}`} />
+          <div
+            id={`item-${product.id}`}
+            key={product.id}
+            onClick={() => navigate(`/gifts/${product.id}`) }
+            className='gift_card shadow'>
+            <a href="">
+              <img className="gift_card_img" src={`../src/assets/${product.image}`} />
             </a>
             <div className='gift_card_body'>
-              <a href="" onClick={() => navigate(`/gifts/${product.id}`) }>
+              <a href="">
                 <p className='gift_title font_Quicksand'>{product.name}</p>
                 <p className='gift_price font_Baloo'>{product.exchangePoint} Thẻ Siêu Quyền Năng</p>
                 <p className='gift_rating'>

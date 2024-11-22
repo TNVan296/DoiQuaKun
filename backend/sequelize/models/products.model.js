@@ -19,7 +19,7 @@ module.exports = (sequelize) => {
         type: DataTypes.INTEGER
       },
       sizeId: {
-        allowNull: false,
+        allowNull: true,
         type: DataTypes.INTEGER
       },
       pictureId: {
@@ -28,6 +28,10 @@ module.exports = (sequelize) => {
       },
       categoryId: { 
         allowNull: false,
+        type: DataTypes.INTEGER
+      },
+      designId: {
+        allowNull: true,
         type: DataTypes.INTEGER
       },
       exchangePoint: {

@@ -1,7 +1,28 @@
-import PropTypes from 'prop-types'
+import { useState, useEffect } from 'react'
 import CartItem from '~/pages/Cart/CartContent/CartItem'
+import { fetchWithAuthToken } from '~/utils/fetchWithAuthToken.js'
 
-function CartContent({ hasCartItem, addedItem }) {
+function CartContent() {
+  const [hasCartItem, setHasCartItem] = useState({})
+
+  useEffect(() => {
+    const fetchCartItem = async () => {
+      try {
+        const response = await fetchWithAuthToken('http://localhost:3000/api/cart', {
+          method: 'GET',
+          headers: {
+            'Content-Type': 'application/json'
+          }
+        })
+        setHasCartItem(response.data)
+        console.log(hasCartItem)
+      }
+      catch (error) {
+        console.error(error)
+      }
+    }
+    fetchCartItem()
+  }, [])
 
   return (
     <>
@@ -12,7 +33,9 @@ function CartContent({ hasCartItem, addedItem }) {
         </div>
         <div className="solid"></div>
         <div className="cart_list">
-          { hasCartItem ? <CartItem item={addedItem} /> :
+          { hasCartItem.totalItems && hasCartItem.totalItems > 0 ?
+            <CartItem hasCartItem={hasCartItem} setHasCartItem={setHasCartItem} />
+            :
             <div className="empty_cart">
               <img src="../src/assets/empty-cart.png" className="inline" alt="empty cart" />
               <p className="text-lg">Không có sản phẩm nào trong giỏ !</p>
@@ -23,11 +46,6 @@ function CartContent({ hasCartItem, addedItem }) {
       </div>
     </>
   )
-}
-
-CartContent.propTypes = {
-  hasCartItem: PropTypes.bool,
-  addedItem: PropTypes.bool
 }
 
 export default CartContent

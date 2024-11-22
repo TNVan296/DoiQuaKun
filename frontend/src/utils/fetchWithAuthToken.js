@@ -13,7 +13,8 @@ export async function fetchWithAuthToken(url, options = {}) {
   }
   const response = await fetch(url, options)
   if (response.ok) {
-    return response.json()
+    const data = await response.json()
+    return data
   } else {
     console.log('Error response:', response.statusText)
   }

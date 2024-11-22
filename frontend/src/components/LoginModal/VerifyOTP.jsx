@@ -9,7 +9,7 @@ function VerifyOTP({ showModal, handleClose, logInSuccess }) {
     try {
       const userEmail = localStorage.getItem('userEmail')
       const otp = parseInt(otpInputValues.join(''), 10)
-      const response = await fetch ('http://localhost:3000/api/users/verifyOtp', {
+      const response = await fetch('http://localhost:3000/api/users/verifyOtp', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'
@@ -24,7 +24,6 @@ function VerifyOTP({ showModal, handleClose, logInSuccess }) {
       }
     } catch (error) {
       console.error('Error logging in:', error)
-      alert('An error occurred. Please try again later.')
     }
   }
 

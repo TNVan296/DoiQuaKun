@@ -43,7 +43,8 @@ function Home() {
   }
 
   useEffect(() => {
-    if (localStorage.getItem('hasUser') === 'true') {
+    const isAccessToken = localStorage.getItem('accessToken')
+    if (isAccessToken) {
       setHasUser(true)
     } else {
       setHasUser(false)
