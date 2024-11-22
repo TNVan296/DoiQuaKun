@@ -21,23 +21,29 @@ const searchProduct = async (name) => {
   }
 };
 
+// Lấy sản phẩm theo ID và gom nhóm
 const getProductByID = async (id) => {
   try {
     const productById = await db.ProductCategory.findByPk(id, {
       include: [
-        { model: db.Product, as: 'products', include: [
-          { model: db.Picture, as: 'picture' },
-          { model: db.Color, as: 'color' },
-          { model: db.Size, as: 'size' },
-          { model: db.Design, as: 'design' }
-        ]},
+        { 
+          model: db.Product, 
+          as: 'products', 
+          include: [
+            { model: db.Picture, as: 'picture' },
+            { model: db.Color, as: 'color' },
+            { model: db.Size, as: 'size' },
+            { model: db.Design, as: 'design' }
+          ]
+        },
       ],
       attributes: { exclude: ['createdAt', 'updatedAt', 'id'] }
     });
+
     if (!productById) {
-      return { success: false, message: 'Không tìm thấy sản phẩm nào có ID như vậy !' }
+      return { success: false, message: 'Không tìm thấy sản phẩm nào có ID như vậy !' };
     } else {
-      return { success: true, data: productById, message: 'Lấy sản phẩm thành công !' };
+      return { success: true, message: 'Lấy sản phẩm thành công !', data: productById };
     }
   } catch (error) {
     console.error('Lỗi khi truy vấn sản phẩm theo ID:', error);

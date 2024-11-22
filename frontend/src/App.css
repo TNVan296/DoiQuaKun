@@ -524,7 +524,7 @@ body {
   gap: 1.25rem;
 }
 
-.gift_detail_color_item {
+.gift_detail_item {
   cursor: pointer;
   padding: 5px;
   border: 1px solid lightgray;
@@ -534,12 +534,12 @@ body {
   margin-right: 20px;
 }
 
-.gift_detail_color_item:hover {
+.gift_detail_item:hover {
   color: #green;
   border: 1px solid green;
 }
 
-.gift_detail_color_item_active {
+.gift_detail_item_active {
   color: #green;
   border: 1px solid green;
 }

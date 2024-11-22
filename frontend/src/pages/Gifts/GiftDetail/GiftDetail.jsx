@@ -4,16 +4,18 @@ import { fetchWithAuthToken } from '~/utils/fetchWithAuthToken.js'
 
 function GiftDetail() {
   const [itemImage, setItemImage] = useState('')
-  const [selectColor, setSelectColor] = useState('')
+  const [selectedColor, setSelectedColor] = useState('')
+  const [selectedSize, setSelectedSize] = useState('')
+  const [selectedDesign, setSelectedDesign] = useState('')
   const [quantity, setQuantity] = useState(1)
+  const [colors, setColors] = useState([])
+  const [sizes, setSizes] = useState([])
+  const [designs, setDesigns] = useState([])
+  const [pictures, setPictures] = useState([])
   const [productItem, setProductItem] = useState({})
+  const [filteredProducts, setFilteredProducts] = useState([])
   const { giftId } = useParams()
-
   const navigate = useNavigate()
-
-  const handleColorChange = (color) => {
-    setSelectColor(color)
-  }
 
   const handleQuantityChange = (event) => {
     setQuantity(event.target.value)
@@ -48,6 +50,28 @@ function GiftDetail() {
     }
   }
 
+  const handleSelectedChange = (type, id) => {
+    if (type === 'color') {
+      if (selectedColor === '') {
+        setSelectedColor(id)
+      } else {
+        setSelectedColor('')
+      }
+    } else if (type === 'size') {
+      if (selectedSize === '') {
+        setSelectedSize(id)
+      } else {
+        setSelectedSize('')
+      }
+    } else if (type === 'design') {
+      if (selectedDesign === '') {
+        setSelectedDesign(id)
+      } else {
+        setSelectedDesign('')
+      }
+    }
+  }
+
   useEffect(() => {
     const fetchProductItem = async () => {
       try {
@@ -57,14 +81,74 @@ function GiftDetail() {
             'Content-Type': 'application/json'
           }
         })
-        console.log(response)
         setProductItem(response.data)
+        const fetchedProducts = response.data.products
+        const colorArray = []
+        const sizeArray = []
+        const designArray = []
+        const pictureArray = []
+
+        fetchedProducts.forEach((product) => {
+          if (product.color) {
+            if (!colorArray.find((color) => color.id === product.colorId)) {
+              colorArray.push({
+                id: product.color.id,
+                name: product.color.name
+              })
+            }
+          }
+          if (product.size) {
+            if (!sizeArray.find((size) => size.id === product.sizeId)) {
+              sizeArray.push({
+                id: product.size.id,
+                name: product.size.sizeName
+              })
+            }
+          }
+          if (product.design) {
+            if (!designArray.find((design) => design.id === product.designId)) {
+              designArray.push({
+                id: product.design.id,
+                name: product.design.name
+              })
+            }
+          }
+          if (product.picture) {
+            if (!pictureArray.find((picture) => picture.pictureId === product.picture.id)) {
+              pictureArray.push({
+                pictureId: product.picture.id,
+                pictureName: product.picture.name
+              })
+            }
+          }
+        })
+
+        setColors(colorArray)
+        setSizes(sizeArray)
+        setDesigns(designArray)
+        setPictures(pictureArray)
+        // console.log(colorArray, sizeArray, designArray, pictureArray)
+        let filteredProductItems = fetchedProducts
+
+        if (selectedColor) {
+          filteredProductItems = fetchedProducts.filter((product) => product.colorId === selectedColor)
+          // console.log(filteredProducts)
+        }
+        if (selectedSize) {
+          filteredProductItems = fetchedProducts.filter((product) => product.sizeId === selectedSize)
+          // console.log(filteredProducts)
+        }
+        if (selectedDesign) {
+          filteredProductItems = fetchedProducts.filter((product) => product.designId === selectedDesign)
+          // console.log(filteredProducts)
+        }
+        setFilteredProducts(filteredProductItems)
       } catch (error) {
         console.error('Error fetching product item:', error)
       }
     }
     if (giftId) fetchProductItem()
-  }, [giftId])
+  }, [giftId, selectedColor, selectedSize, selectedDesign])
 
   return (
     <>
@@ -77,12 +161,12 @@ function GiftDetail() {
             </div>
             <div className='gift_detail_side_img_wrapper'>
               <div className='slick_track'>
-                {productItem.products?.map((product) => (
+                {pictures.map((picture) => (
                   <img
                     className="slick_track_item"
-                    key={product.pictureId}
-                    src={`../src/assets/${product.picture?.name}`}
-                    onClick={() => handleImageChange(product?.picture?.name)}
+                    key={picture.pictureId}
+                    src={`../src/assets/${picture.pictureName}`}
+                    onClick={() => handleImageChange(picture.pictureName)}
                   />
                 ))}
               </div>
@@ -99,28 +183,116 @@ function GiftDetail() {
                   ))}
                 </p>
               </div>
-              <div className='container color mb-[15px]'>
-                <div className="gift_detail_color flex gap-4 items-center">
-                  <div className="w-1/5">
-                    <p>Màu sắc</p>
-                  </div>
-                  <div className="w-2/5">
-                    <div id="gift_detail_color_list" className="flex flex-row">
-                      {productItem.products?.map((product) => (
-                        <>
-                          <input type="radio" key={product.colorId} hidden id={`gift_detail_color_${product.colorId}`} name="gift_detail_color" />
-                          <label htmlFor={`gift_detail_color_${product.colorId}`}
-                            className={`gift_detail_color_item ${selectColor === product.color?.name ? 'gift_detail_color_item_active' : ''}`}
-                            onClick={() => handleColorChange(product.color?.name)}
-                          >
-                            <p>{product.color?.name}</p>
-                          </label>
-                        </>
-                      ))}
+              {sizes.length > 0 &&
+                <div className="container size mb-[15px]">
+                  <div className="gift_detail_size flex gap-4 items-center">
+                    <div className="w-1/5">
+                      <p>Kích thước<br />(Size)</p>
+                    </div>
+                    <div className="w-4/5">
+                      <div id="gift_detail_size_list" className="flex flex-row">
+                        {sizes.map((size) => {
+                          const isAvailable = filteredProducts.some(
+                            (product) => product.sizeId === size.id
+                          );
+                          if (!isAvailable) return null // Không hiển thị size nếu không có trong filteredProducts
+
+                          return (
+                            <>
+                              <input
+                                key={size.id}
+                                type="radio"
+                                hidden
+                                id={`gift_detail_size_${size.id}`}
+                                name="gift_detail_size"
+                              />
+                              <label
+                                htmlFor={`gift_detail_size_${size.id}`}
+                                className={`gift_detail_item ${
+                                  selectedSize === size.id ? 'gift_detail_item_active' : ''
+                                }`}
+                                onClick={() => handleSelectedChange('size', size.id)}
+                              >
+                                <p>{size.name}</p>
+                              </label>
+                            </>
+                          );
+                        })}
+                      </div>
                     </div>
                   </div>
                 </div>
-              </div>
+              }
+              {designs.length > 0 &&
+                <div className='container design mb-[15px]'>
+                  <div className="gift_detail_design flex gap-4 items-center">
+                    <div className="w-1/5">
+                      <p>Thiết kế</p>
+                    </div>
+                    <div className="w-4/5">
+                      <div id="gift_detail_design_list" className="flex flex-row">
+                        {designs.map((design) => {
+                          const isAvailable = filteredProducts.some(
+                            (product) => product.designId === design.id
+                          )
+                          if (!isAvailable) return '' // Không hiển thị design nếu không có trong filteredProducts
+
+                          return (
+                            <>
+                              <input
+                                type="radio"
+                                key={design.id}
+                                hidden
+                                id={`gift_detail_design_${design.id}`}
+                                name="gift_detail_design"
+                              />
+                              <label
+                                htmlFor={`gift_detail_design_${design?.id}`}
+                                className={`gift_detail_item ${
+                                  selectedDesign === design?.id ? 'gift_detail_item_active' : ''
+                                }`}
+                                onClick={() => handleSelectedChange('design', design?.id)}
+                              >
+                                <p>{design?.name}</p>
+                              </label>
+                            </>
+                          )
+                        })}
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              }
+              {colors.length > 0 &&
+                <div className='container color mb-[15px]'>
+                  <div className="gift_detail_color flex gap-4 items-center">
+                    <div className="w-1/5">
+                      <p>Màu sắc</p>
+                    </div>
+                    <div className="w-4/5">
+                      <div id="gift_detail_color_list" className="flex flex-row">
+                        {colors.map((color) => {
+                          const isAvailable = filteredProducts.some(
+                            (product) => product.colorId === color.id
+                          )
+                          if (!isAvailable) return null // Không hiển thị color nếu không có trong filteredProducts
+                          return (
+                            <>
+                              <input type="radio" key={color.id} hidden id={`gift_detail_color_${color.id}`} name="gift_detail_color" />
+                              <label htmlFor={`gift_detail_color_${color.id}`}
+                                className={`gift_detail_item ${selectedColor === color.id ? 'gift_detail_item_active' : ''}`}
+                                onClick={() => handleSelectedChange('color', color.id)}
+                              >
+                                <p>{color.name}</p>
+                              </label>
+                            </>
+                          )
+                        })}
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              }
               <div className='container quantity mb-[15px]'>
                 <div className="gift_detail_quantity flex gap-4 items-center">
                   <div className="w-1/5">
