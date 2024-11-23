@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import PropTypes from 'prop-types'
 
-function CartItem({ hasCartItem, setHasCartItem }) {
+function CartItem({ hasCartItem, setHasCartItem, cartPoints }) {
   const [products, setProducts] = useState([])
   const [startIndex, setStartIndex] = useState(0)
   const itemsPerPage = 4
@@ -115,10 +115,10 @@ function CartItem({ hasCartItem, setHasCartItem }) {
         <div className='transaction'>
           <div className='transaction_card'>
             <p className='price_total font_Baloo text-lg'>
-              <b>Tổng cộng:</b> <b className='text-[lightseagreen]'>4 Thẻ Siêu Quyền Năng</b>
+              <b>Tổng cộng:</b> <b className='text-[lightseagreen]'>{cartPoints.exchangePoint} Thẻ Siêu Quyền Năng</b>
             </p>
             <p className='remain_total font_Baloo text-lg'>
-              <b>Hiện có:</b> <b className='text-[peru]'>0 Thẻ Siêu Quyền Năng</b>
+              <b>Hiện có:</b> <b className='text-[peru]'>{cartPoints.userPoints} Thẻ Siêu Quyền Năng</b>
             </p>
           </div>
           <div className='add_card_button'>
@@ -271,7 +271,8 @@ function CartItem({ hasCartItem, setHasCartItem }) {
 
 CartItem.propTypes = {
   hasCartItem: PropTypes.object,
-  setHasCartItem: PropTypes.func
+  setHasCartItem: PropTypes.func,
+  cartPoints: PropTypes.object
 }
 
 export default CartItem

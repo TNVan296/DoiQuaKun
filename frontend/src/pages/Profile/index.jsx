@@ -70,6 +70,7 @@ function User() {
           }
         })
         const data = await response.data
+        localStorage.setItem('userId', data.id)
         setUserProfile(data)
       } catch (error) {
         console.error(error)

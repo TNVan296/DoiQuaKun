@@ -49,7 +49,7 @@ const handleAddCartItem = async (req, res) => {
   console.log(cartObject)
   try {
     const cartItem = await cartService.addCartItem(cartObject);
-    if (!cartItem) {
+    if (!cartItem.success) {
       return res.status(400).json({ message: cartItem.message });
     } else {
       return res.status(200).json(cartAddResponseTemplate(cartItem));
