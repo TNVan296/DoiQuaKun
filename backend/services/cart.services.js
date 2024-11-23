@@ -61,10 +61,10 @@ const getUserPoints = async (userObject) => {
 const addCartItem = async (cartObject) => {
   try {
     if (!cartObject.cart.productId || !cartObject.cart.userId) {
-      return res.status(400).json({ message: 'productId and userId are required' });
+      return { success: false, message: 'productId and userId are required' };
     }
     if (cartObject.cart.quantity <= 0) {
-      return res.status(400).json({ message: 'Quantity must be greater than zero' });
+      return { success: false, message: 'Quantity must be greater than zero' };
     }
     // Tìm giỏ hàng của người dùng với trạng thái 'active'.
     let cart = await db.Cart.findOne({
@@ -98,6 +98,7 @@ const addCartItem = async (cartObject) => {
     cart.totalItems += cartObject.cart.quantity;
     cart.totalPoints += productPrice * cartObject.cart.quantity;  
     await cart.save(); 
+    return { success: true, data: cart, message: 'Add item to cart successfully !' };
     return cart; 
   } catch (error) {
     throw new Error('Could not add item to cart'); 

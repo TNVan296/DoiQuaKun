@@ -37,38 +37,31 @@ function GiftDetail() {
     setItemImage(index)
   }
 
+  const handleSelectedChange = (type, id) => {
+    if (type === 'color') {
+      setSelectedColor((prev) => (prev === id ? '' : id))
+    } else if (type === 'size') {
+      setSelectedSize((prev) => (prev === id ? '' : id))
+    } else if (type === 'design') {
+      setSelectedDesign((prev) => (prev === id ? '' : id))
+    }
+  }
+
   const addToCart = async () => {
     try {
       const addProductToCart = await fetchWithAuthToken('http://localhost:3000/api/cart/add', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'
-        }
+        },
+        body: JSON.stringify({
+          productId: filteredProducts.map((product) => product.id)[0],
+          userId: localStorage.getItem('userId'),
+          quantity: quantity
+        })
       })
     } catch (error) {
       console.log('Error adding product item to cart !', error)
-    }
-  }
-
-  const handleSelectedChange = (type, id) => {
-    if (type === 'color') {
-      if (selectedColor === '') {
-        setSelectedColor(id)
-      } else {
-        setSelectedColor('')
-      }
-    } else if (type === 'size') {
-      if (selectedSize === '') {
-        setSelectedSize(id)
-      } else {
-        setSelectedSize('')
-      }
-    } else if (type === 'design') {
-      if (selectedDesign === '') {
-        setSelectedDesign(id)
-      } else {
-        setSelectedDesign('')
-      }
     }
   }
 
@@ -89,37 +82,29 @@ function GiftDetail() {
         const pictureArray = []
 
         fetchedProducts.forEach((product) => {
-          if (product.color) {
-            if (!colorArray.find((color) => color.id === product.colorId)) {
-              colorArray.push({
-                id: product.color.id,
-                name: product.color.name
-              })
-            }
+          if (product.color && !colorArray.find((color) => color.id === product.colorId)) {
+            colorArray.push({
+              id: product.color.id,
+              name: product.color.name
+            })
           }
-          if (product.size) {
-            if (!sizeArray.find((size) => size.id === product.sizeId)) {
-              sizeArray.push({
-                id: product.size.id,
-                name: product.size.sizeName
-              })
-            }
+          if (product.size && !sizeArray.find((size) => size.id === product.sizeId)) {
+            sizeArray.push({
+              id: product.size.id,
+              name: product.size.sizeName
+            })
           }
-          if (product.design) {
-            if (!designArray.find((design) => design.id === product.designId)) {
-              designArray.push({
-                id: product.design.id,
-                name: product.design.name
-              })
-            }
+          if (product.design && !designArray.find((design) => design.id === product.designId)) {
+            designArray.push({
+              id: product.design.id,
+              name: product.design.name
+            })
           }
-          if (product.picture) {
-            if (!pictureArray.find((picture) => picture.pictureId === product.picture.id)) {
-              pictureArray.push({
-                pictureId: product.picture.id,
-                pictureName: product.picture.name
-              })
-            }
+          if (product.picture && !pictureArray.find((picture) => picture.pictureId === product.picture.id)) {
+            pictureArray.push({
+              pictureId: product.picture.id,
+              pictureName: product.picture.name
+            })
           }
         })
 
@@ -127,20 +112,17 @@ function GiftDetail() {
         setSizes(sizeArray)
         setDesigns(designArray)
         setPictures(pictureArray)
-        // console.log(colorArray, sizeArray, designArray, pictureArray)
+
         let filteredProductItems = fetchedProducts
 
         if (selectedColor) {
-          filteredProductItems = fetchedProducts.filter((product) => product.colorId === selectedColor)
-          // console.log(filteredProducts)
+          filteredProductItems = filteredProductItems.filter((product) => product.colorId === selectedColor)
         }
         if (selectedSize) {
-          filteredProductItems = fetchedProducts.filter((product) => product.sizeId === selectedSize)
-          // console.log(filteredProducts)
+          filteredProductItems = filteredProductItems.filter((product) => product.sizeId === selectedSize)
         }
         if (selectedDesign) {
-          filteredProductItems = fetchedProducts.filter((product) => product.designId === selectedDesign)
-          // console.log(filteredProducts)
+          filteredProductItems = filteredProductItems.filter((product) => product.designId === selectedDesign)
         }
         setFilteredProducts(filteredProductItems)
       } catch (error) {
@@ -194,8 +176,8 @@ function GiftDetail() {
                         {sizes.map((size) => {
                           const isAvailable = filteredProducts.some(
                             (product) => product.sizeId === size.id
-                          );
-                          if (!isAvailable) return null // Không hiển thị size nếu không có trong filteredProducts
+                          )
+                          if (!isAvailable) return null
 
                           return (
                             <>
@@ -235,7 +217,7 @@ function GiftDetail() {
                           const isAvailable = filteredProducts.some(
                             (product) => product.designId === design.id
                           )
-                          if (!isAvailable) return '' // Không hiển thị design nếu không có trong filteredProducts
+                          if (!isAvailable) return ''
 
                           return (
                             <>
@@ -275,7 +257,7 @@ function GiftDetail() {
                           const isAvailable = filteredProducts.some(
                             (product) => product.colorId === color.id
                           )
-                          if (!isAvailable) return null // Không hiển thị color nếu không có trong filteredProducts
+                          if (!isAvailable) return null
                           return (
                             <>
                               <input type="radio" key={color.id} hidden id={`gift_detail_color_${color.id}`} name="gift_detail_color" />

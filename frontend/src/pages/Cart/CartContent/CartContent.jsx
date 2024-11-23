@@ -4,6 +4,7 @@ import { fetchWithAuthToken } from '~/utils/fetchWithAuthToken.js'
 
 function CartContent() {
   const [hasCartItem, setHasCartItem] = useState({})
+  const [cartPoints, setCartPoints] = useState({})
 
   useEffect(() => {
     const fetchCartItem = async () => {
@@ -20,7 +21,22 @@ function CartContent() {
         console.error(error)
       }
     }
+    const fetchCartPoints = async () => {
+      try {
+        const response = await fetchWithAuthToken('http://localhost:3000/api/cart/points', {
+          method: 'GET',
+          headers: {
+            'Content-Type': 'application/json'
+          }
+        })
+        setCartPoints(response)
+      }
+      catch (error) {
+        console.error(error)
+      }
+    }
     fetchCartItem()
+    fetchCartPoints()
   }, [])
 
   return (
@@ -33,7 +49,7 @@ function CartContent() {
         <div className="solid"></div>
         <div className="cart_list">
           { hasCartItem.totalItems && hasCartItem.totalItems > 0 ?
-            <CartItem hasCartItem={hasCartItem} setHasCartItem={setHasCartItem} />
+            <CartItem hasCartItem={hasCartItem} setHasCartItem={setHasCartItem} cartPoints={cartPoints} />
             :
             <div className="empty_cart">
               <img src="../src/assets/empty-cart.png" className="inline" alt="empty cart" />
