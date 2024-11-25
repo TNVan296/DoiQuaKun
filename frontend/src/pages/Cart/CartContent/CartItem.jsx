@@ -1,12 +1,14 @@
 import { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import PropTypes from 'prop-types'
+import ExchangedPoints from '~/components/BottomNav/ExchangedPoints'
+import { fetchWithAuthToken } from '~/utils/fetchWithAuthToken'
 
-function CartItem({ hasCartItem, setHasCartItem, cartPoints }) {
+function CartItem({ hasCartItem, setHasCartItem, cartPoints, setCartPoints }) {
+  const navigate = useNavigate()
   const [products, setProducts] = useState([])
   const [startIndex, setStartIndex] = useState(0)
   const itemsPerPage = 4
-  const navigate = useNavigate()
 
   const handleNext = () => {
     setStartIndex((prevIndex) => (prevIndex + itemsPerPage) % products.length)
@@ -18,51 +20,106 @@ function CartItem({ hasCartItem, setHasCartItem, cartPoints }) {
     )
   }
 
-  const handleQuantityChange = (id, newQuantity) => {
+  const handleChange = async (id, event) => {
+    const newQuantity = parseInt(event.target.value, 10) || 1
     setHasCartItem((prevState) => ({
       ...prevState,
-      cartItems: prevState.cartItems.map((item) =>
-        item.id === id ? { ...item, quantity: Math.max(1, newQuantity)} : item
+      cartItems: prevState.cartItems?.map((item) =>
+        item.id === id ? { ...item, quantity: Math.max(1, newQuantity) } : item
       )
     }))
   }
 
-  const increaseValue = (id) => {
-    setHasCartItem(
-      hasCartItem.cartItems?.map((item) =>
-        item.id === id ? { ...item, quantity: item.quantity + 1 } : item
-      )
-    )
+  const increaseValue = async (id) => {
+    try {
+      setHasCartItem((prev) => ({
+        ...prev,
+        cartItems: prev.cartItems?.map((item) =>
+          item.id === id ? { ...item, quantity: item.quantity + 1 } : item
+        )
+      }))
+      const product = hasCartItem.cartItems.find((item) => item.id === id)
+      if (product) {
+        await fetchWithAuthToken('http://localhost:3000/api/cart/add', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({
+            productId: product.productId,
+            userId: hasCartItem.userId,
+            quantity: 1
+          })
+        })
+      }
+      const newCartPoints = await fetchWithAuthToken('http://localhost:3000/api/cart/points', {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json'
+        }
+      })
+      setCartPoints(newCartPoints)
+    } catch (error) {
+      console.log(error)
+    }
   }
 
-  const decreaseValue = (id) => {
-    setHasCartItem(
-      hasCartItem.cartItems?.map((item) =>
-        item.id === id && item.quantity > 1
-          ? { ...item, quantity: item.quantity - 1 }
-          : item
-      )
-    )
+  const decreaseValue = async (id) => {
+    try {
+      setHasCartItem((prev) => ({
+        ...prev,
+        cartItems: prev.cartItems?.map((item) =>
+          item.id === id && item.quantity > 1 ?
+            { ...item, quantity: item.quantity - 1 } : item
+        )
+      }))
+      const product = hasCartItem.cartItems.find((item) => item.id === id)
+      if (product) {
+        await fetchWithAuthToken('http://localhost:3000/api/cart/remove', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({
+            productId: product.productId,
+            userId: hasCartItem.userId,
+            quantity: 1
+          })
+        })
+      }
+      const newCartPoints = await fetchWithAuthToken('http://localhost:3000/api/cart/points', {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json'
+        }
+      })
+      setCartPoints(newCartPoints)
+    } catch (error) {
+      console.log(error)
+    }
   }
 
   useEffect(() => {
-    const fetchProducts = async () => {
-      try {
-        const response = await fetch('http://localhost:3000/api/products', {
-          method: 'GET',
-          headers: {
-            'Content-Type': 'application/json'
-          }
-        })
-        const data = await response.json()
-        setProducts(data.data)
+    try {
+      const fetchProducts = async () => {
+        try {
+          const response = await fetch('http://localhost:3000/api/products', {
+            method: 'GET',
+            headers: {
+              'Content-Type': 'application/json'
+            }
+          })
+          const data = await response.json()
+          setProducts(data.data)
+        }
+        catch (error) {
+          console.log(error)
+        }
       }
-      catch (error) {
-        console.log(error)
-        setProducts([])
-      }
+      fetchProducts()
+    } catch (error) {
+      console.log(error)
     }
-    fetchProducts()
   }, [])
 
   return (
@@ -90,7 +147,7 @@ function CartItem({ hasCartItem, setHasCartItem, cartPoints }) {
                   </button>
                   <input
                     type="number"
-                    onChange={(event) => handleQuantityChange(item.id, event)}
+                    onChange={(event) => handleChange(item.id, event)}
                     min="1"
                     value={item.quantity}
                     className="gift_detail_quantity_counter_input"
@@ -122,9 +179,13 @@ function CartItem({ hasCartItem, setHasCartItem, cartPoints }) {
             </p>
           </div>
           <div className='add_card_button'>
-            <p className='font_Quicksand text-[#dc3545] font-bold'>Bạn còn thiếu 4 thẻ
+            {cartPoints.userPoints >= cartPoints.exchangePoint ?
               <button className='ml-4 form_button font_Quicksand bg-[#0099d4] capitalize text-white'>thêm thẻ siêu quyền năng ngay !</button>
-            </p>
+              :
+              <p className='font_Quicksand text-[#dc3545] font-bold'>Bạn còn thiếu {cartPoints.exchangePoint - cartPoints.userPoints} thẻ
+                <button className='ml-4 form_button font_Quicksand bg-[#0099d4] capitalize text-white'>thêm thẻ siêu quyền năng ngay !</button>
+              </p>
+            }
           </div>
           <p className='font_Quicksand text-[#dc3545] font-bold mt-4  '>Bạn phải nhập thông tin để hoàn tất việc đổi quà</p>
         </div>
@@ -265,6 +326,7 @@ function CartItem({ hasCartItem, setHasCartItem, cartPoints }) {
           </div>
         </div>
       </div>
+      <ExchangedPoints increaseValue={increaseValue} decreaseValue={decreaseValue} />
     </>
   )
 }
@@ -272,7 +334,8 @@ function CartItem({ hasCartItem, setHasCartItem, cartPoints }) {
 CartItem.propTypes = {
   hasCartItem: PropTypes.object,
   setHasCartItem: PropTypes.func,
-  cartPoints: PropTypes.object
+  cartPoints: PropTypes.object,
+  setCartPoints: PropTypes.func
 }
 
 export default CartItem

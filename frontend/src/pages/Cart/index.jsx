@@ -4,12 +4,10 @@ import Header from '~/components/Header/Header'
 import Footer from '~/components/Footer/Footer'
 import Logout from '~/components/LoginModal/Logout'
 import CartContent from '~/pages/Cart/CartContent/CartContent'
-import ExchangedPoints from '~/components/BottomNav/ExchangedPoints'
 
 function Cart() {
   const [showLogOutModal, setShowLogOutModal] = useState(false)
   const [hasUser, setHasUser] = useState(false)
-  const navigate = useNavigate()
 
   const logOutSuccess = () => {
     setHasUser(false)
@@ -18,7 +16,6 @@ function Cart() {
     localStorage.removeItem('refreshToken')
     localStorage.removeItem('userEmail')
     setShowLogOutModal(false)
-    navigate('/home')
   }
 
   // eslint-disable-next-line react/prop-types
@@ -39,7 +36,7 @@ function Cart() {
       setHasUser(false)
       return <Navigate to='/home' />
     }
-  }, [navigate])
+  }, [hasUser])
 
   return (
     <div className='container mx-auto'>
@@ -49,7 +46,6 @@ function Cart() {
       </PrivateRoute>
       <Footer />
       {showLogOutModal && <Logout showModal={showLogOutModal} handleClose={() => setShowLogOutModal(false)} logOutSuccess={() => logOutSuccess()} />}
-      {hasUser && <ExchangedPoints />}
     </div>
   )
 }
