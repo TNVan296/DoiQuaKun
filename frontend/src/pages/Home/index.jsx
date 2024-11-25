@@ -30,7 +30,6 @@ function Home() {
     localStorage.setItem('accessToken', data.token.accessToken)
     localStorage.setItem('refreshToken', data.token.refreshToken)
     closeModal()
-    window.location.href = '/profile/account'
   }
 
   const logOutSuccess = () => {
@@ -39,6 +38,7 @@ function Home() {
     localStorage.removeItem('accessToken')
     localStorage.removeItem('refreshToken')
     localStorage.removeItem('userEmail')
+    localStorage.removeItem('userId')
     setShowLogOutModal(false)
   }
 
@@ -49,7 +49,7 @@ function Home() {
     } else {
       setHasUser(false)
     }
-  }, [])
+  }, [hasUser])
 
   return (
     <div className='container mx-auto'>

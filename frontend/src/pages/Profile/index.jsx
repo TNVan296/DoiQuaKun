@@ -36,7 +36,6 @@ function User() {
     localStorage.setItem('accessToken', data.token.accessToken)
     localStorage.setItem('refreshToken', data.token.refreshToken)
     closeModal()
-    window.location.href = '/profile/account'
   }
 
   const logOutSuccess = () => {
@@ -45,8 +44,8 @@ function User() {
     localStorage.removeItem('accessToken')
     localStorage.removeItem('refreshToken')
     localStorage.removeItem('userEmail')
+    localStorage.removeItem('userId')
     setShowLogOutModal(false)
-    navigate('/home')
   }
 
   // eslint-disable-next-line react/prop-types
@@ -61,6 +60,12 @@ function User() {
 
   useEffect(() => {
     const isAccessToken = localStorage.getItem('accessToken')
+    if (isAccessToken) {
+      setHasUser(true)
+    } else {
+      setHasUser(false)
+      return <Navigate to='/home' />
+    }
     const fetchUserProfile = async () => {
       try {
         const response = await fetchWithAuthToken('http://localhost:3000/api/users/profile', {
@@ -76,14 +81,8 @@ function User() {
         console.error(error)
       }
     }
-    if (isAccessToken) {
-      setHasUser(true)
-    } else {
-      setHasUser(false)
-      return <Navigate to='/home' />
-    }
     fetchUserProfile()
-  }, [])
+  }, [hasUser])
 
   return (
     <div className='container mx-auto'>
@@ -165,7 +164,7 @@ function User() {
       {showGetOtpModal && <GetOTP showModal={showGetOtpModal} handleClose={closeModal} showVerifyOtpModal={showVerifyOtpModal} />}
       {showVerifyModal && <VerifyOTP showModal={showVerifyOtpModal} handleClose={closeModal} logInSuccess={logInSuccess} />}
       {showLogOutModal && <Logout showModal={showLogOutModal} handleClose={() => setShowLogOutModal(false)} logOutSuccess={() => logOutSuccess()} />}
-      <ExchangedPoints />
+      {hasUser && <ExchangedPoints />}
     </div>
   )
 }

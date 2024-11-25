@@ -21,6 +21,7 @@ function CartContent() {
         console.error(error)
       }
     }
+    fetchCartItem()
     const fetchCartPoints = async () => {
       try {
         const response = await fetchWithAuthToken('http://localhost:3000/api/cart/points', {
@@ -35,7 +36,6 @@ function CartContent() {
         console.error(error)
       }
     }
-    fetchCartItem()
     fetchCartPoints()
   }, [])
 
@@ -49,7 +49,7 @@ function CartContent() {
         <div className="solid"></div>
         <div className="cart_list">
           { hasCartItem.totalItems && hasCartItem.totalItems > 0 ?
-            <CartItem hasCartItem={hasCartItem} setHasCartItem={setHasCartItem} cartPoints={cartPoints} />
+            <CartItem hasCartItem={hasCartItem} setHasCartItem={setHasCartItem} cartPoints={cartPoints} setCartPoints={setCartPoints} />
             :
             <div className="empty_cart">
               <img src="../src/assets/empty-cart.png" className="inline" alt="empty cart" />

@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
+import ExchangedPoints from '~/components/BottomNav/ExchangedPoints'
 import { fetchWithAuthToken } from '~/utils/fetchWithAuthToken.js'
 
 function GiftDetail() {
@@ -14,6 +15,7 @@ function GiftDetail() {
   const [pictures, setPictures] = useState([])
   const [productItem, setProductItem] = useState({})
   const [filteredProducts, setFilteredProducts] = useState([])
+  const [cartPoints, setCartPoints] = useState({})
   const { giftId } = useParams()
   const navigate = useNavigate()
 
@@ -49,6 +51,7 @@ function GiftDetail() {
 
   const addToCart = async () => {
     try {
+      // eslint-disable-next-line no-unused-vars
       const addProductToCart = await fetchWithAuthToken('http://localhost:3000/api/cart/add', {
         method: 'POST',
         headers: {
@@ -60,6 +63,13 @@ function GiftDetail() {
           quantity: quantity
         })
       })
+      const newCartPoints = await fetchWithAuthToken('http://localhost:3000/api/cart/points', {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json'
+        }
+      })
+      setCartPoints(newCartPoints)
     } catch (error) {
       console.log('Error adding product item to cart !', error)
     }
@@ -328,6 +338,7 @@ function GiftDetail() {
           </div>
         </div>
       </div>
+      <ExchangedPoints addToCart={addToCart} />
     </>
   )
 }

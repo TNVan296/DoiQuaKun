@@ -1,7 +1,8 @@
 import { useState, useEffect } from 'react'
+import PropTypes from 'prop-types'
 import { fetchWithAuthToken } from '~/utils/fetchWithAuthToken'
 
-function ExchangedPoints() {
+function ExchangedPoints({ increaseValue, decreaseValue, addToCart }) {
   const [exchangePoints, setExchangePoints] = useState({})
 
   useEffect(() => {
@@ -19,7 +20,7 @@ function ExchangedPoints() {
       }
     }
     fetchExchangePoints()
-  }, [])
+  }, [increaseValue, decreaseValue, addToCart])
 
   return (
     <nav className="bottom_nav">
@@ -45,6 +46,12 @@ function ExchangedPoints() {
       </div>
     </nav>
   )
+}
+
+ExchangedPoints.propTypes = {
+  increaseValue: PropTypes.func,
+  decreaseValue: PropTypes.func,
+  addToCart: PropTypes.func
 }
 
 export default ExchangedPoints

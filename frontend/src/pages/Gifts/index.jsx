@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import { useNavigate, Routes, Route } from 'react-router-dom'
+import { Routes, Route } from 'react-router-dom'
 import Header from '~/components/Header/Header'
 import Footer from '~/components/Footer/Footer'
 import GetOTP from '~/components/LoginModal/GetOTP'
@@ -7,14 +7,13 @@ import VerifyOTP from '~/components/LoginModal/VerifyOTP'
 import Logout from '~/components/LoginModal/Logout'
 import GiftContent from '~/pages/Gifts/GiftContent/GiftContent'
 import GiftDetail from '~/pages/Gifts/GiftDetail/GiftDetail'
-import ExchangedPoints from '~/components/BottomNav/ExchangedPoints'
 
 function Gifts() {
   const [showGetOtpModal, setShowGetOtpModal] = useState(false)
   const [showVerifyModal, setShowVerifyModal] = useState(false)
   const [showLogOutModal, setShowLogOutModal] = useState(false)
   const [hasUser, setHasUser] = useState(false)
-  const navigate = useNavigate()
+  const [hasCartItem, setHasCartItem] = useState({})
 
   const showVerifyOtpModal = () => {
     setShowGetOtpModal(false)
@@ -27,11 +26,12 @@ function Gifts() {
     setShowLogOutModal(false)
   }
 
-  const logInSuccess = () => {
+  const logInSuccess = (data) => {
     setHasUser(true)
     localStorage.setItem('hasUser', 'true')
+    localStorage.setItem('accessToken', data.token.accessToken)
+    localStorage.setItem('refreshToken', data.token.refreshToken)
     closeModal()
-    navigate('/profile/account')
   }
 
   const logOutSuccess = () => {
@@ -40,8 +40,8 @@ function Gifts() {
     localStorage.removeItem('accessToken')
     localStorage.removeItem('refreshToken')
     localStorage.removeItem('userEmail')
+    localStorage.removeItem('userId')
     setShowLogOutModal(false)
-    navigate('/home')
   }
 
   useEffect(() => {
@@ -51,7 +51,22 @@ function Gifts() {
     } else {
       setHasUser(false)
     }
-  }, [])
+    const fetchCartItem = async () => {
+      try {
+        const response = await fetch('http://localhost:3000/api/cart', {
+          method: 'GET',
+          headers: {
+            'Content-Type': 'application/json'
+          }
+        })
+        setHasCartItem(response.data)
+      }
+      catch (error) {
+        console.error(error)
+      }
+    }
+    fetchCartItem()
+  }, [hasUser, hasCartItem])
 
   return (
     <div className='container mx-auto'>
@@ -83,7 +98,6 @@ function Gifts() {
       {showGetOtpModal && <GetOTP showModal={showGetOtpModal} handleClose={closeModal} showVerifyOtpModal={showVerifyOtpModal} />}
       {showVerifyModal && <VerifyOTP showModal={showVerifyOtpModal} handleClose={closeModal} logInSuccess={logInSuccess} />}
       {showLogOutModal && <Logout showModal={showLogOutModal} handleClose={closeModal} logOutSuccess={logOutSuccess} />}
-      {hasUser && <ExchangedPoints />}
     </div>
   )
 }

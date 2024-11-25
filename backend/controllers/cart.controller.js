@@ -1,10 +1,4 @@
 const cartService = require('../services/cart.services');
-const {
-  cartAddResponseTemplate,
-  cartRemoveResponseTemplate,
-  cartCheckoutResponseTemplate,
-  cartCheckoutErrorResponseTemplate,
-} = require('../utils/responses/cart.response');
 const handleError = require('../utils/errorHandler');
 
 
@@ -46,13 +40,12 @@ const handleAddCartItem = async (req, res) => {
   const cartObject = {
     cart: req.body,
   }
-  console.log(cartObject)
   try {
     const cartItem = await cartService.addCartItem(cartObject);
     if (!cartItem.success) {
       return res.status(400).json({ message: cartItem.message });
     } else {
-      return res.status(200).json(cartAddResponseTemplate(cartItem));
+      return res.status(200).json({ message: cartItem.message, data: cartItem.data });
     }
   } catch (error) {
     console.log('Could not add item to cart', error);
@@ -66,10 +59,10 @@ const handleRemoveCartItem = async (req, res) => {
   }
   try {
     const cartItem = await cartService.removeCartItem(cartObject);
-    if (!cartItem) {
+    if (!cartItem.success) {
       return res.status(400).json({ message: cartItem.message });
     } else {
-      return res.status(200).json(cartRemoveResponseTemplate(cartItem));
+      return res.status(200).json({ message: cartItem.message, data: cartItem.data });
     }
   } catch (error) {
     handleError(res, error, 'Could not remove item from cart');
@@ -83,9 +76,13 @@ const handleCheckout = async (req, res) => {
   }
   try {
     const result = await cartService.checkoutCart(cartObject);
-    return res.status(200).json(cartCheckoutResponseTemplate(result.cart, result.totalPointsPaid));
+    if (!result.success) {
+      return res.status(400).json({ message: result.message });
+    } else {
+      return res.status(200).json({ message: result.message, data: result.data, totalPointsPaid: result.totalPointsPaid });
+    }
   } catch (error) {
-    return res.status(400).json(cartCheckoutErrorResponseTemplate(error.message));
+    handleError(res, error, 'Could not checkout cart');
   }
 };
 

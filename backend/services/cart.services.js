@@ -69,7 +69,18 @@ const addCartItem = async (cartObject) => {
     // Tìm giỏ hàng của người dùng với trạng thái 'active'.
     let cart = await db.Cart.findOne({
       where: { userId: cartObject.cart.userId, status: 'active' },
-      include: [{ model: db.CartItem, as: 'cartItems' }]
+      include: [{ model: db.CartItem, as: 'cartItems', include:
+        [
+          { model: db.Product, as: 'product', include:
+            [
+              { model: db.Picture, as: 'picture' },
+              { model: db.Color, as: 'color' },
+              { model: db.Size, as: 'size' },
+              { model: db.Design, as: 'design' }
+            ]
+          }
+        ]
+      }]
     });
     // Nếu không có giỏ hàng 'active', tạo giỏ hàng mới.
     if (!cart) {
@@ -99,7 +110,6 @@ const addCartItem = async (cartObject) => {
     cart.totalPoints += productPrice * cartObject.cart.quantity;  
     await cart.save(); 
     return { success: true, data: cart, message: 'Add item to cart successfully !' };
-    return cart; 
   } catch (error) {
     throw new Error('Could not add item to cart'); 
   }
@@ -115,13 +125,24 @@ const removeCartItem = async (cartObject) => {
     }
     let cart = await db.Cart.findOne({
       where: { userId: cartObject.cart.userId, status: 'active' },
-      include: [{ model: db.CartItem, as: 'cartItems' }]
+      include: [{ model: db.CartItem, as: 'cartItems', include:
+        [
+          { model: db.Product, as: 'product', include:
+            [
+              { model: db.Picture, as: 'picture' },
+              { model: db.Color, as: 'color' },
+              { model: db.Size, as: 'size' },
+              { model: db.Design, as: 'design' }
+            ]
+          }
+        ]
+      }]
     });
     if (!cart) {
       throw new Error('No active cart found for this user');
     }
     let cartItem = await db.CartItem.findOne({
-      where: { cartId: cart.id, productId: cartObject.cart.productId }
+      where: { cartId: cart.id, productId: cartObject.cart.productId}
     });
     if (!cartItem) {
       throw new Error('Product not found in cart');
@@ -140,8 +161,8 @@ const removeCartItem = async (cartObject) => {
     if (cart.total_items < 0) cart.total_items = 0; 
     if (cart.total_prices < 0) cart.total_prices = 0.0; 
 
-    await cart.save(); 
-    return cart;
+    await cart.save();
+    return { success: true, data: cart, message: 'Remove item from cart successfully !' };
   } catch (error) {
     throw new Error('Could not remove item from cart');
   }
@@ -176,7 +197,7 @@ const checkoutCart = async (cartObject) => {
     await wallet.save();
     cart.status = 'complete';
     await cart.save();
-    return { cart, totalPointsPaid: totalPoints };
+    return { success: true, data: cart, totalPointsPaid: totalPoints, message: 'Checkout successful !' };
   } catch (error) {
     throw new Error('Checkout failed');
   }
