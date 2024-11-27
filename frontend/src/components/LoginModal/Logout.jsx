@@ -5,7 +5,7 @@ function Logout({ showModal, handleClose, logOutSuccess }) {
     logOutSuccess()
   }
   return (
-    <div className={`login-modal ${showModal ? 'block' : 'hidden'}`}>
+    <div className={`show-modal ${showModal ? 'block' : 'hidden'}`}>
       <div className="modal-content logout">
         <span className="close" onClick={handleClose}>
           <i className="fas fa-times"></i>

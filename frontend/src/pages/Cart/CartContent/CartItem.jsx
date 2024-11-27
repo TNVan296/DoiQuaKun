@@ -20,14 +20,18 @@ function CartItem({ hasCartItem, setHasCartItem, cartPoints, setCartPoints }) {
     )
   }
 
-  const handleChange = async (id, event) => {
-    const newQuantity = parseInt(event.target.value, 10) || 1
-    setHasCartItem((prevState) => ({
-      ...prevState,
-      cartItems: prevState.cartItems?.map((item) =>
-        item.id === id ? { ...item, quantity: Math.max(1, newQuantity) } : item
-      )
-    }))
+  const updateCartPoints = async () => {
+    try {
+      const response = await fetchWithAuthToken('http://localhost:3000/api/cart/points', {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json'
+        }
+      })
+      setCartPoints(response)
+    } catch (error) {
+      console.error(error)
+    }
   }
 
   const increaseValue = async (id) => {
@@ -52,13 +56,7 @@ function CartItem({ hasCartItem, setHasCartItem, cartPoints, setCartPoints }) {
           })
         })
       }
-      const newCartPoints = await fetchWithAuthToken('http://localhost:3000/api/cart/points', {
-        method: 'GET',
-        headers: {
-          'Content-Type': 'application/json'
-        }
-      })
-      setCartPoints(newCartPoints)
+      await updateCartPoints()
     } catch (error) {
       console.log(error)
     }
@@ -66,13 +64,13 @@ function CartItem({ hasCartItem, setHasCartItem, cartPoints, setCartPoints }) {
 
   const decreaseValue = async (id) => {
     try {
-      setHasCartItem((prev) => ({
-        ...prev,
-        cartItems: prev.cartItems?.map((item) =>
-          item.id === id && item.quantity > 1 ?
+      setHasCartItem((prev) => {
+        const updateCartItems = prev.cartItems?.map((item) =>
+          item.id === id ?
             { ...item, quantity: item.quantity - 1 } : item
-        )
-      }))
+        ).filter((item) => item.quantity > 0)
+        return { ...prev, cartItems: updateCartItems }
+      })
       const product = hasCartItem.cartItems.find((item) => item.id === id)
       if (product) {
         await fetchWithAuthToken('http://localhost:3000/api/cart/remove', {
@@ -87,13 +85,7 @@ function CartItem({ hasCartItem, setHasCartItem, cartPoints, setCartPoints }) {
           })
         })
       }
-      const newCartPoints = await fetchWithAuthToken('http://localhost:3000/api/cart/points', {
-        method: 'GET',
-        headers: {
-          'Content-Type': 'application/json'
-        }
-      })
-      setCartPoints(newCartPoints)
+      await updateCartPoints()
     } catch (error) {
       console.log(error)
     }
@@ -147,7 +139,6 @@ function CartItem({ hasCartItem, setHasCartItem, cartPoints, setCartPoints }) {
                   </button>
                   <input
                     type="number"
-                    onChange={(event) => handleChange(item.id, event)}
                     min="1"
                     value={item.quantity}
                     className="gift_detail_quantity_counter_input"

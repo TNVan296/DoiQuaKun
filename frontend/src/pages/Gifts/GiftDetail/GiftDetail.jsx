@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
 import ExchangedPoints from '~/components/BottomNav/ExchangedPoints'
+import AddCartItemModal from '~/components/NotificationModal/AddCartItemModal'
 import { fetchWithAuthToken } from '~/utils/fetchWithAuthToken.js'
 
 function GiftDetail() {
@@ -16,6 +17,7 @@ function GiftDetail() {
   const [productItem, setProductItem] = useState({})
   const [filteredProducts, setFilteredProducts] = useState([])
   const [cartPoints, setCartPoints] = useState({})
+  const [showSuccessAddCartItemModal, setShowSuccessAddCartItemModal] = useState(false)
   const { giftId } = useParams()
   const navigate = useNavigate()
 
@@ -49,6 +51,20 @@ function GiftDetail() {
     }
   }
 
+  const updateCartPoints = async () => {
+    try {
+      const response = await fetchWithAuthToken('http://localhost:3000/api/cart/points', {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json'
+        }
+      })
+      setCartPoints(response)
+    } catch (error) {
+      console.error(error)
+    }
+  }
+
   const addToCart = async () => {
     try {
       // eslint-disable-next-line no-unused-vars
@@ -63,13 +79,8 @@ function GiftDetail() {
           quantity: quantity
         })
       })
-      const newCartPoints = await fetchWithAuthToken('http://localhost:3000/api/cart/points', {
-        method: 'GET',
-        headers: {
-          'Content-Type': 'application/json'
-        }
-      })
-      setCartPoints(newCartPoints)
+      await updateCartPoints()
+      setShowSuccessAddCartItemModal(true)
     } catch (error) {
       console.log('Error adding product item to cart !', error)
     }
@@ -208,7 +219,7 @@ function GiftDetail() {
                                 <p>{size.name}</p>
                               </label>
                             </>
-                          );
+                          )
                         })}
                       </div>
                     </div>
@@ -313,32 +324,13 @@ function GiftDetail() {
                   :
                 </p>
                 <p className='gift_notes'>Hình ảnh được giao ngẫu nhiên, màu sắc có thể khác biệt một chút so với thực tế bạn nhé.</p>
-                <p className='gift_notes_title'>
-                  <b>Chất liệu</b>
-                  :
-                </p>
-                <p className='gift_notes'>420D</p>
-                <p className='gift_notes_title'>
-                  <b>Công dụng</b>
-                  :
-                </p>
-                <p className='gift_notes'>Túi rút thời trang dùng để đựng các vật dụng cá nhân với trọng lượng không quá 10kg.</p>
-                <p className='gift_notes_title'>
-                  <b>Xuất xứ</b>
-                  :
-                </p>
-                <p className='gift_notes'>Việt Nam</p>
-                <p className='gift_notes_title'>
-                  <b>Mô tả</b>
-                  :
-                </p>
-                <p className='gift_notes'>Túi rút Kun, màu sắc bắt mắt, bé mang đi học thêm, chơi thể thao rất tiện.</p>
               </div>
             </div>
           </div>
         </div>
       </div>
       <ExchangedPoints addToCart={addToCart} />
+      {showSuccessAddCartItemModal && <AddCartItemModal showModal={showSuccessAddCartItemModal} handleClose={() => setShowSuccessAddCartItemModal(false)} />}
     </>
   )
 }

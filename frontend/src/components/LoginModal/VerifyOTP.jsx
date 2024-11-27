@@ -2,7 +2,7 @@ import { useState } from 'react'
 import PropTypes from 'prop-types'
 import { nextInput } from '~/utils/otpInput.js'
 
-function VerifyOTP({ showModal, handleClose, logInSuccess }) {
+function VerifyOTP({ showModal, handleClose, verifySuccess, showSuccessLoginModal }) {
   const [otpInputValues, setOtpInputValues] = useState(Array(6).fill(''))
 
   const handleButtonClick = async () => {
@@ -18,7 +18,8 @@ function VerifyOTP({ showModal, handleClose, logInSuccess }) {
       })
       if (response.ok) {
         const data = await response.json()
-        logInSuccess(data)
+        verifySuccess(data)
+        showSuccessLoginModal()
       } else {
         alert('Mã OTP đã sai, vui lòng nhập sai !')
       }
@@ -28,7 +29,7 @@ function VerifyOTP({ showModal, handleClose, logInSuccess }) {
   }
 
   return (
-    <div className={`login-modal ${showModal ? 'block' : 'hidden'}`}>
+    <div className={`show-modal ${showModal ? 'block' : 'hidden'}`}>
       <div className="modal-content">
         <span className="close" onClick={handleClose}>
           <i className="fas fa-times"></i>
@@ -58,7 +59,8 @@ function VerifyOTP({ showModal, handleClose, logInSuccess }) {
 VerifyOTP.propTypes = {
   showModal: PropTypes.func,
   handleClose: PropTypes.func,
-  logInSuccess: PropTypes.func
+  verifySuccess: PropTypes.func,
+  showSuccessLoginModal: PropTypes.func
 }
 
 export default VerifyOTP

@@ -33,8 +33,9 @@ const GetOTP = ({ showModal, handleClose, showVerifyOtpModal }) => {
       alert('Please enter a valid email address.')
     }
   }
+
   return (
-    <div className={`login-modal ${showModal ? 'block' : 'hidden'}`}>
+    <div className={`show-modal ${showModal ? 'block' : 'hidden'}`}>
       <div className="modal-content">
         <span className="close" onClick={handleClose}>
           <i className="fas fa-times"></i>
