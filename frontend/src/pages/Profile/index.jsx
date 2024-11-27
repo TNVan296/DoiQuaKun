@@ -6,37 +6,14 @@ import Account from '~/pages/Profile/Account/Account'
 import Coupons from '~/pages/Profile/Coupons/Coupons'
 import History from '~/pages/Profile/History/History'
 import ExchangedPoints from '~/components/BottomNav/ExchangedPoints'
-import GetOTP from '~/components/LoginModal/GetOTP'
-import VerifyOTP from '~/components/LoginModal/VerifyOTP'
 import Logout from '~/components/LoginModal/Logout'
 import { fetchWithAuthToken } from '~/utils/fetchWithAuthToken.js'
 
 function User() {
-  const [showGetOtpModal, setShowGetOtpModal] = useState(false)
-  const [showVerifyModal, setShowVerifyModal] = useState(false)
   const [showLogOutModal, setShowLogOutModal] = useState(false)
   const [hasUser, setHasUser] = useState(false)
   const [userProfile, setUserProfile] = useState({})
   const navigate = useNavigate()
-
-  const showVerifyOtpModal = () => {
-    setShowGetOtpModal(false)
-    setShowVerifyModal(true)
-  }
-
-  const closeModal = () => {
-    setShowGetOtpModal(false)
-    setShowVerifyModal(false)
-    setShowLogOutModal(false)
-  }
-
-  const logInSuccess = (data) => {
-    setHasUser(true)
-    localStorage.setItem('hasUser', 'true')
-    localStorage.setItem('accessToken', data.token.accessToken)
-    localStorage.setItem('refreshToken', data.token.refreshToken)
-    closeModal()
-  }
 
   const logOutSuccess = () => {
     setHasUser(false)
@@ -46,6 +23,8 @@ function User() {
     localStorage.removeItem('userEmail')
     localStorage.removeItem('userId')
     setShowLogOutModal(false)
+    window.location.reload()
+    navigate('/home')
   }
 
   // eslint-disable-next-line react/prop-types
@@ -161,9 +140,7 @@ function User() {
         </div>
       </>
       <Footer />
-      {showGetOtpModal && <GetOTP showModal={showGetOtpModal} handleClose={closeModal} showVerifyOtpModal={showVerifyOtpModal} />}
-      {showVerifyModal && <VerifyOTP showModal={showVerifyOtpModal} handleClose={closeModal} logInSuccess={logInSuccess} />}
-      {showLogOutModal && <Logout showModal={showLogOutModal} handleClose={() => setShowLogOutModal(false)} logOutSuccess={() => logOutSuccess()} />}
+      {showLogOutModal && <Logout showModal={showLogOutModal} handleClose={() => setShowLogOutModal(false)} logOutSuccess={logOutSuccess} />}
       {hasUser && <ExchangedPoints />}
     </div>
   )

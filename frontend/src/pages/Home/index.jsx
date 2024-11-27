@@ -4,12 +4,14 @@ import HomeContent from '~/pages/Home/HomeContent/HomeContent'
 import Footer from '~/components/Footer/Footer'
 import GetOTP from '~/components/LoginModal/GetOTP'
 import VerifyOTP from '~/components/LoginModal/VerifyOTP'
+import SuccessLoginModal from '~/components/NotificationModal/SuccessLoginModal'
 import Logout from '~/components/LoginModal/Logout'
 import ExchangedPoints from '~/components/BottomNav/ExchangedPoints'
 
 function Home() {
   const [showGetOtpModal, setShowGetOtpModal] = useState(false)
   const [showVerifyModal, setShowVerifyModal] = useState(false)
+  const [showSuccessModal, setShowSuccessModal] = useState(false)
   const [showLogOutModal, setShowLogOutModal] = useState(false)
   const [hasUser, setHasUser] = useState(false)
 
@@ -18,18 +20,16 @@ function Home() {
     setShowVerifyModal(true)
   }
 
-  const closeModal = () => {
-    setShowGetOtpModal(false)
+  const showSuccessLoginModal = () => {
     setShowVerifyModal(false)
-    setShowLogOutModal(false)
+    setShowSuccessModal(true)
   }
 
-  const logInSuccess = (data) => {
+  const verifySuccess = (data) => {
     setHasUser(true)
     localStorage.setItem('hasUser', 'true')
     localStorage.setItem('accessToken', data.token.accessToken)
     localStorage.setItem('refreshToken', data.token.refreshToken)
-    closeModal()
   }
 
   const logOutSuccess = () => {
@@ -40,6 +40,7 @@ function Home() {
     localStorage.removeItem('userEmail')
     localStorage.removeItem('userId')
     setShowLogOutModal(false)
+    window.location.reload()
   }
 
   useEffect(() => {
@@ -56,9 +57,10 @@ function Home() {
       <Header hasUser={hasUser} openModal={() => setShowGetOtpModal(true)} openLogOutModal={() => setShowLogOutModal(true)}/>
       <HomeContent hasUser={hasUser} openModal={() => setShowGetOtpModal(true)} />
       <Footer />
-      {showGetOtpModal && <GetOTP showModal={showGetOtpModal} handleClose={closeModal} showVerifyOtpModal={showVerifyOtpModal} />}
-      {showVerifyModal && <VerifyOTP showModal={showVerifyOtpModal} handleClose={closeModal} logInSuccess={logInSuccess} />}
-      {showLogOutModal && <Logout showModal={showLogOutModal} handleClose={closeModal} logOutSuccess={logOutSuccess} />}
+      {showGetOtpModal && <GetOTP showModal={showGetOtpModal} handleClose={() => setShowGetOtpModal(false)} showVerifyOtpModal={showVerifyOtpModal} />}
+      {showVerifyModal && <VerifyOTP showModal={showVerifyModal} handleClose={() => setShowVerifyModal(false)} verifySuccess={verifySuccess} showSuccessLoginModal={showSuccessLoginModal} />}
+      {showSuccessModal && <SuccessLoginModal showModal={showSuccessModal} handleClose={() => setShowSuccessModal(false)} />}
+      {showLogOutModal && <Logout showModal={showLogOutModal} handleClose={() => setShowLogOutModal(false)} logOutSuccess={logOutSuccess} />}
       {hasUser && <ExchangedPoints />}
     </div>
   )

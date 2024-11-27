@@ -40,6 +40,7 @@ const handleAddCartItem = async (req, res) => {
   const cartObject = {
     cart: req.body,
   }
+  console.log(cartObject)
   try {
     const cartItem = await cartService.addCartItem(cartObject);
     if (!cartItem.success) {

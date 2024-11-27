@@ -91,6 +91,7 @@ const addCartItem = async (cartObject) => {
         total_prices: 0.0, 
       });
     }
+    console.log('vao day')
     let cartItem = await db.CartItem.findOne({
       where: { cartId: cart.id, productId: cartObject.cart.productId }
     });

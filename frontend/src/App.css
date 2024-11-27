@@ -207,7 +207,7 @@ body {
   margin: 0 5px;
 }
 
-.login-modal {
+.show-modal {
   display: block;
   position: fixed;
   top: 0;

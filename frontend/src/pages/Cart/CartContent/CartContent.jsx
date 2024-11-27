@@ -1,10 +1,12 @@
 import { useState, useEffect } from 'react'
+import { useNavigate } from 'react-router-dom'
 import CartItem from '~/pages/Cart/CartContent/CartItem'
 import { fetchWithAuthToken } from '~/utils/fetchWithAuthToken.js'
 
 function CartContent() {
   const [hasCartItem, setHasCartItem] = useState({})
   const [cartPoints, setCartPoints] = useState({})
+  const navigate = useNavigate()
 
   useEffect(() => {
     const fetchCartItem = async () => {
@@ -54,7 +56,7 @@ function CartContent() {
             <div className="empty_cart">
               <img src="../src/assets/empty-cart.png" className="inline" alt="empty cart" />
               <p className="text-lg">Không có sản phẩm nào trong giỏ !</p>
-              <button className="form_button font_iCiel_Panton text-white bg-[#00AAEC] hover:bg-[#007bff] w-[230px] mt-0 uppercase">chọn quà ngay</button>
+              <button onClick={() => navigate('/gifts')} className="form_button font_iCiel_Panton text-white bg-[#00AAEC] hover:bg-[#007bff] w-[230px] mt-0 uppercase">chọn quà ngay</button>
             </div>
           }
         </div>

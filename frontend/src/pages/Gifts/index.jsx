@@ -4,6 +4,7 @@ import Header from '~/components/Header/Header'
 import Footer from '~/components/Footer/Footer'
 import GetOTP from '~/components/LoginModal/GetOTP'
 import VerifyOTP from '~/components/LoginModal/VerifyOTP'
+import SuccessLoginModal from '~/components/NotificationModal/SuccessLoginModal'
 import Logout from '~/components/LoginModal/Logout'
 import GiftContent from '~/pages/Gifts/GiftContent/GiftContent'
 import GiftDetail from '~/pages/Gifts/GiftDetail/GiftDetail'
@@ -11,27 +12,25 @@ import GiftDetail from '~/pages/Gifts/GiftDetail/GiftDetail'
 function Gifts() {
   const [showGetOtpModal, setShowGetOtpModal] = useState(false)
   const [showVerifyModal, setShowVerifyModal] = useState(false)
+  const [showSuccessModal, setShowSuccessModal] = useState(false)
   const [showLogOutModal, setShowLogOutModal] = useState(false)
   const [hasUser, setHasUser] = useState(false)
-  const [hasCartItem, setHasCartItem] = useState({})
 
   const showVerifyOtpModal = () => {
     setShowGetOtpModal(false)
     setShowVerifyModal(true)
   }
 
-  const closeModal = () => {
-    setShowGetOtpModal(false)
+  const showSuccessLoginModal = () => {
     setShowVerifyModal(false)
-    setShowLogOutModal(false)
+    setShowSuccessModal(true)
   }
 
-  const logInSuccess = (data) => {
+  const verifySuccess = (data) => {
     setHasUser(true)
     localStorage.setItem('hasUser', 'true')
     localStorage.setItem('accessToken', data.token.accessToken)
     localStorage.setItem('refreshToken', data.token.refreshToken)
-    closeModal()
   }
 
   const logOutSuccess = () => {
@@ -42,6 +41,7 @@ function Gifts() {
     localStorage.removeItem('userEmail')
     localStorage.removeItem('userId')
     setShowLogOutModal(false)
+    window.location.reload()
   }
 
   useEffect(() => {
@@ -51,22 +51,7 @@ function Gifts() {
     } else {
       setHasUser(false)
     }
-    const fetchCartItem = async () => {
-      try {
-        const response = await fetch('http://localhost:3000/api/cart', {
-          method: 'GET',
-          headers: {
-            'Content-Type': 'application/json'
-          }
-        })
-        setHasCartItem(response.data)
-      }
-      catch (error) {
-        console.error(error)
-      }
-    }
-    fetchCartItem()
-  }, [hasUser, hasCartItem])
+  }, [hasUser])
 
   return (
     <div className='container mx-auto'>
@@ -95,9 +80,10 @@ function Gifts() {
         </Routes>
       </div>
       <Footer />
-      {showGetOtpModal && <GetOTP showModal={showGetOtpModal} handleClose={closeModal} showVerifyOtpModal={showVerifyOtpModal} />}
-      {showVerifyModal && <VerifyOTP showModal={showVerifyOtpModal} handleClose={closeModal} logInSuccess={logInSuccess} />}
-      {showLogOutModal && <Logout showModal={showLogOutModal} handleClose={closeModal} logOutSuccess={logOutSuccess} />}
+      {showGetOtpModal && <GetOTP showModal={showGetOtpModal} handleClose={() => setShowGetOtpModal(false)} showVerifyOtpModal={showVerifyOtpModal} />}
+      {showVerifyModal && <VerifyOTP showModal={showVerifyModal} handleClose={() => setShowVerifyModal(false)} verifySuccess={verifySuccess} showSuccessLoginModal={showSuccessLoginModal} />}
+      {showSuccessModal && <SuccessLoginModal showModal={showSuccessModal} handleClose={() => setShowSuccessModal(false)} />}
+      {showLogOutModal && <Logout showModal={showLogOutModal} handleClose={() => setShowLogOutModal(false)} logOutSuccess={logOutSuccess} />}
     </div>
   )
 }
