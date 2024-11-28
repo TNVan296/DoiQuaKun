@@ -40,8 +40,8 @@ const GetOTP = ({ showModal, handleClose, showVerifyOtpModal }) => {
         <span className="close" onClick={handleClose}>
           <i className="fas fa-times"></i>
         </span>
-        <div className='modal-form text-center px-3 pt-5 pb-4'>
-          <h1 className="text-[#00AAEC] font-bold text-2xl mb-3">Nhập email của bạn</h1>
+        <div className='modal-form text-center px-3 pt-5 pb-4 mb-2'>
+          <h1 className="text-[#00AAEC] font-bold text-2xl mb-5">Nhập email của bạn</h1>
           <div className="form">
             <input value={email} onChange={handleInputValue} type="email" placeholder="Email của bạn" className="onboarding_input focus:outline-none focus:border-[#00AAEC] focus:border-[3px]" />
           </div>

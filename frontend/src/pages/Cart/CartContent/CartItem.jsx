@@ -123,13 +123,13 @@ function CartItem({ hasCartItem, setHasCartItem, cartPoints, setCartPoints }) {
               <div className="gift_cart_img">
                 <img src={`../src/assets/${item.product.picture.name}`} alt="Product Image" />
               </div>
-              <div className="gift_cart_info mr-[150px]">
+              <div className="gift_cart_info mr-[150px] w-1/4">
                 <p className="gift_cart_title font_iCiel_Crocante">{item.product.name}</p>
                 <p className="gift_cart_color">
                   <b>Màu sắc:</b> {item.product.color.name}
                 </p>
               </div>
-              <div className="gift_cart_quantity mr-[100px]">
+              <div className="gift_cart_quantity mr-[100px] w-1/4">
                 <div className="gift_detail_quantity_counter">
                   <button
                     className="gift_detail_quantity_counter_button btn_decrease"
@@ -151,7 +151,7 @@ function CartItem({ hasCartItem, setHasCartItem, cartPoints, setCartPoints }) {
                   </button>
                 </div>
               </div>
-              <div className="gift_cart_price">
+              <div className="gift_cart_price w-1/4">
                 <p className="font_Quicksand text-[lightseagreen] capitalize">
                   <b>{item.product.exchangePoint} thẻ siêu quyền năng</b>
                 </p>
