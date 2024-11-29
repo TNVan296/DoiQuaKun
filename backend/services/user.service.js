@@ -1,3 +1,4 @@
+const { DATEONLY } = require('sequelize');
 const db = require('../sequelize/database.js');
 const { sendOtpToEmail } = require('../utils/emailHelper.utils');
 const { createAccessToken, createRefreshToken } = require('../utils/jwtToken.utils');
@@ -125,7 +126,7 @@ const GetCardHistory = async (userObject) => {
     if (!walletUser) {
       return { success: false, message: 'Wallet does not exist' };
     }
-    const cardHistory = await db.Card.findAll({ where: { walletId: walletUser.id, status: 'inactive' } });
+    const cardHistory = await db.Card.findAll({ where: { walletId: walletUser.id, status: 'Đã nạp' } });
     return { success: true, data: cardHistory, message: 'User card history fetched successfully' };
   } catch (error) {
     return { success: false, message: 'Error while fetching user card history' };
@@ -138,8 +139,8 @@ const GetHistoryExchange = async (userObject) => {
     if (!user) {
       return { success: false, message: 'User does not exist' };
     }
-    const cartHistoryExchange = await db.Cart.findOne({
-      where : { userId: user.id, status: 'complete' },
+    const cartHistoryExchange = await db.Cart.findAll({
+      where : { userId: user.id, status: 'Đã thanh toán' },
       include: [
         {
           model: db.CartItem,

@@ -172,9 +172,8 @@ function Account() {
                 name="city"
                 onFocus={getCities}
                 onChange={(e) => {
-                  const cityId = e.target.value
-                  setUserProfile({ ...userProfile, cityId: cityId })
-                  getDistricts(cityId)
+                  setUserProfile({ ...userProfile, cityId: e.target.value })
+                  getDistricts(e.target.value)
                 }}
                 value={userProfile.cityId}
                 className='w-4/5 form_control focus:outline-none focus:border-[#00AAEC] focus:border-[3px]'
@@ -196,9 +195,8 @@ function Account() {
                 id="district"
                 name="district"
                 onChange={(e) => {
-                  const districtId = e.target.value
-                  setUserProfile({ ...userProfile, districtId: districtId })
-                  getWards(districtId)
+                  setUserProfile({ ...userProfile, districtId: e.target.value })
+                  getWards(e.target.value)
                 }}
                 value={userProfile.districtId}
                 className='w-4/5 form_control focus:outline-none focus:border-[#00AAEC] focus:border-[3px]'

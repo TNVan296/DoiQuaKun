@@ -3,7 +3,7 @@ const db = require('../sequelize/database.js');
 const getCartItems = async (userObject) => {
   try {
     const cart = await db.Cart.findOne({
-      where: { userId: userObject.user.id, status: 'active' },
+      where: { userId: userObject.user.id, status: 'Đã kích hoạt' },
       include:
       [
         { model: db.CartItem, as: 'cartItems', include:
@@ -21,25 +21,25 @@ const getCartItems = async (userObject) => {
     if (!cart) {
       return { success: false, message: 'Cart not found' };
     } else {
-      return { success: true, data: cart, message: 'Cart fetched successfully' };
+      return { success: true, data: cart, message: 'Đã lấy giỏ hàng của người dùng thành công !' };
     }
   } catch (error) {
-    return { success: false, message: 'Error while fetching cart' };
+    return { success: false, message: 'Lỗi không thể lấy được sản phẩm trong giỏ hàng !' };
   }
 }
 
 const getExchangePoints = async (userObject) => {
   try {
     const exchangePoints = await db.Cart.findOne({
-      where: { userId: userObject.user.id, status: 'active' },
+      where: { userId: userObject.user.id, status: 'Đã kích hoạt' },
       attributes: ['totalPoints']
     })
     if (!exchangePoints) {
       return 0;
     }
-    return { success: true, data: exchangePoints.totalPoints, message: 'Exchange points fetched successfully' };
+    return { success: true, data: exchangePoints.totalPoints, message: 'Đã lấy điểm cần đổi thành công !' };
   } catch (error) {
-    return { success: false, message: 'Error while fetching points' };
+    return { success: false, message: 'Lỗi không thể lấy được điểm cần đổi !' };
   }
 }
 
@@ -52,23 +52,23 @@ const getUserPoints = async (userObject) => {
     if (!userPoints) {
       return 0;
     }
-    return { success: true, data: userPoints.points, message: 'User Points fetched successfully' };
+    return { success: true, data: userPoints.points, message: 'Đã lấy điểm của người dùng thành công !' };
   } catch (error) {
-    return { success: false, message: 'Error while fetching points' };
+    return { success: false, message: 'Lỗi không thể lấy được điểm của người dùng !' };
   }
 }
 
 const addCartItem = async (cartObject) => {
   try {
     if (!cartObject.cart.productId || !cartObject.cart.userId) {
-      return { success: false, message: 'productId and userId are required' };
+      return res.status(400).json({ message: 'Yêu cầu ID sản phẩm và ID của người dùng !' });
     }
     if (cartObject.cart.quantity <= 0) {
-      return { success: false, message: 'Quantity must be greater than zero' };
+      return res.status(400).json({ message: 'Số lượng phải lớn hơn 0 !' });
     }
     // Tìm giỏ hàng của người dùng với trạng thái 'active'.
     let cart = await db.Cart.findOne({
-      where: { userId: cartObject.cart.userId, status: 'active' },
+      where: { userId: cartObject.cart.userId, status: 'Đã kích hoạt' },
       include: [{ model: db.CartItem, as: 'cartItems', include:
         [
           { model: db.Product, as: 'product', include:
@@ -86,12 +86,11 @@ const addCartItem = async (cartObject) => {
     if (!cart) {
       cart = await db.Cart.create({
         userId: cartObject.cart.userId,
-        status: 'active',
+        status: 'Đã kích hoạt',
         total_items: 0,
         total_prices: 0.0, 
       });
     }
-    console.log('vao day')
     let cartItem = await db.CartItem.findOne({
       where: { cartId: cart.id, productId: cartObject.cart.productId }
     });
@@ -110,22 +109,22 @@ const addCartItem = async (cartObject) => {
     cart.totalItems += cartObject.cart.quantity;
     cart.totalPoints += productPrice * cartObject.cart.quantity;  
     await cart.save(); 
-    return { success: true, data: cart, message: 'Add item to cart successfully !' };
+    return { success: true, data: cart, message: 'Thêm sản phẩm vào giỏ hàng thành công !' };
   } catch (error) {
-    throw new Error('Could not add item to cart'); 
+    throw new Error('Không thể thêm sản phẩm vào giỏ hàng !'); 
   }
 };
 
 const removeCartItem = async (cartObject) => {
   try {
     if (!cartObject.cart.productId || !cartObject.cart.userId) {
-      return res.status(400).json({ message: 'productId and userId are required' });
+      return res.status(400).json({ message: 'Yêu cầu ID sản phẩm và ID của người dùng !' });
     }
     if (cartObject.cart.quantity <= 0) {
-      return res.status(400).json({ message: 'Quantity must be greater than zero' });
+      return res.status(400).json({ message: 'Số lượng phải lớn hơn 0 !' });
     }
     let cart = await db.Cart.findOne({
-      where: { userId: cartObject.cart.userId, status: 'active' },
+      where: { userId: cartObject.cart.userId, status: 'Đã kích hoạt' },
       include: [{ model: db.CartItem, as: 'cartItems', include:
         [
           { model: db.Product, as: 'product', include:
@@ -140,13 +139,13 @@ const removeCartItem = async (cartObject) => {
       }]
     });
     if (!cart) {
-      throw new Error('No active cart found for this user');
+      throw new Error('Giỏ hàng của người dùng chưa được kích hoạt !');
     }
     let cartItem = await db.CartItem.findOne({
       where: { cartId: cart.id, productId: cartObject.cart.productId}
     });
     if (!cartItem) {
-      throw new Error('Product not found in cart');
+      throw new Error('Không tìm thấy sản phẩm trong giỏ hàng !');
     }
     const product = await db.Product.findByPk(cartObject.cart.productId);
     const productPrice = product.exchangePoint;
@@ -163,44 +162,52 @@ const removeCartItem = async (cartObject) => {
     if (cart.total_prices < 0) cart.total_prices = 0.0; 
 
     await cart.save();
-    return { success: true, data: cart, message: 'Remove item from cart successfully !' };
+    return { success: true, data: cart, message: 'Xóa sản phẩm trong giỏ hàng thành công !' };
   } catch (error) {
-    throw new Error('Could not remove item from cart');
+    throw new Error('Không thể xóa sản phẩm trong giỏ hàng !');
   }
 };
 
 const checkoutCart = async (cartObject) => {
   try {
     if (!cartObject.cart.userId) {
-      return res.status(400).json({ message: 'userId is required' });
+      return res.status(400).json({ message: 'Yêu cầu phải có ID của người dùng' });
     }
     const cart = await db.Cart.findOne({
-      where: { userId: cartObject.cart.userId, status: 'active' },
+      where: { userId: cartObject.cart.userId, status: 'Đã kích hoạt' },
       include: [{ model: db.CartItem, as: 'cartItems' }]
     });
     if (!cart) {
-      throw new Error('No active cart found');
+      throw new Error('Giỏ hàng chưa được kích hoạt !');
     }
     const totalPoints = cart.totalPoints;  
     if (totalPoints === undefined) {
-      throw new Error('Total points not found in cart'); // Thêm kiểm tra cho totalPoints
+      throw new Error('Tổng điểm của người dùng không tìm thấy !'); // Thêm kiểm tra cho totalPoints
     }
     const wallet = await db.Wallet.findOne({
       where: { userId: cartObject.cart.userId },
     });
     if (!wallet) {
-      throw new Error('Wallet not found for this user');
+      throw new Error('Không tìm thấy ví của người dùng !');
     }
     if (wallet.points < totalPoints) {
-      throw new Error('Insufficient points in wallet');
+      throw new Error('Không đủ điểm để đổi !');
     }
     wallet.points -= totalPoints;
     await wallet.save();
-    cart.status = 'complete';
+    cart.status = 'Đã thanh toán';
     await cart.save();
-    return { success: true, data: cart, totalPointsPaid: totalPoints, message: 'Checkout successful !' };
+
+    // người dùng thanh toán xong liền tạo 1 giỏ hàng mới
+    await db.Cart.create({
+      userId: cartObject.cart.userId,
+      totalItems: 0,
+      totalPoints: 0,
+      status: 'Đã kích hoạt'
+    });
+    return { success: true, data: cart, totalPointsPaid: totalPoints, message: 'Thanh toán thành công !' };
   } catch (error) {
-    throw new Error('Checkout failed');
+    throw new Error('Thanh toán thất bại !');
   }
 };
 
