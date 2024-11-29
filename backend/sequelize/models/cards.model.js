@@ -29,12 +29,12 @@ module.exports = (sequelize) => {
       validFrom:
       {
         allowNull: false,
-        type: DataTypes.DATE
+        type: DataTypes.DATEONLY
       },
       validTo:
       {
         allowNull: false,
-        type: DataTypes.DATE
+        type: DataTypes.DATEONLY
       },
       walletId:
       {
