@@ -37,11 +37,10 @@ const getCartPoints = async (req, res) => {
 
 // Handle adding an item to the cart
 const handleAddCartItem = async (req, res) => {
-  const cartObject = {
-    cart: req.body,
-  }
-  console.log(cartObject)
   try {
+    const cartObject = {
+      cart: req.body,
+    }
     const cartItem = await cartService.addCartItem(cartObject);
     if (!cartItem.success) {
       return res.status(400).json({ message: cartItem.message });
@@ -80,7 +79,7 @@ const handleCheckout = async (req, res) => {
     if (!result.success) {
       return res.status(400).json({ message: result.message });
     } else {
-      return res.status(200).json({ message: result.message, data: result.data, totalPointsPaid: result.totalPointsPaid });
+      return res.status(200).json({ message: result.message, data: result.data });
     }
   } catch (error) {
     handleError(res, error, 'Could not checkout cart');

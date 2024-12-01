@@ -1,9 +1,6 @@
-const { District, City } = require("./database");
-
 module.exports = (sequelize) => {
-    const { Color, Size, Design, Product, ProductCategory, Picture, Cart, User, Wallet, Card, CartItem, District, City, Ward } = sequelize.models;
+    const { Color, Size, Design, Product, ProductCategory, Picture, Cart, User, Wallet, Card, CartItem, District, City, Ward, Order } = sequelize.models;
 
-    // Một Picture có nhiều Products
     Picture.hasMany(Product, {
       foreignKey: 'pictureId',
       as: 'products'
@@ -153,6 +150,25 @@ module.exports = (sequelize) => {
       as: 'district'
     });
 
+    // User.hasOne(Order, {
+    //   foreignKey: 'userId',
+    //   as: 'order'
+    // });
+  
+    // Order.belongsTo(User, {
+    //   foreignKey: 'userId',
+    //   as: 'user'
+    // });
+
+    Cart.hasOne(Order, {
+      foreignKey: 'cartId',
+      as: 'order'
+    })
+
+    Order.belongsTo(Cart, {
+      foreignKey: 'cartId',
+      as: 'cart'
+    })
     
   };
   

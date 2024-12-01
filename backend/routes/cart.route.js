@@ -109,6 +109,18 @@ router.post('/remove', authenticateToken, cartController.handleRemoveCartItem);
  *               userId:
  *                 type: integer
  *                 example: 1
+ *               babyName:
+ *                 type: string
+ *                 example: "Nhung"
+ *               babyAge:
+ *                 type: integer
+ *                 example: 12
+ *               babyGender:
+ *                 type: boolean
+ *                 example: false
+ *               detailAddress:
+ *                 type: string
+ *                 example: "123 Nguyễn Trãi"
  *     responses:
  *       200:
  *         description: Checkout successful

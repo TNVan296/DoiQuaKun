@@ -505,39 +505,21 @@ body {
 .table_container {
   width: 100%;
   border: 1px solid #ddd;
-  overflow: auto;
+  overflow-x: auto;
 }
 
 .coupon_table {
-  width: 100%;
+  display: block;
+  width: max-content;
+  min-width: 100%;
   border-collapse: collapse;
   border-bottom: 1px solid #111;
-  white-space: nowrap;
-}
-
-.coupon_table thead {
-  display: table;
-  width: 100%;
-  table-layout: fixed;
 }
 
 .coupon_table th, .coupon_table td {
   padding: 10px;
   border: 1px solid #ddd;
-}
-
-.table_scroll_y {
-  display: block;
-  max-height: 300px;
-  overflow-y: auto;
-  max-width: 100%;
-  width: 100%;
-}
-
-.table_scroll_y tr {
-  display: table;
-  width: 100%;
-  table-layout: fixed;
+  white-space: nowrap;
 }
 
 .no_cards {

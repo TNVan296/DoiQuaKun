@@ -2,13 +2,65 @@ import { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import PropTypes from 'prop-types'
 import ExchangedPoints from '~/components/BottomNav/ExchangedPoints'
+import SuccessCheckoutModal from '~/components/NotificationModal/SuccessCheckoutModal'
 import { fetchWithAuthToken } from '~/utils/fetchWithAuthToken'
 
 function CartItem({ hasCartItem, setHasCartItem, cartPoints, setCartPoints }) {
   const navigate = useNavigate()
   const [products, setProducts] = useState([])
+  const [userProfile, setUserProfile] = useState({})
+  const [userOrder, setUserOrder] = useState({})
+  const [cities, setCities] = useState([])
+  const [districts, setDistricts] = useState([])
+  const [wards, setWards] = useState([])
+  const [showSuccessCheckoutModal, setShowSuccessCheckoutModal] = useState(false)
   const [startIndex, setStartIndex] = useState(0)
   const itemsPerPage = 4
+
+  const getCities = async () => {
+    try {
+      const response = await fetch('http://localhost:3000/api/address/cities', {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json'
+        }
+      })
+      const data = await response.json()
+      setCities(data.data)
+    } catch (error) {
+      console.error(error)
+    }
+  }
+
+  const getDistricts = async (cityId) => {
+    try {
+      const response = await fetch(`http://localhost:3000/api/address/districts/${cityId}`, {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json'
+        }
+      })
+      const data = await response.json()
+      setDistricts(data.data)
+    } catch (error) {
+      console.error(error)
+    }
+  }
+
+  const getWards = async (districtId) => {
+    try {
+      const response = await fetch(`http://localhost:3000/api/address/wards/${districtId}`, {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json'
+        }
+      })
+      const data = await response.json()
+      setWards(data.data)
+    } catch (error) {
+      console.error(error)
+    }
+  }
 
   const handleNext = () => {
     setStartIndex((prevIndex) => (prevIndex + itemsPerPage) % products.length)
@@ -91,6 +143,29 @@ function CartItem({ hasCartItem, setHasCartItem, cartPoints, setCartPoints }) {
     }
   }
 
+  const handleCheckOut = async () => {
+    try {
+      const response = await fetchWithAuthToken('http://localhost:3000/api/cart/checkout', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          userId: hasCartItem.userId,
+          babyName: userOrder.babyName,
+          babyAge: userOrder.babyAge,
+          babyGender: userOrder.babyGender,
+          detailAddress: userOrder.detailAddress,
+          // note: userOrder.note
+        })
+      })
+      setUserOrder(response.data)
+      setShowSuccessCheckoutModal(true)
+    } catch (error) {
+      console.log(error)
+    }
+  }
+
   useEffect(() => {
     try {
       const fetchProducts = async () => {
@@ -109,6 +184,23 @@ function CartItem({ hasCartItem, setHasCartItem, cartPoints, setCartPoints }) {
         }
       }
       fetchProducts()
+      const fetchUserProfile = async () => {
+        try {
+          const response = await fetchWithAuthToken('http://localhost:3000/api/users/profile', {
+            method: 'GET',
+            headers: {
+              'Content-Type': 'application/json'
+            }
+          })
+          setUserProfile(response.data)
+          await getCities()
+          if (response.data.cityId) await getDistricts(response.data.cityId)
+          if (response.data.districtId) await getWards(response.data.districtId)
+        } catch (error) {
+          console.log(error)
+        }
+      }
+      fetchUserProfile()
     } catch (error) {
       console.log(error)
     }
@@ -160,6 +252,7 @@ function CartItem({ hasCartItem, setHasCartItem, cartPoints, setCartPoints }) {
           ))}
           <div className="solid"></div>
         </div>
+
         <div className='transaction'>
           <div className='transaction_card'>
             <p className='price_total font_Baloo text-lg'>
@@ -180,6 +273,7 @@ function CartItem({ hasCartItem, setHasCartItem, cartPoints, setCartPoints }) {
           </div>
           <p className='font_Quicksand text-[#dc3545] font-bold mt-4  '>Bạn phải nhập thông tin để hoàn tất việc đổi quà</p>
         </div>
+
         <div className="item_list_carousel">
           <div className="header_title">
             <h1 className="m-[20px_0_10px]">Các sản phẩm khác</h1>
@@ -220,6 +314,7 @@ function CartItem({ hasCartItem, setHasCartItem, cartPoints, setCartPoints }) {
             </button>
           </div>
         </div>
+
         <div className='checkout_info mt-[100px] mb-[80px] w-[100%] font_Quicksand text-[#666] '>
           <div className="header_title">
             <h1 className="m-[20px_0_10px]">đổi quà ngay</h1>
@@ -232,41 +327,71 @@ function CartItem({ hasCartItem, setHasCartItem, cartPoints, setCartPoints }) {
                 <p className='font_Quicksand text-black'>
                   <b>Họ và Tên</b>
                 </p>
-                <input type="text" value={'Nguyễn Gia Thưởng'} id="name" disabled className='w-full font_Quicksand form_control' />
+                <input
+                  id="name"
+                  type="text"
+                  value={userProfile.name}
+                  className='w-full font_Quicksand form_control'
+                  disabled={cartPoints.userPoints < cartPoints.exchangePoint}
+                />
               </div>
               <div className='checkout_info_item mb-4'>
                 <p className='font_Quicksand text-black'>
                   <b>Số điện thoại</b>
                 </p>
-                <input type="tel" value={'0935542939'} id="phone" disabled className='w-full font_Quicksand form_control' />
+                <input
+                  id="phone"
+                  type="tel"
+                  value={userProfile.phoneNumber}
+                  className='w-full font_Quicksand form_control'
+                  disabled={cartPoints.userPoints < cartPoints.exchangePoint}
+                />
               </div>
               <div className='checkout_info_item mb-4'>
                 <p className='font_Quicksand text-black'>
                   <b>Email</b>
                 </p>
-                <input type="email" value={'thuong4g@gmail.com'} id="email" disabled className='w-full font_Quicksand form_control' />
+                <input type="email" value={userProfile.email} id="email" disabled className='w-full font_Quicksand form_control' />
               </div>
               <div className='checkout_info_item mb-4'>
                 <p className='font_Quicksand text-black'>
                   <b>Họ và Tên bé</b>
                 </p>
-                <input type="text" value={'Tên bé'} id="baby_name" disabled className='w-full font_Quicksand form_control' />
+                <input
+                  type="text"
+                  id="baby_name"
+                  onChange={(e) => setUserOrder({ ...userOrder, babyName: e.target.value })}
+                  className='w-full font_Quicksand form_control'
+                  disabled={cartPoints.userPoints < cartPoints.exchangePoint}
+                />
               </div>
               <div className='checkout_info_item mb-4'>
                 <p className='font_Quicksand text-black'>
                   <b>Giới tính của bé</b>
                 </p>
-                <select id="baby_gender" disabled className='w-full form_control font_Quicksand'>
-                  <option value="male">Nam</option>
-                  <option value="female">Nữ</option>
-                  <option value="other">Khác</option>
+                <select
+                  id="baby_gender"
+                  onChange={(e) => setUserOrder({ ...userOrder, gender: e.target.value })}
+                  value={String(userOrder.gender)}
+                  className='w-full form_control font_Quicksand'
+                  disabled={cartPoints.userPoints < cartPoints.exchangePoint}
+                >
+                  <option value="true">Nam</option>
+                  <option value="false">Nữ</option>
+                  <option value="null">Khác</option>
                 </select>
               </div>
               <div className='checkout_info_item mb-4'>
                 <p className='font_Quicksand text-black'>
                   <b>Tuổi của bé</b>
                 </p>
-                <input type="number" value={''} id="baby_old" disabled className='w-full font_Quicksand form_control' />
+                <input
+                  type="number"
+                  id="baby_old"
+                  onChange={(e) => setUserOrder({ ...userOrder, babyAge: e.target.value })}
+                  className='w-full font_Quicksand form_control'
+                  disabled={cartPoints.userPoints < cartPoints.exchangePoint}
+                />
               </div>
             </div>
             <div className='checkout_info_col w-1/2 flex flex-col gap-2 px-5'>
@@ -275,49 +400,114 @@ function CartItem({ hasCartItem, setHasCartItem, cartPoints, setCartPoints }) {
                 <p className='font_Quicksand text-black'>
                   <b>Thành Phố/Tỉnh</b>
                 </p>
-                <select id="city" disabled className='w-full form_control font_Quicksand'>
-                  <option value="gia_lai">Tỉnh Gia Lai</option>
+                <select
+                  id="city"
+                  onFocus={getCities}
+                  onChange={(e) => {
+                    setUserProfile({ ...userProfile, cityId: e.target.value })
+                    getDistricts(e.target.value)
+                  }}
+                  value={userProfile.cityId}
+                  className='w-full form_control font_Quicksand'
+                  disabled={cartPoints.userPoints < cartPoints.exchangePoint}
+                >
+                  <option value="">Chọn Tỉnh/Thành</option>
+                  {cities.map((city) => (
+                    <option
+                      key={city.id}
+                      value={city.id}
+                    >
+                      {city.name}
+                    </option>
+                  ))}
                 </select>
               </div>
               <div className='checkout_info_item mb-4'>
                 <p className='font_Quicksand text-black'>
                   <b>Quận/huyện</b>
                 </p>
-                <select id="district" disabled className='w-full form_control font_Quicksand'>
-                  <option value="pleiku">Thành phố Pleiku</option>
+                <select
+                  id="district"
+                  onChange={(e) => {
+                    setUserProfile({ ...userProfile, districtId: e.target.value })
+                    getWards(e.target.value)
+                  }}
+                  value={userProfile.districtId}
+                  className='w-full form_control font_Quicksand'
+                  disabled={cartPoints.userPoints < cartPoints.exchangePoint}
+                >
+                  <option value="">Chọn Quận/Huyện</option>
+                  {districts.map((district) => (
+                    <option
+                      key={district.id}
+                      value={district.id}
+                    >
+                      {district.name}
+                    </option>
+                  ))}
                 </select>
               </div>
               <div className='checkout_info_item mb-4'>
                 <p className='font_Quicksand text-black'>
                   <b>Phường/Xã</b>
                 </p>
-                <select id="ward" disabled className='w-full form_control font_Quicksand'>
-                  <option value="">Chọn phường/xã</option>
+                <select
+                  id="ward"
+                  onChange={(e) => setUserProfile({ ...userProfile, wardId: e.target.value })}
+                  value={userProfile.wardId}
+                  className='w-full form_control font_Quicksand'
+                  disabled={cartPoints.userPoints < cartPoints.exchangePoint}
+                >
+                  <option value="">Chọn Phường/Xã</option>
+                  {wards &&
+                    wards.map((ward) => (
+                      <option
+                        key={ward.id}
+                        value={ward.id}
+                      >
+                        {ward.name}
+                      </option>
+                    ))
+                  }
                 </select>
               </div>
               <div className='checkout_info_item mb-4'>
                 <p className='font_Quicksand text-black'>
-                  <b>Điểm đổi quà</b>
+                  <b>Địa điểm chi tiết</b>
                 </p>
-                <select id="baby_gender" disabled className='w-full form_control font_Quicksand'>
-                  <option value="">Chọn điểm đổi quà</option>
-                </select>
+                <input
+                  id="address"
+                  type="text"
+                  value={userOrder.detailAddress}
+                  onChange={(e) => setUserOrder({ ...userOrder, detailAddress: e.target.value })}
+                  className='w-4/5 form_control'
+                  disabled={cartPoints.userPoints < cartPoints.exchangePoint}
+                />
               </div>
               <div className='checkout_info_item mb-4mb-4'>
                 <p className='font_Quicksand text-black'>
                   <b>Ghi chú</b>
                 </p>
-                <textarea type='text' className='w-full form_control font_Quicksand' disabled placeholder='Nội dung' rows={4}></textarea>
+                <textarea
+                  type='text'
+                  // value={userOrder.note}
+                  // onChange={(e) => setUserOrder({ ...userOrder, note: e.target.value })}
+                  className='w-full form_control font_Quicksand'
+                  placeholder='Nội dung'
+                  rows={4}
+                  disabled={cartPoints.userPoints < cartPoints.exchangePoint}
+                ></textarea>
               </div>
             </div>
           </div>
           <div className="solid"></div>
           <div className='confirm_btn text-center'>
-            <button className='form_button font_iCiel_Panton bg-[#0099d4] uppercase text-white'>xác nhận đổi quà</button>
+            <button onClick={handleCheckOut} className='form_button font_iCiel_Panton bg-[#0099d4] uppercase text-white'>xác nhận đổi quà</button>
           </div>
         </div>
       </div>
       <ExchangedPoints increaseValue={increaseValue} decreaseValue={decreaseValue} />
+      {showSuccessCheckoutModal && <SuccessCheckoutModal showModal={showSuccessCheckoutModal} handleClose={() => setShowSuccessCheckoutModal(false)} />}
     </>
   )
 }
