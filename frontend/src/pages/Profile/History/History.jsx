@@ -73,33 +73,37 @@ function History() {
                 </label>
               </div>
             </div>
-            <div className='table_container'>
-              <table className='coupon_table overflow-x-auto'>
+            <div className="table_container">
+              <table className="coupon_table">
                 <thead>
                   <tr>
-                    <th colSpan={1} className='coupon_table_item'>Mã đơn</th>
-                    <th colSpan={1} className='coupon_table_item'>Ngày xác nhận</th>
-                    <th colSpan={1} className='coupon_table_item'>Trạng thái</th>
-                    <th colSpan={1} className='coupon_table_item'>Sản phẩm đổi</th>
-                    <th colSpan={1} className='coupon_table_item'>Tổng điểm</th>
+                    <th className="coupon_table_item">Mã đơn</th>
+                    <th className="coupon_table_item">Ngày xác nhận</th>
+                    <th className="coupon_table_item">Trạng thái</th>
+                    <th className="coupon_table_item">Sản phẩm đổi</th>
+                    <th className="coupon_table_item">Tổng điểm</th>
                   </tr>
                 </thead>
-                <tbody className='table_scroll_y overflow-x-auto'>
-                  {cartHistoryData.length === 0 ?
-                    (<tr className='no_cards'>
-                      <td colSpan={5} className='text-center align-top p-[10px_10px]'>Không tìm thấy dòng nào phù hợp</td>
-                    </tr>)
-                    :
+                <tbody>
+                  {cartHistoryData.length === 0 ? (
+                    <tr className="no_cards">
+                      <td colSpan={5} className="text-center align-top p-[10px_10px]">
+                        Không tìm thấy dòng nào phù hợp
+                      </td>
+                    </tr>
+                  ) : (
                     cartHistoryData.map((item) => (
-                      <tr key={item.id} className='bg-[#f9f9f9] border-b-[1px] border-[#111]'>
-                        <td colSpan={3} className='coupon_table_item font-normal'>{item.id}</td>
-                        <td colSpan={3} className='coupon_table_item font-normal'>{item.updatedAt}</td>
-                        <td colSpan={3} className='coupon_table_item font-normal'>{item.status}</td>
-                        <td colSpan={3} className='coupon_table_item font-normal'>{item.cartItems.map((item) => item.product.name).join(', ')}</td>
-                        <td colSpan={3} className='coupon_table_item font-normal'>{item.totalPoints}</td>
+                      <tr key={item.id} className="bg-[#f9f9f9] border-b-[1px] border-[#111]">
+                        <td className="coupon_table_item font-normal">{item.id}</td>
+                        <td className="coupon_table_item font-normal">{item.updatedAt}</td>
+                        <td className="coupon_table_item font-normal">{item.status}</td>
+                        <td className="coupon_table_item font-normal">
+                          {item.cartItems.map((item) => item.product.name).join(', ')}
+                        </td>
+                        <td className="coupon_table_item font-normal">{item.totalPoints}</td>
                       </tr>
                     ))
-                  }
+                  )}
                 </tbody>
               </table>
             </div>

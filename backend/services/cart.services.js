@@ -69,26 +69,14 @@ const addCartItem = async (cartObject) => {
     // Tìm giỏ hàng của người dùng với trạng thái 'active'.
     let cart = await db.Cart.findOne({
       where: { userId: cartObject.cart.userId, status: 'Đã kích hoạt' },
-      include: [{ model: db.CartItem, as: 'cartItems', include:
-        [
-          { model: db.Product, as: 'product', include:
-            [
-              { model: db.Picture, as: 'picture' },
-              { model: db.Color, as: 'color' },
-              { model: db.Size, as: 'size' },
-              { model: db.Design, as: 'design' }
-            ]
-          }
-        ]
-      }]
     });
     // Nếu không có giỏ hàng 'active', tạo giỏ hàng mới.
     if (!cart) {
       cart = await db.Cart.create({
         userId: cartObject.cart.userId,
-        status: 'Đã kích hoạt',
-        total_items: 0,
-        total_prices: 0.0, 
+        totalItems: 0,
+        totalPoints: 0,
+        status: 'Đã kích hoạt'
       });
     }
     let cartItem = await db.CartItem.findOne({
@@ -125,18 +113,6 @@ const removeCartItem = async (cartObject) => {
     }
     let cart = await db.Cart.findOne({
       where: { userId: cartObject.cart.userId, status: 'Đã kích hoạt' },
-      include: [{ model: db.CartItem, as: 'cartItems', include:
-        [
-          { model: db.Product, as: 'product', include:
-            [
-              { model: db.Picture, as: 'picture' },
-              { model: db.Color, as: 'color' },
-              { model: db.Size, as: 'size' },
-              { model: db.Design, as: 'design' }
-            ]
-          }
-        ]
-      }]
     });
     if (!cart) {
       throw new Error('Giỏ hàng của người dùng chưa được kích hoạt !');
@@ -173,7 +149,7 @@ const checkoutCart = async (cartObject) => {
     if (!cartObject.cart.userId) {
       return res.status(400).json({ message: 'Yêu cầu phải có ID của người dùng' });
     }
-    const cart = await db.Cart.findOne({
+    let cart = await db.Cart.findOne({
       where: { userId: cartObject.cart.userId, status: 'Đã kích hoạt' },
       include: [{ model: db.CartItem, as: 'cartItems' }]
     });
@@ -198,6 +174,35 @@ const checkoutCart = async (cartObject) => {
     cart.status = 'Đã thanh toán';
     await cart.save();
 
+    let order = await db.Order.create({
+      userId: cartObject.cart.userId,
+      cartId: cart.id,
+      orderAt: new Date(),
+      status: 'Đã thanh toán',
+      babyName: cartObject.cart.babyName,
+      babyAge: cartObject.cart.babyAge,
+      babyGender: cartObject.cart.babyGender,
+      detailAddress: cartObject.cart.detailAddress
+    });
+
+    // lấy ra chi tiết đơn hàng
+    order = await db.Order.findOne({
+      where: { id: order.id },
+      include:
+      [
+        { model: db.User, as: 'user' },
+        { model: db.Cart, as: 'cart', include:
+          [
+            { model: db.CartItem, as: 'cartItems', include:
+              [
+                { model: db.Product, as: 'product' }
+              ]
+            }
+          ]
+        }
+      ]
+    });
+
     // người dùng thanh toán xong liền tạo 1 giỏ hàng mới
     await db.Cart.create({
       userId: cartObject.cart.userId,
@@ -205,7 +210,7 @@ const checkoutCart = async (cartObject) => {
       totalPoints: 0,
       status: 'Đã kích hoạt'
     });
-    return { success: true, data: cart, totalPointsPaid: totalPoints, message: 'Thanh toán thành công !' };
+    return { success: true, data: order, message: 'Thanh toán thành công !' };
   } catch (error) {
     throw new Error('Thanh toán thất bại !');
   }

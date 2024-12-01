@@ -27,8 +27,7 @@ module.exports = (sequelize) => {
       userId: {
         type: DataTypes.INTEGER,
         allowNull: true, 
-      },
-    
+      }
     }, 
     {
       tableName: 'carts',
