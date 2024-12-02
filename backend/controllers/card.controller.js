@@ -5,6 +5,7 @@ const handleAddCardPoints = async (req, res) => {
     const CardObject = {
       card: req.body,
     }
+    console.log(CardObject)
     const result = await cardService.addCardPoints(CardObject);
     if (result.success === false) {
       return res.status(400).json({ message: result.message });

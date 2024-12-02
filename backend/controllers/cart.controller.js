@@ -65,7 +65,7 @@ const handleRemoveCartItem = async (req, res) => {
       return res.status(200).json({ message: cartItem.message, data: cartItem.data });
     }
   } catch (error) {
-    handleError(res, error, 'Could not remove item from cart');
+    console.log('Could not remove item from cart', error);
   }
 };
 
@@ -74,15 +74,18 @@ const handleCheckout = async (req, res) => {
   const cartObject = {
     cart: req.body,
   }
+  // console.log(cartObject)
   try {
     const result = await cartService.checkoutCart(cartObject);
+    console.log('Thanh cong')
+    console.log(result)
     if (!result.success) {
       return res.status(400).json({ message: result.message });
     } else {
       return res.status(200).json({ message: result.message, data: result.data });
     }
   } catch (error) {
-    handleError(res, error, 'Could not checkout cart');
+    console.log('Could not checkout cart', error);
   }
 };
 

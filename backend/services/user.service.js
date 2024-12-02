@@ -15,13 +15,26 @@ const UserRegister = async (newUserObject) => {
       createdAt: new Date(),
       updateAt: new Date()
     });
-    // khi tạo 1 user mới liền lập tức tạo cho họ 1 ví người dùng
+    // khi tạo 1 user mới liền lập tức tạo cho họ 1 ví người dùng, 1 giỏ hàng và 1 đơn hàng
     const userWallet = await db.Wallet.create({
       userId: newUser.id,
       points: 0,
       status: 'active',
       createAt: new Date(),
       updateAt: new Date()
+    });
+    // tạo mới 1 giỏ hàng
+    const userCart = await db.Cart.create({
+      userId: newUser.id,
+      totalItems: 0,
+      totalPoints: 0,
+      status: 'Đã kích hoạt'
+    });
+    // tạo mới 1 đơn hàng
+    const userOrder = await db.Order.create({
+      userId: newUser.id,
+      cartId: userCart.id,
+      status: 'Chưa thanh toán',
     });
     return { success: true, data: newUser, message: `New User is ${newUser.email} registered successfully!` };
   } catch (error) {

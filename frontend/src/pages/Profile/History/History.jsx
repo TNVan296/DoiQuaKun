@@ -3,7 +3,6 @@ import { useNavigate } from 'react-router-dom'
 import { fetchWithAuthToken } from '~/utils/fetchWithAuthToken.js'
 
 function History() {
-  const [giftHistory, setGiftHistory] = useState([])
   const [currentLength, setCurrentLength] = useState(10)
   const [currentPage, setCurrentPage] = useState(1)
   const [cartHistoryData, setCartHistoryData] = useState([])
@@ -77,14 +76,14 @@ function History() {
               <table className="coupon_table">
                 <thead>
                   <tr>
-                    <th className="coupon_table_item">Mã đơn</th>
-                    <th className="coupon_table_item">Ngày xác nhận</th>
-                    <th className="coupon_table_item">Trạng thái</th>
-                    <th className="coupon_table_item">Sản phẩm đổi</th>
-                    <th className="coupon_table_item">Tổng điểm</th>
+                    <th colSpan={1} className="coupon_table_item w-[136px]">Mã đơn</th>
+                    <th colSpan={1} className="coupon_table_item w-[137px]">Ngày xác<br/>nhận</th>
+                    <th colSpan={1} className="coupon_table_item w-[137px]">Trạng thái</th>
+                    <th colSpan={1} className="coupon_table_item w-[136px]">Sản phẩm đổi</th>
+                    <th colSpan={1} className="coupon_table_item">Tổng điểm</th>
                   </tr>
                 </thead>
-                <tbody>
+                <tbody className='table_scroll_y overflow-y-scroll'>
                   {cartHistoryData.length === 0 ? (
                     <tr className="no_cards">
                       <td colSpan={5} className="text-center align-top p-[10px_10px]">
@@ -94,13 +93,13 @@ function History() {
                   ) : (
                     cartHistoryData.map((item) => (
                       <tr key={item.id} className="bg-[#f9f9f9] border-b-[1px] border-[#111]">
-                        <td className="coupon_table_item font-normal">{item.id}</td>
-                        <td className="coupon_table_item font-normal">{item.updatedAt}</td>
-                        <td className="coupon_table_item font-normal">{item.status}</td>
-                        <td className="coupon_table_item font-normal">
-                          {item.cartItems.map((item) => item.product.name).join(', ')}
+                        <td colSpan={1} className="coupon_table_item font-normal">{item.id}</td>
+                        <td colSpan={1} className="coupon_table_item font-normal">{item.updatedAt}</td>
+                        <td colSpan={1} className="coupon_table_item font-normal">{item.status}</td>
+                        <td colSpan={1} className="coupon_table_item font-normal">
+                          <button className="detail_button font_Quicksand">Xem chi tiết</button>
                         </td>
-                        <td className="coupon_table_item font-normal">{item.totalPoints}</td>
+                        <td colSpan={1} className="coupon_table_item font-normal">{item.totalPoints}</td>
                       </tr>
                     ))
                   )}

@@ -4,7 +4,6 @@ const express = require('express');
 const path = require('path');
 const cors = require('cors');
 const morgan = require('morgan');
-const nodemailer = require('nodemailer');
 const db = require('./sequelize/database.js');
 const swaggerUi = require('swagger-ui-express');
 const swaggerDocs = require('./swagger');

@@ -2,10 +2,10 @@ import { useState, useEffect } from 'react'
 import Header from '~/components/Header/Header'
 import HomeContent from '~/pages/Home/HomeContent/HomeContent'
 import Footer from '~/components/Footer/Footer'
-import GetOTP from '~/components/LoginModal/GetOTP'
-import VerifyOTP from '~/components/LoginModal/VerifyOTP'
+import GetOTP from '~/components/ShowModal/GetOTP'
+import VerifyOTP from '~/components/ShowModal/VerifyOTP'
 import SuccessLoginModal from '~/components/NotificationModal/SuccessLoginModal'
-import Logout from '~/components/LoginModal/Logout'
+import Logout from '~/components/ShowModal/Logout'
 import ExchangedPoints from '~/components/BottomNav/ExchangedPoints'
 
 function Home() {
