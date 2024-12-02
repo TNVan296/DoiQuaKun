@@ -6,7 +6,7 @@ import Account from '~/pages/Profile/Account/Account'
 import Coupons from '~/pages/Profile/Coupons/Coupons'
 import History from '~/pages/Profile/History/History'
 import ExchangedPoints from '~/components/BottomNav/ExchangedPoints'
-import Logout from '~/components/LoginModal/Logout'
+import Logout from '~/components/ShowModal/Logout'
 import { fetchWithAuthToken } from '~/utils/fetchWithAuthToken.js'
 
 function User() {
@@ -67,7 +67,7 @@ function User() {
     <div className='container mx-auto'>
       <Header hasUser={hasUser} openLogOutModal={() => setShowLogOutModal(true)}/>
       <>
-        <div className='content pt-[80px] pb-[200px] mx-[150px]'>
+        <div className='content pt-[80px] pb-[200px] mx-[140px]'>
           <div className="header_title pt-[80px]">
             <h1>thông tin tài khoản</h1>
           </div>

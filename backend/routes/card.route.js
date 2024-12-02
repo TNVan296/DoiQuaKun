@@ -22,7 +22,7 @@ const { authenticateToken } = require('../middlewares/authenticateToken.middlewa
  *               cardName:
  *                 type: string
  *                 example: 'DQK_ADMIN'
- *               walletId:
+ *               userId:
  *                 type: integer
  *                 example: 1
  *     responses:

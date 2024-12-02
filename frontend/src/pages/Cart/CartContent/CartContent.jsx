@@ -45,7 +45,7 @@ function CartContent() {
     <>
       <div className="content pt-[80px] pb-[200px] mx-[150px]">
         <div className="header_title pt-[80px]">
-          <button className="font_iCiel_Crocante form_button font-medium text-white bg-[#00AAEC] w-[230px] mt-0">thêm quà vào giỏ</button>
+          <button onClick={() => navigate('/gifts')} className="font_iCiel_Crocante form_button font-medium text-white bg-[#00AAEC] w-[230px] mt-0">thêm quà vào giỏ</button>
           <h1 className="m-[20px_0_10px]">giỏ quà</h1>
         </div>
         <div className="solid"></div>

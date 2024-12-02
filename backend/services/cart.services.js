@@ -11,7 +11,9 @@ const getCartItems = async (userObject) => {
             { model: db.Product, as: 'product', include:
               [
                 { model: db.Picture, as: 'picture' },
-                { model: db.Color, as: 'color' }
+                { model: db.Color, as: 'color' },
+                { model: db.Design, as: 'design' },
+                { model: db.Size, as: 'size' }
               ]
             }
           ] 
@@ -146,73 +148,84 @@ const removeCartItem = async (cartObject) => {
 
 const checkoutCart = async (cartObject) => {
   try {
-    if (!cartObject.cart.userId) {
-      return res.status(400).json({ message: 'Yêu cầu phải có ID của người dùng' });
+    if (!cartObject || !cartObject.cart || !cartObject.cart.userId) {
+      return { success: false, message: 'Yêu cầu phải có thông tin giỏ hàng và ID người dùng' };
     }
-    let cart = await db.Cart.findOne({
-      where: { userId: cartObject.cart.userId, status: 'Đã kích hoạt' },
+
+    const userId = cartObject.cart.userId;
+    const cart = await db.Cart.findOne({
+      where: { userId: userId, status: 'Đã kích hoạt' },
       include: [{ model: db.CartItem, as: 'cartItems' }]
     });
     if (!cart) {
-      throw new Error('Giỏ hàng chưa được kích hoạt !');
+      return { success: false, message: 'Giỏ hàng chưa được kích hoạt!' };
     }
+
     const totalPoints = cart.totalPoints;  
     if (totalPoints === undefined) {
-      throw new Error('Tổng điểm của người dùng không tìm thấy !'); // Thêm kiểm tra cho totalPoints
+      return { success: false, message: 'Không tìm thấy tổng điểm của giỏ hàng!' };
     }
+
     const wallet = await db.Wallet.findOne({
-      where: { userId: cartObject.cart.userId },
+      where: { userId: userId },
     });
     if (!wallet) {
-      throw new Error('Không tìm thấy ví của người dùng !');
+      return { success: false, message: 'Không tìm thấy ví của người dùng!' };
     }
     if (wallet.points < totalPoints) {
-      throw new Error('Không đủ điểm để đổi !');
+      return { success: false, message: 'Không đủ điểm để đổi!' };
     }
+
     wallet.points -= totalPoints;
     await wallet.save();
     cart.status = 'Đã thanh toán';
     await cart.save();
 
-    let order = await db.Order.create({
-      userId: cartObject.cart.userId,
-      cartId: cart.id,
-      orderAt: new Date(),
-      status: 'Đã thanh toán',
-      babyName: cartObject.cart.babyName,
-      babyAge: cartObject.cart.babyAge,
-      babyGender: cartObject.cart.babyGender,
-      detailAddress: cartObject.cart.detailAddress
-    });
-
-    // lấy ra chi tiết đơn hàng
-    order = await db.Order.findOne({
-      where: { id: order.id },
-      include:
-      [
-        { model: db.User, as: 'user' },
-        { model: db.Cart, as: 'cart', include:
-          [
-            { model: db.CartItem, as: 'cartItems', include:
-              [
-                { model: db.Product, as: 'product' }
-              ]
-            }
-          ]
-        }
-      ]
-    });
-
-    // người dùng thanh toán xong liền tạo 1 giỏ hàng mới
-    await db.Cart.create({
-      userId: cartObject.cart.userId,
+    // kiểm tra đơn hàng của người dùng có hay không
+    const existingOrder = await db.Order.findOne({ where: { userId, cartId: cart.id } });
+    
+    let order;
+    if (existingOrder) {
+      order = await existingOrder.update({
+        orderAt: new Date(),
+        status: 'Đã thanh toán',
+        babyName: cartObject.cart.babyName,
+        babyAge: cartObject.cart.babyAge,
+        babyGender: cartObject.cart.babyGender,
+        detailAddress: cartObject.cart.detailAddress,
+        note: cartObject.cart.note
+      });
+    } else {
+      // Tạo đơn hàng mới rồi lập tức thanh toán
+      order = await db.Order.create({
+        userId,
+        cartId: cart.id,
+        orderAt: new Date(),
+        status: 'Đã thanh toán',
+        babyName: cartObject.cart.babyName,
+        babyAge: cartObject.cart.babyAge,
+        babyGender: cartObject.cart.babyGender,
+        detailAddress: cartObject.cart.detailAddress,
+        note: cartObject.cart.note,
+      });
+    }
+    // Tạo giỏ hàng và đơn hàng mới cho người dùng
+    const newCart = await db.Cart.create({
+      userId,
       totalItems: 0,
       totalPoints: 0,
-      status: 'Đã kích hoạt'
+      status: 'Đã kích hoạt',
     });
+    await db.Order.create({
+      userId,
+      cartId: newCart.id,
+      status: 'Chưa thanh toán',
+    });
+
     return { success: true, data: order, message: 'Thanh toán thành công !' };
   } catch (error) {
-    throw new Error('Thanh toán thất bại !');
+    console.error('Lỗi trong quá trình thanh toán:', error.message);
+    return { success: false, message: 'Thanh toán thất bại!' };
   }
 };
 

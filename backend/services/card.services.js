@@ -3,26 +3,23 @@ const db = require('../sequelize/database.js');
 
 const addCardPoints = async (CardObject) => {
   try {
-    if (!CardObject.card.cardName) {
-      return { success: false, message: 'Yêu cầu phải có mã thẻ' };
-    }
-    if (!CardObject.card.walletId) {
-      return { success: false, message: 'Yêu cầu phải có ID của ví' };
+    if (!CardObject.card.cardName || !CardObject.card.userId) {
+      return { success: false, message: 'Yêu cầu phải có mã thẻ và có ID của người dùng' };
     }
     const card = await db.Card.findOne({ where: { name: CardObject.card.cardName } });
 
     if (!card) {
-      throw new Error('Không tìm thấy thẻ !');
+      return { success: false, message: 'Không tìm thấy thẻ !' };
     }
     if (card.status !== 'Đã kích hoạt') {
-      throw new Error('Thẻ chưa được kích hoạt hoặc đã nạp !');
+      return { success: false, message: 'Thẻ chưa được kích hoạt hoặc đã nạp !' };
     }
     if (card.validTo < new Date()) {
-      throw new Error('Thẻ đã hết hạn !');
+      return { success: false, message: 'Thẻ đã hết hạn !' };
     }
-    const userWallet = await db.Wallet.findOne({ where: { userId: CardObject.card.walletId } });
+    const userWallet = await db.Wallet.findOne({ where: { userId: CardObject.card.userId } });
     if (!userWallet) {
-      throw new Error('Không tìm thấy ví của người dùng !');
+      return { success: false, message: 'Không tìm thấy ví của người dùng !' };
     } else {
       await card.update({ status: 'Đã nạp', walletId: userWallet.id });
       await userWallet.increment({ points: card.points });

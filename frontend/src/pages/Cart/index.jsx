@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react'
 import { Navigate } from 'react-router-dom'
 import Header from '~/components/Header/Header'
 import Footer from '~/components/Footer/Footer'
-import Logout from '~/components/LoginModal/Logout'
+import Logout from '~/components/ShowModal/Logout'
 import CartContent from '~/pages/Cart/CartContent/CartContent'
 
 function Cart() {

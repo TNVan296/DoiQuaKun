@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom'
 import PropTypes from 'prop-types'
 import ExchangedPoints from '~/components/BottomNav/ExchangedPoints'
 import SuccessCheckoutModal from '~/components/NotificationModal/SuccessCheckoutModal'
+import CardRecharge from '~/components/ShowModal/CardRecharge'
 import { fetchWithAuthToken } from '~/utils/fetchWithAuthToken'
 
 function CartItem({ hasCartItem, setHasCartItem, cartPoints, setCartPoints }) {
@@ -13,6 +14,7 @@ function CartItem({ hasCartItem, setHasCartItem, cartPoints, setCartPoints }) {
   const [cities, setCities] = useState([])
   const [districts, setDistricts] = useState([])
   const [wards, setWards] = useState([])
+  const [showCardRechargeModal, setShowCardRechargeModal] = useState(false)
   const [showSuccessCheckoutModal, setShowSuccessCheckoutModal] = useState(false)
   const [startIndex, setStartIndex] = useState(0)
   const itemsPerPage = 4
@@ -217,9 +219,21 @@ function CartItem({ hasCartItem, setHasCartItem, cartPoints, setCartPoints }) {
               </div>
               <div className="gift_cart_info mr-[150px] w-1/4">
                 <p className="gift_cart_title font_iCiel_Crocante">{item.product.name}</p>
-                <p className="gift_cart_color">
-                  <b>Màu sắc:</b> {item.product.color.name}
-                </p>
+                {item.product?.size &&
+                  <p className="gift_cart_props">
+                    <b>Kích thước (Size):</b> {item.product.size.sizeName}
+                  </p>
+                }
+                {item.product?.design &&
+                  <p className="gift_cart_props">
+                    <b>Thiết kế:</b> {item.product.design.name}
+                  </p>
+                }
+                {item.product?.color &&
+                  <p className="gift_cart_props">
+                    <b>Màu sắc:</b> {item.product.color.name}
+                  </p>
+                }
               </div>
               <div className="gift_cart_quantity mr-[100px] w-1/4">
                 <div className="gift_detail_quantity_counter">
@@ -264,10 +278,10 @@ function CartItem({ hasCartItem, setHasCartItem, cartPoints, setCartPoints }) {
           </div>
           <div className='add_card_button'>
             {cartPoints.userPoints >= cartPoints.exchangePoint ?
-              <button className='ml-4 form_button font_Quicksand bg-[#0099d4] capitalize text-white'>thêm thẻ siêu quyền năng ngay !</button>
+              <button onClick={() => setShowCardRechargeModal(true)} className='ml-4 form_button font_Quicksand bg-[#0099d4] capitalize text-white'>thêm thẻ siêu quyền năng ngay !</button>
               :
               <p className='font_Quicksand text-[#dc3545] font-bold'>Bạn còn thiếu {cartPoints.exchangePoint - cartPoints.userPoints} thẻ
-                <button className='ml-4 form_button font_Quicksand bg-[#0099d4] capitalize text-white'>thêm thẻ siêu quyền năng ngay !</button>
+                <button onClick={() => setShowCardRechargeModal(true)} className='ml-4 form_button font_Quicksand bg-[#0099d4] capitalize text-white'>thêm thẻ siêu quyền năng ngay !</button>
               </p>
             }
           </div>
@@ -371,8 +385,8 @@ function CartItem({ hasCartItem, setHasCartItem, cartPoints, setCartPoints }) {
                 </p>
                 <select
                   id="baby_gender"
-                  onChange={(e) => setUserOrder({ ...userOrder, gender: e.target.value })}
-                  value={String(userOrder.gender)}
+                  onChange={(e) => setUserOrder({ ...userOrder, babyGender: e.target.value })}
+                  value={String(userOrder.babyGender)}
                   className='w-full form_control font_Quicksand'
                   disabled={cartPoints.userPoints < cartPoints.exchangePoint}
                 >
@@ -507,6 +521,7 @@ function CartItem({ hasCartItem, setHasCartItem, cartPoints, setCartPoints }) {
         </div>
       </div>
       <ExchangedPoints increaseValue={increaseValue} decreaseValue={decreaseValue} />
+      {showCardRechargeModal && <CardRecharge showModal={showCardRechargeModal} handleClose={() => setShowCardRechargeModal(false)} cartPoints={cartPoints} setCartPoints={setCartPoints} userId={userProfile.id} />}
       {showSuccessCheckoutModal && <SuccessCheckoutModal showModal={showSuccessCheckoutModal} handleClose={() => setShowSuccessCheckoutModal(false)} />}
     </>
   )

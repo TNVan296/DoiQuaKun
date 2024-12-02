@@ -91,12 +91,12 @@ function Coupons() {
               <table className='coupon_table'>
                 <thead>
                   <tr>
-                    <th className='coupon_table_item w-[223.5px]'>Mã thẻ</th>
-                    <th className='coupon_table_item w-[223.5px]'>Ngày nhập</th>
-                    <th className='coupon_table_item'>Trạng thái</th>
+                    <th colSpan={1} className='coupon_table_item w-[227px]'>Mã thẻ</th>
+                    <th colSpan={1} className='coupon_table_item w-[227.5px]'>Ngày nhập</th>
+                    <th colSpan={1} className='coupon_table_item'>Trạng thái</th>
                   </tr>
                 </thead>
-                <tbody className={`table_scroll_y ${couponData.length > 6 ? 'overflow-y-scroll' : ''}`}>
+                <tbody className='table_scroll_y overflow-y-scroll'>
                   {couponData.length === 0 ?
                     (<tr className='no_cards'>
                       <td colSpan={6} className='text-center align-top p-[10px_10px]'>Không tìm thấy dòng nào phù hợp</td>
@@ -104,9 +104,9 @@ function Coupons() {
                     :
                     couponData.map((item) => (
                       <tr key={item.id} className='bg-[#f9f9f9] border-b-[1px] border-[#111]'>
-                        <td colSpan={3} className='coupon_table_item font-normal'>{item.name}</td>
-                        <td colSpan={3} className='coupon_table_item font-normal'>{item.updatedAt}</td>
-                        <td colSpan={3} className='coupon_table_item font-normal'>{item.status}</td>
+                        <td colSpan={1} className='coupon_table_item font-normal'>{item.name}</td>
+                        <td colSpan={1} className='coupon_table_item font-normal'>{item.updatedAt}</td>
+                        <td colSpan={1} className='coupon_table_item font-normal'>{item.status}</td>
                       </tr>
                     ))
                   }

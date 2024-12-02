@@ -9,15 +9,15 @@ module.exports = (sequelize) => {
     },
     userId: {
       type: DataTypes.INTEGER,
-      allowNull: true, 
+      allowNull: false, 
     },
     cartId: {
       type: DataTypes.INTEGER,
-      allowNull: true, 
+      allowNull: false, 
     },
     orderAt: {
       type: DataTypes.DATE,
-      allowNull: false,
+      allowNull: true,
     },
     status: {
       type: DataTypes.STRING,
@@ -36,6 +36,10 @@ module.exports = (sequelize) => {
       allowNull: true,
     },
     detailAddress: {
+      type: DataTypes.STRING,
+      allowNull: true,
+    },
+    note: {
       type: DataTypes.STRING,
       allowNull: true,
     }
