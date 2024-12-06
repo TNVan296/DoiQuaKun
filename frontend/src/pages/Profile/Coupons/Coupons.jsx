@@ -1,12 +1,15 @@
 import { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { fetchWithAuthToken } from '~/utils/fetchWithAuthToken.js'
+import CardRecharge from '~/components/ShowModal/CardRecharge'
 
 function Coupons() {
+  const [cartPoints, setCartPoints] = useState({})
   const [cardHistory, setCardHistory] = useState([])
   const [currentLength, setCurrentLength] = useState(10)
   const [currentPage, setCurrentPage] = useState(1)
   const [couponData, setCouponData] = useState([])
+  const [showCardRechargeModal, setShowCardRechargeModal] = useState(false)
   const navigate = useNavigate()
 
   const handlePrevPage = () => {
@@ -22,6 +25,20 @@ function Coupons() {
   }
 
   useEffect(() => {
+    const fetchCartPoints = async () => {
+      try {
+        const response = await fetchWithAuthToken('http://localhost:3000/api/cart/points', {
+          method: 'GET',
+          headers: {
+            'Content-Type': 'application/json'
+          }
+        })
+        setCartPoints(response)
+      } catch (error) {
+        console.error(error)
+      }
+    }
+    fetchCartPoints()
     const fetchCardHistory = async () => {
       try {
         const response = await fetchWithAuthToken('http://localhost:3000/api/users/cardHistory', {
@@ -130,11 +147,12 @@ function Coupons() {
             </div>
           </div>
           <div className='btn_wrapper flex justify-end gap-4'>
-            <button className='form_button bg-[#00AAEC] text-white'>Đổi quà</button>
-            <button className='form_button '>Thêm thẻ</button>
+            <button onClick={() => navigate('/cart')} className='form_button bg-[#00AAEC] text-white'>Đổi quà</button>
+            <button onClick={() => setShowCardRechargeModal(true)} className='form_button '>Thêm thẻ</button>
           </div>
         </div>
       </div>
+      {showCardRechargeModal && <CardRecharge showModal={showCardRechargeModal} handleClose={() => setShowCardRechargeModal(false)} cartPoints={cartPoints} setCartPoints={setCartPoints} />}
     </>
   )
 }

@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const { searchProducts, getAllProducts, getProductById, getProductsByCategory } = require('../controllers/products.controller');
+const { searchProducts, getAllProducts, getProductById } = require('../controllers/products.controller');
 
 /**
  * @swagger

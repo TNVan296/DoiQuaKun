@@ -1,11 +1,14 @@
 import { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { fetchWithAuthToken } from '~/utils/fetchWithAuthToken.js'
+import DetailOrders from '~/components/ShowModal/DetailOrders'
 
 function History() {
   const [currentLength, setCurrentLength] = useState(10)
   const [currentPage, setCurrentPage] = useState(1)
-  const [cartHistoryData, setCartHistoryData] = useState([])
+  const [orderData, setOrderData] = useState([])
+  const [selectedCartId, setSelectedCartId] = useState(null)
+  const [showDetailOrdersModal, setShowDetailOrdersModal] = useState(false)
   const navigate = useNavigate()
 
   const handlePrevPage = () => {
@@ -15,26 +18,26 @@ function History() {
   }
 
   const handleNextPage = () => {
-    if (currentPage < Math.ceil(cartHistoryData.length / currentLength)) {
+    if (currentPage < Math.ceil(orderData.length / currentLength)) {
       setCurrentLength(currentPage + 1)
     }
   }
 
   useEffect(() => {
-    const fetchCartHistory = async () => {
+    const fetchCompletedOrders = async () => {
       try {
-        const response = await fetchWithAuthToken('http://localhost:3000/api/users/cartHistory', {
+        const response = await fetchWithAuthToken('http://localhost:3000/api/order/completed', {
           method: 'GET',
           headers: {
             'Content-Type': 'application/json'
           }
         })
-        setCartHistoryData(response.data)
+        setOrderData(response.data)
       } catch (error) {
         console.log(error)
       }
     }
-    fetchCartHistory()
+    fetchCompletedOrders()
   }, [])
 
   return (
@@ -84,22 +87,27 @@ function History() {
                   </tr>
                 </thead>
                 <tbody className='table_scroll_y overflow-y-scroll'>
-                  {cartHistoryData.length === 0 ? (
+                  {orderData.length === 0 ? (
                     <tr className="no_cards">
                       <td colSpan={5} className="text-center align-top p-[10px_10px]">
                         Không tìm thấy dòng nào phù hợp
                       </td>
                     </tr>
                   ) : (
-                    cartHistoryData.map((item) => (
+                    orderData.map((item) => (
                       <tr key={item.id} className="bg-[#f9f9f9] border-b-[1px] border-[#111]">
                         <td colSpan={1} className="coupon_table_item font-normal">{item.id}</td>
-                        <td colSpan={1} className="coupon_table_item font-normal">{item.updatedAt}</td>
+                        <td colSpan={1} className="coupon_table_item font-normal">{item.orderAt}</td>
                         <td colSpan={1} className="coupon_table_item font-normal">{item.status}</td>
                         <td colSpan={1} className="coupon_table_item font-normal">
-                          <button className="detail_button font_Quicksand">Xem chi tiết</button>
+                          <button
+                            onClick={() => {
+                              setShowDetailOrdersModal(true)
+                              setSelectedCartId(item.cartId)
+                            }}
+                            className="detail_button font_Quicksand">Xem chi tiết</button>
                         </td>
-                        <td colSpan={1} className="coupon_table_item font-normal">{item.totalPoints}</td>
+                        <td colSpan={1} className="coupon_table_item font-normal">{item.cart.totalPoints}</td>
                       </tr>
                     ))
                   )}
@@ -124,6 +132,7 @@ function History() {
           </div>
         </div>
       </div>
+      {showDetailOrdersModal && <DetailOrders showModal={showDetailOrdersModal} handleClose={() => setShowDetailOrdersModal(false)} cartId={selectedCartId} />}
     </>
   )
 }
