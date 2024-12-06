@@ -11,7 +11,6 @@ function CardRecharge({ showModal, handleClose, cartPoints }) {
   const [cardValue, setCardValue] = useState('')
   const [successAddCard, setSuccessAddCard] = useState(false)
   const [wrongCard, setWrongCard] = useState(false)
-  const navigate = useNavigate()
 
   const handlePrevPage = () => {
     if (currentPage > 1) {

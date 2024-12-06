@@ -674,12 +674,18 @@ body {
   gap: 2rem;
   margin-left: 5%;
   margin-right: 5%;
-  margin-bottom: 10px
+  margin-bottom: 10px;
+}
+
+.gift_cart_line {
+  margin-top: 1rem;
+  margin-bottom: 1rem;
+  border-bottom: 1px solid lightgray;
 }
 
 .gift_cart_img {
   width: 100px;
-  height: 70px;
+  height: 80px;
   border-radius: 10px;
   padding: 5px;
   border: 1px solid lightgray;
@@ -778,9 +784,6 @@ body {
   position: fixed;
   left: 250px;
   right: 250px;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
   padding: 0 20px 45px;
   margin: 5rem auto;
   width: 100%;
