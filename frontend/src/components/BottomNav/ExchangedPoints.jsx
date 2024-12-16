@@ -28,9 +28,15 @@ function ExchangedPoints({ increaseValue, decreaseValue, addToCart }) {
         <div className="bottom_nav_item">
           <p className="font_Quicksand text-[lightseagreen] font-bold text-base">
             Bạn cần&nbsp;
-            <span className="font_Quicksand text-[#dc3545] font-bold text-base">
-              {exchangePoints.exchangePoint}
-            </span>
+            {exchangePoints.exchangePoint ?
+              <span className="font_Quicksand text-[#dc3545] font-bold text-base">
+                {exchangePoints.exchangePoint}
+              </span>
+              :
+              <span className="font_Quicksand text-[#dc3545] font-bold text-base">
+                0
+              </span>
+            }
             &nbsp;thẻ để thực hiện đổi quà
           </p>
         </div>

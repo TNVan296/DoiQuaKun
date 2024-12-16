@@ -9,6 +9,7 @@ function Account() {
   const [districts, setDistricts] = useState([])
   const [wards, setWards] = useState([])
   const [showSuccessUpdateModal, setShowSuccessUpdateModal] = useState(false)
+  const [showFailUpdateModal, setShowFailUpdateModal] = useState(false)
   const navigate = useNavigate()
 
   const getCities = async () => {
@@ -70,6 +71,7 @@ function Account() {
       setShowSuccessUpdateModal(true)
     } catch (error) {
       console.error(error)
+      alert('Cập nhật lỗi, vui lòng kiểm tra và thử lại !')
     }
   }
 
@@ -178,7 +180,6 @@ function Account() {
                 value={userProfile.cityId}
                 className='w-4/5 form_control focus:outline-none focus:border-[#00AAEC] focus:border-[3px]'
               >
-                <option value="">Chọn Tỉnh/Thành phố</option>
                 {cities.map((city) => (
                   <option
                     key={city.id}
@@ -201,7 +202,7 @@ function Account() {
                 value={userProfile.districtId}
                 className='w-4/5 form_control focus:outline-none focus:border-[#00AAEC] focus:border-[3px]'
               >
-                <option value="">Chọn Quận/Huyện</option>
+                <option value={0}>Chọn quận/huyện</option>
                 {districts.map((district) => (
                   <option
                     key={district.id}
@@ -221,7 +222,7 @@ function Account() {
                 value={userProfile.wardId}
                 className='w-4/5 form_control focus:outline-none focus:border-[#00AAEC] focus:border-[3px]'
               >
-                <option value="">Chọn Xã/Phường</option>
+                <option value={0}>Chọn xã/phường</option>
                 {wards &&
                   wards.map((ward) => (
                     <option

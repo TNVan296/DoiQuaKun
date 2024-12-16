@@ -76,7 +76,7 @@ function CardRecharge({ showModal, handleClose, cartPoints }) {
       <div className="modal_wrapper">
         <div className='modal_header'>
           <h3 className='text-xl text-[#00AAEC] w-full text-center font-medium'>Thêm Thẻ Siêu Quyền Năng</h3>
-          <span className="close" onClick={handleClose}>
+          <span className="close transition-transform duration-300 ease-in-out transform hover:scale-105 active:scale-95" onClick={handleClose}>
             <i className="fas fa-times"></i>
           </span>
         </div>
@@ -127,7 +127,7 @@ function CardRecharge({ showModal, handleClose, cartPoints }) {
                       <th colSpan={1} className='coupon_table_item'>Trạng thái</th>
                     </tr>
                   </thead>
-                  <tbody className='table_scroll_y overflow-y-scroll max-h-[80px]'>
+                  <tbody className='table_scroll_y overflow-y-scroll max-h-[125px]'>
                     {couponData.length === 0 ?
                       (<tr className='no_cards'>
                         <td colSpan={6} className='text-center align-top p-[10px_10px]'>Không tìm thấy dòng nào phù hợp</td>
@@ -186,8 +186,8 @@ function CardRecharge({ showModal, handleClose, cartPoints }) {
               </button>
             </div>
             <div className='button_row'>
-              <button onClick={() => window.location.reload()} className='detail_button'>Đổi quà ngay</button>
-              <button onClick={handleClose} className='detail_button bg-[#6c757d]'>Đóng</button>
+              <button onClick={() => window.location.reload()} className='detail_button transition-transform duration-300 ease-in-out transform hover:scale-105 active:scale-95'>Đổi quà ngay</button>
+              <button onClick={handleClose} className='detail_button bg-[#6c757d] transition-transform duration-300 ease-in-out transform hover:scale-105 active:scale-95'>Đóng</button>
             </div>
           </div>
         </div>

@@ -50,9 +50,12 @@ const generateRefreshToken = async (req, res) => {
     loggedUser.refreshToken = newRefreshToken;
     await loggedUser.save();
 
-    return res.status(200).json({
-      accessToken: newAccessToken,
-      refreshToken: newRefreshToken, // Gửi lại refreshToken mới nếu cần
+    return res.status(200).send({ 
+      message: 'Re-generate Access Token and Refresh Token successfully !',
+      data: {
+        accessToken: newAccessToken,
+        refreshToken: newRefreshToken
+      }
     });
   } catch (err) {
     return res.status(403).json({ message: 'Invalid or expired refresh token' });

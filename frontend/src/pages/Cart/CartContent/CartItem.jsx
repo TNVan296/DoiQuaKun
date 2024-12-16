@@ -427,7 +427,6 @@ function CartItem({ hasCartItem, setHasCartItem, cartPoints, setCartPoints }) {
                   className='w-full form_control font_Quicksand'
                   disabled={cartPoints.userPoints < cartPoints.exchangePoint}
                 >
-                  <option value="">Chọn Tỉnh/Thành</option>
                   {cities.map((city) => (
                     <option
                       key={city.id}

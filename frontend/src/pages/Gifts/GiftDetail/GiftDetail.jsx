@@ -9,6 +9,7 @@ function GiftDetail() {
   const [selectedColor, setSelectedColor] = useState('')
   const [selectedSize, setSelectedSize] = useState('')
   const [selectedDesign, setSelectedDesign] = useState('')
+  const [selectedProduct, setSelectedProduct] = useState({})
   const [quantity, setQuantity] = useState(1)
   const [colors, setColors] = useState([])
   const [sizes, setSizes] = useState([])
@@ -334,5 +335,4 @@ function GiftDetail() {
     </>
   )
 }
-
 export default GiftDetail

@@ -18,18 +18,17 @@ export async function ensureAccessToken() {
       },
       body: JSON.stringify({ refreshToken })
     })
-
-    if (response.ok) {
-      const data = await response.json()
-      localStorage.setItem('accessToken', data.accessToken)
-      localStorage.setItem('refreshToken', data.refreshToken)
-      return data.accessToken
-    } else {
-      localStorage.removeItem('hasUser')
-      localStorage.removeItem('userEmail')
-      localStorage.removeItem('accessToken')
-      localStorage.removeItem('refreshToken')
-      return null
-    }
+    const dataToken = await response.json()
+    const data = dataToken.data
+    localStorage.setItem('accessToken', data.accessToken)
+    localStorage.setItem('refreshToken', data.refreshToken)
+    return data.accessToken
+  } else {
+    localStorage.removeItem('hasUser')
+    localStorage.removeItem('userId')
+    localStorage.removeItem('userEmail')
+    localStorage.removeItem('accessToken')
+    localStorage.removeItem('refreshToken')
+    return null
   }
 }

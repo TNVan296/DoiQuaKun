@@ -4,6 +4,8 @@ import { nextInput } from '~/utils/otpInput.js'
 
 function VerifyOTP({ showModal, handleClose, verifySuccess, showSuccessLoginModal }) {
   const [otpInputValues, setOtpInputValues] = useState(Array(6).fill(''))
+  const [wrongOtp, setWrongOtp] = useState(false)
+  const [getNewOTP, setGetNewOTP] = useState(false)
 
   const handleButtonClick = async () => {
     try {
@@ -21,22 +23,48 @@ function VerifyOTP({ showModal, handleClose, verifySuccess, showSuccessLoginModa
         verifySuccess(data)
         showSuccessLoginModal()
       } else {
-        alert('Mã OTP đã sai, vui lòng nhập sai !')
+        setWrongOtp(true)
       }
     } catch (error) {
       console.error('Error logging in:', error)
+      alert('An error occurred. Please try again later !')
+    }
+  }
+
+  const handleGetNewOTP = async () => {
+    try {
+      const userEmail = localStorage.getItem('userEmail')
+      const response = await fetch('http://localhost:3000/api/users/getNewOtp', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ email: userEmail })
+      })
+      if (response.oke) {
+        setGetNewOTP(true)
+      } else {
+        setGetNewOTP(false)
+      }
+    } catch (error) {
+      console.error('Error logging in:', error)
+      alert('An error occurred. Please try again later !')
     }
   }
 
   return (
     <div className={`show-modal ${showModal ? 'block' : 'hidden'}`}>
-      <div className="modal-content">
-        <span className="close" onClick={handleClose}>
+      <div className="modal-content h-[330px]">
+        <span className="close transition-transform duration-300 ease-in-out transform hover:scale-105 active:scale-95" onClick={handleClose}>
           <i className="fas fa-times"></i>
         </span>
         <div className="modal-form text-center px-3">
-          <h1 className="text-[#00AAEC] font-bold text-2xl mb-2">Nhập mật khẩu</h1>
-          <p className='text-[#6c757d] font-medium text-lg mb-3'>Mật khẩu đã gửi cho bạn từ lần đăng nhập trước qua tổng đài DoiQuaKun</p>
+          <h1 className="text-[#00AAEC] font-bold text-2xl mb-1">Nhập mật khẩu</h1>
+          {getNewOTP ?
+            <p className='text-[#6c757d] font-medium text-lg mb-3'>Nhập mật khẩu mới đã được gửi vào Email của bạn</p>
+            :
+            <p className='text-[#6c757d] font-medium text-lg mb-3'>Mật khẩu đã gửi cho bạn từ lần đăng nhập trước qua tổng đài DoiQuaKun</p>
+          }
           <div className="form flex justify-center gap-4 p-0 mb-3">
             {[...Array(6)].map((_, i) => (
               <input
@@ -49,7 +77,17 @@ function VerifyOTP({ showModal, handleClose, verifySuccess, showSuccessLoginModa
               />
             ))}
           </div>
-          <button onClick={handleButtonClick} type="submit" className="onboarding_button_2 text-white bg-[#00AAEC] w-[150px] mx-auto mt-0">Xác nhận</button>
+          <h4 className='text-base font-medium my-2'>
+            {wrongOtp && <span className='text-[#dc3545] mr-4'>Mật khẩu không chính xác</span>}
+            <a className='text-[#007bff] hover:underline cursor-pointer' onClick={handleGetNewOTP}>Lấy lại mật khẩu</a>
+          </h4>
+          <button
+            type="submit"
+            onClick={handleButtonClick}
+            className="onboarding_button_2 text-white bg-[#00AAEC] w-[150px] mx-auto mt-0 transition-transform duration-300 ease-in-out transform hover:scale-105 active:scale-95"
+          >
+            Xác nhận
+          </button>
         </div>
       </div>
     </div>
