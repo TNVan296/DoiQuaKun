@@ -4,6 +4,7 @@ import { fetchWithAuthToken } from '~/utils/fetchWithAuthToken.js'
 import CardRecharge from '~/components/ShowModal/CardRecharge'
 
 function Coupons() {
+  const apiURL = import.meta.env.VITE_API_URL
   const [cartPoints, setCartPoints] = useState({})
   const [cardHistory, setCardHistory] = useState([])
   const [currentLength, setCurrentLength] = useState(10)
@@ -27,7 +28,7 @@ function Coupons() {
   useEffect(() => {
     const fetchCartPoints = async () => {
       try {
-        const response = await fetchWithAuthToken('http://localhost:3000/api/cart/points', {
+        const response = await fetchWithAuthToken(`${apiURL}/cart/points`, {
           method: 'GET',
           headers: {
             'Content-Type': 'application/json'
@@ -41,7 +42,7 @@ function Coupons() {
     fetchCartPoints()
     const fetchCardHistory = async () => {
       try {
-        const response = await fetchWithAuthToken('http://localhost:3000/api/users/cardHistory', {
+        const response = await fetchWithAuthToken(`${apiURL}/users/cardHistory`, {
           method: 'GET',
           headers: {
             'Content-Type': 'application/json'
@@ -68,11 +69,20 @@ function Coupons() {
           <i className="fas fa-arrow-left"></i>
         </button>
         <div className="info_content">
-          {cardHistory.length === 0 &&
+          {cardHistory.length === 0 ?
             <>
               <div className="info_title">
-                <h1 className='text-[#dc3545] font_iCiel_Crocante'>Bạn chưa có thẻ nào,<br />
-                hãy nhanh chóng thu thập thật nhiều thẻ KUN nhé!</h1>
+                <h1 className='text-[#dc3545] font_iCiel_Crocante'>Bạn chưa có thẻ nào hoặc đã dùng hết thẻ,<br />
+                hãy nhanh chóng thu thập thật nhiều thẻ KUN nhé !</h1>
+              </div>
+            </>
+            :
+            <>
+              <div className="info_title">
+                <h1 className='text-[#007bff] font_iCiel_Crocante'>Bạn đã sưu tập được
+                  <span className='text-[#dc3545] font_iCiel_Crocante'> {cartPoints.userPoints}</span> thẻ, <br />
+                  hãy mau chóng đổi quà đi nhé !
+                </h1>
               </div>
             </>
           }

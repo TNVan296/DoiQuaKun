@@ -4,6 +4,7 @@ import UpdateProfileModal from '~/components/NotificationModal/UpdateProfileModa
 import { fetchWithAuthToken } from '~/utils/fetchWithAuthToken.js'
 
 function Account() {
+  const apiURL = import.meta.env.VITE_API_URL
   const [userProfile, setUserProfile] = useState({})
   const [cities, setCities] = useState([])
   const [districts, setDistricts] = useState([])
@@ -13,7 +14,7 @@ function Account() {
 
   const getCities = async () => {
     try {
-      const response = await fetch('http://localhost:3000/api/address/cities', {
+      const response = await fetch(`${apiURL}/address/cities`, {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json'
@@ -28,7 +29,7 @@ function Account() {
 
   const getDistricts = async (cityId) => {
     try {
-      const response = await fetch(`http://localhost:3000/api/address/districts/${cityId}`, {
+      const response = await fetch(`${apiURL}/address/districts/${cityId}`, {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json'
@@ -43,7 +44,7 @@ function Account() {
 
   const getWards = async (districtId) => {
     try {
-      const response = await fetch(`http://localhost:3000/api/address/wards/${districtId}`, {
+      const response = await fetch(`${apiURL}/address/wards/${districtId}`, {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json'
@@ -59,7 +60,7 @@ function Account() {
   const handleSubmit = async (e) => {
     e.preventDefault()
     try {
-      const response = await fetchWithAuthToken('http://localhost:3000/api/users/profile', {
+      const response = await fetchWithAuthToken(`${apiURL}/users/profile`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json'
@@ -70,13 +71,14 @@ function Account() {
       setShowSuccessUpdateModal(true)
     } catch (error) {
       console.error(error)
+      alert('Cập nhật lỗi, vui lòng kiểm tra và thử lại !')
     }
   }
 
   useEffect(() => {
     const fetchUserProfile = async () => {
       try {
-        const response = await fetchWithAuthToken('http://localhost:3000/api/users/profile', {
+        const response = await fetchWithAuthToken(`${apiURL}/users/profile`, {
           method: 'GET',
           headers: {
             'Content-Type': 'application/json'
@@ -178,7 +180,6 @@ function Account() {
                 value={userProfile.cityId}
                 className='w-4/5 form_control focus:outline-none focus:border-[#00AAEC] focus:border-[3px]'
               >
-                <option value="">Chọn Tỉnh/Thành phố</option>
                 {cities.map((city) => (
                   <option
                     key={city.id}
@@ -201,7 +202,7 @@ function Account() {
                 value={userProfile.districtId}
                 className='w-4/5 form_control focus:outline-none focus:border-[#00AAEC] focus:border-[3px]'
               >
-                <option value="">Chọn Quận/Huyện</option>
+                <option value={0}>Chọn quận/huyện</option>
                 {districts.map((district) => (
                   <option
                     key={district.id}
@@ -221,7 +222,7 @@ function Account() {
                 value={userProfile.wardId}
                 className='w-4/5 form_control focus:outline-none focus:border-[#00AAEC] focus:border-[3px]'
               >
-                <option value="">Chọn Xã/Phường</option>
+                <option value={0}>Chọn xã/phường</option>
                 {wards &&
                   wards.map((ward) => (
                     <option

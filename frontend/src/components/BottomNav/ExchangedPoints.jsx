@@ -3,12 +3,13 @@ import PropTypes from 'prop-types'
 import { fetchWithAuthToken } from '~/utils/fetchWithAuthToken'
 
 function ExchangedPoints({ increaseValue, decreaseValue, addToCart }) {
+  const apiURL = import.meta.env.VITE_API_URL
   const [exchangePoints, setExchangePoints] = useState({})
 
   useEffect(() => {
     const fetchExchangePoints = async () => {
       try {
-        const response = await fetchWithAuthToken('http://localhost:3000/api/cart/points', {
+        const response = await fetchWithAuthToken(`${apiURL}/cart/points`, {
           method: 'GET',
           headers: {
             'Content-Type': 'application/json'
@@ -28,9 +29,15 @@ function ExchangedPoints({ increaseValue, decreaseValue, addToCart }) {
         <div className="bottom_nav_item">
           <p className="font_Quicksand text-[lightseagreen] font-bold text-base">
             Bạn cần&nbsp;
-            <span className="font_Quicksand text-[#dc3545] font-bold text-base">
-              {exchangePoints.exchangePoint}
-            </span>
+            {exchangePoints.exchangePoint ?
+              <span className="font_Quicksand text-[#dc3545] font-bold text-base">
+                {exchangePoints.exchangePoint}
+              </span>
+              :
+              <span className="font_Quicksand text-[#dc3545] font-bold text-base">
+                0
+              </span>
+            }
             &nbsp;thẻ để thực hiện đổi quà
           </p>
         </div>

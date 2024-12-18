@@ -4,6 +4,7 @@ const {
   register,
   login,
   verifyOtp,
+  getNewOtp,
   getProfileUser,
   updateProfileUser,
   getCardHistory,
@@ -41,7 +42,7 @@ router.post('/register', register);
  * /api/users/login:
  *   post:
  *     summary: Đăng nhập người dùng
-  *     tags:
+ *     tags:
  *       - Users
  *     requestBody:
  *       required: true
@@ -88,6 +89,31 @@ router.post('/login', login);
  *         description: OTP không hợp lệ
 */
 router.post('/verifyOtp', verifyOtp);
+
+/**
+ * @swagger
+ * /api/users/getNewOtp:
+ *   post:
+ *     summary: Lấy lại OTP
+ *     tags:
+ *       - Users
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               email:
+ *                 type: string
+ *                 example: thuong4g@gmail.com
+ *     responses:
+ *       200:
+ *         description: Đã gửi lại mã OTP mới
+ *       400:
+ *         description: Lỗi đăng nhập
+*/
+router.post('/getNewOtp', getNewOtp);
 
 /**
  * @swagger

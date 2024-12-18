@@ -5,6 +5,7 @@ import AddCartItemModal from '~/components/NotificationModal/AddCartItemModal'
 import { fetchWithAuthToken } from '~/utils/fetchWithAuthToken.js'
 
 function GiftDetail() {
+  const apiURL = import.meta.env.VITE_API_URL
   const [itemImage, setItemImage] = useState('')
   const [selectedColor, setSelectedColor] = useState('')
   const [selectedSize, setSelectedSize] = useState('')
@@ -67,8 +68,7 @@ function GiftDetail() {
 
   const addToCart = async () => {
     try {
-      // eslint-disable-next-line no-unused-vars
-      const addProductToCart = await fetchWithAuthToken('http://localhost:3000/api/cart/add', {
+      await fetchWithAuthToken(`${apiURL}/cart/add`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'
@@ -89,7 +89,7 @@ function GiftDetail() {
   useEffect(() => {
     const fetchProductItem = async () => {
       try {
-        const response = await fetchWithAuthToken(`http://localhost:3000/api/products/${giftId}`, {
+        const response = await fetchWithAuthToken(`${apiURL}/products/${giftId}`, {
           method: 'GET',
           headers: {
             'Content-Type': 'application/json'
@@ -151,7 +151,7 @@ function GiftDetail() {
       }
     }
     if (giftId) fetchProductItem()
-  }, [giftId, selectedColor, selectedSize, selectedDesign])
+  }, [giftId, selectedColor, selectedSize, selectedDesign, apiURL])
 
   return (
     <>
@@ -334,5 +334,4 @@ function GiftDetail() {
     </>
   )
 }
-
 export default GiftDetail

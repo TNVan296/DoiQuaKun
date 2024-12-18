@@ -10,6 +10,7 @@ import Logout from '~/components/ShowModal/Logout'
 import { fetchWithAuthToken } from '~/utils/fetchWithAuthToken.js'
 
 function User() {
+  const apiURL = import.meta.env.VITE_API_URL
   const [showLogOutModal, setShowLogOutModal] = useState(false)
   const [hasUser, setHasUser] = useState(false)
   const [userProfile, setUserProfile] = useState({})
@@ -47,7 +48,7 @@ function User() {
     }
     const fetchUserProfile = async () => {
       try {
-        const response = await fetchWithAuthToken('http://localhost:3000/api/users/profile', {
+        const response = await fetchWithAuthToken(`${apiURL}/users/profile`, {
           method: 'GET',
           headers: {
             'Content-Type': 'application/json'
@@ -61,7 +62,7 @@ function User() {
       }
     }
     fetchUserProfile()
-  }, [hasUser])
+  }, [apiURL, hasUser])
 
   return (
     <div className='container mx-auto'>

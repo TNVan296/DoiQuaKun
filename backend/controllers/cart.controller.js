@@ -74,11 +74,8 @@ const handleCheckout = async (req, res) => {
   const cartObject = {
     cart: req.body,
   }
-  // console.log(cartObject)
   try {
     const result = await cartService.checkoutCart(cartObject);
-    console.log('Thanh cong')
-    console.log(result)
     if (!result.success) {
       return res.status(400).json({ message: result.message });
     } else {

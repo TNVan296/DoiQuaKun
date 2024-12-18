@@ -13,7 +13,13 @@ function UpdateProfileModal({ showModal, handleClose }) {
           <i className='far fa-check-circle fa-4x text-[#7AEF78] mb-2'></i>
           <h1 className="text-[#00AAEC] font-bold text-2xl mb-2">Cập nhật thành công !</h1>
           <div className="form flex gap-4 p-0 justify-between mt-5 mb-0">
-            <button onClick={successUpdateProfile} type="submit" className="onboarding_button_2 text-white bg-[#00AAEC] w-[150px] mx-auto mt-0">Xác nhận</button>
+            <button
+              onClick={successUpdateProfile}
+              type="submit"
+              className="onboarding_button_2 text-white bg-[#00AAEC] w-[150px] mx-auto mt-0 transition-transform duration-300 ease-in-out transform hover:scale-105 active:scale-95"
+            >
+              Xác nhận
+            </button>
           </div>
         </div>
       </div>

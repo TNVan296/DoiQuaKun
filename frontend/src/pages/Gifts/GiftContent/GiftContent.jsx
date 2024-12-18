@@ -2,13 +2,14 @@ import { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 
 function GiftContent() {
+  const apiURL = import.meta.env.VITE_API_URL
   const [products, setProducts] = useState([])
   const navigate = useNavigate()
 
   useEffect(() => {
     const fetchProducts = async () => {
       try {
-        const response = await fetch('http://localhost:3000/api/products', {
+        const response = await fetch(`${apiURL}/products`, {
           method: 'GET',
           headers: {
             'Content-Type': 'application/json'

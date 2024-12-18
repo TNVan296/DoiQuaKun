@@ -4,12 +4,12 @@ const {
   UserRegister,
   UserLogin,
   UserVerify,
+  UserGetNewOtp,
   UserProfile,
   UserUpdateProfile,
   GetCardHistory,
   GetHistoryExchange
 } = require('../services/user.service');
-const { generateHTML } = require('swagger-ui-express');
 
 // Hàm đăng ký người dùng
 const register =  async (req, res) => {
@@ -63,6 +63,26 @@ const verifyOtp = async (req, res) => {
     }
   } catch (error) {
     return res.status(400).send({ message: 'Something went wrong' });
+  }
+};
+
+// hàm lấy lại OTP mới
+const getNewOtp = async (req, res) => {
+  try {
+    const userObject = {
+      email: req.body.email,
+    };
+    if (!userObject.email) {
+      return res.status(400).send({ message: 'Email không hợp lệ' });
+    }
+    const getNewPassword = await UserGetNewOtp(userObject);
+    if (getNewPassword.success === true) {
+      return res.status(200).send({ message: getNewPassword.message });
+    } else {
+      return res.status(400).send({ message: getNewPassword.message });
+    }
+  } catch (error) {
+    return res.status(500).send({ message: 'Có lỗi xảy ra trong quá trình !' });
   }
 };
 
@@ -141,6 +161,7 @@ module.exports = {
   register,
   login,
   verifyOtp,
+  getNewOtp,
   getProfileUser,
   updateProfileUser,
   getCardHistory,

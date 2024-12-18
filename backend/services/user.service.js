@@ -1,4 +1,3 @@
-const { DATEONLY } = require('sequelize');
 const db = require('../sequelize/database.js');
 const { sendOtpToEmail } = require('../utils/emailHelper.utils');
 const { createAccessToken, createRefreshToken } = require('../utils/jwtToken.utils');
@@ -16,7 +15,7 @@ const UserRegister = async (newUserObject) => {
       updateAt: new Date()
     });
     // khi tạo 1 user mới liền lập tức tạo cho họ 1 ví người dùng, 1 giỏ hàng và 1 đơn hàng
-    const userWallet = await db.Wallet.create({
+    await db.Wallet.create({
       userId: newUser.id,
       points: 0,
       status: 'active',
@@ -24,14 +23,14 @@ const UserRegister = async (newUserObject) => {
       updateAt: new Date()
     });
     // tạo mới 1 giỏ hàng
-    const userCart = await db.Cart.create({
+    await db.Cart.create({
       userId: newUser.id,
       totalItems: 0,
       totalPoints: 0,
       status: 'Đã kích hoạt'
     });
     // tạo mới 1 đơn hàng
-    const userOrder = await db.Order.create({
+    await db.Order.create({
       userId: newUser.id,
       cartId: userCart.id,
       status: 'Chưa thanh toán',
@@ -53,14 +52,17 @@ const UserLogin = async (userObject) => {
     }
 
     if (user.otp) {
-      return { success: true, message: 'User already has OTP, please verify !' };
+      return { success: true, message: 'Người dùng đã tồn tại OTP, vui lòng đăng nhập !' };
     } else {
       const newOtp = await user.set({
         otp: Math.floor(100000 + Math.random() * 900000)
       });
       await newOtp.save();
       const mailSend = sendOtpToEmail(user.email, newOtp.otp);
-      return { success: true, message: 'New OTP sent to your email' };
+      if (!mailSend) {
+        return { success: false, message: 'Lỗi khi gửi Email !' };
+      }
+      return { success: true, message: 'Mã OTP mới đã được gửi đến Email của bạn !' };
     }
   } catch (error) {
     return { success: false, message: 'Error while logging in user' };
@@ -92,6 +94,26 @@ const UserVerify = async (userObject) => {
     };
   } catch (error) {
     return { success: false, message: 'Error while verifying user' };
+  }
+};
+
+const UserGetNewOtp = async (userObject) => {
+  try {
+    const user = await db.User.findOne({ where: { email: userObject.email } });
+    if (!user) {
+      return { success: false, message: 'Người dùng không tồn tại !' };
+    }
+    const newOtp = await user.set({
+      otp: Math.floor(100000 + Math.random() * 900000)
+    });
+    await newOtp.save();
+    const mailSend = sendOtpToEmail(user.email, newOtp.otp);
+    if (!mailSend) {
+      return { success: false, message: 'Lỗi khi gửi Email !' };
+    }
+    return { success: true, message: 'Mã OTP mới đã được gửi đến Email của bạn !' };
+  } catch (error) {
+    return { success: false, message: 'Lỗi đăng nhập' };
   }
 };
 
@@ -172,6 +194,7 @@ module.exports = {
   UserRegister,
   UserLogin,
   UserVerify,
+  UserGetNewOtp,
   UserProfile,
   UserUpdateProfile,
   GetCardHistory,

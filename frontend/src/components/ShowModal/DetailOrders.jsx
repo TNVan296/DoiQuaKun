@@ -3,13 +3,14 @@ import { useState, useEffect } from 'react'
 import { fetchWithAuthToken } from '~/utils/fetchWithAuthToken'
 
 function DetailOrders({ showModal, handleClose, cartId }) {
+  const apiURL = import.meta.env.VITE_API_URL
   const [cartItems, setCartItems] = useState([])
 
   useEffect(() => {
     if (!cartId) return
     const fetchOrderProducts = async () => {
       try {
-        const response = await fetchWithAuthToken(`http://localhost:3000/api/order/completed/${cartId}`, {
+        const response = await fetchWithAuthToken(`${apiURL}/order/completed/${cartId}`, {
           method: 'GET',
           headers: {
             'Content-Type': 'application/json'
@@ -28,7 +29,7 @@ function DetailOrders({ showModal, handleClose, cartId }) {
       <div className="modal_wrapper max-w-[1000px] text-center">
         <div className='modal_header'>
           <h3 className='text-xl text-[#00AAEC] w-full text-center font-medium'>Chi tiết đơn đổi quà</h3>
-          <span className="close" onClick={handleClose}>
+          <span className="close transition-transform duration-300 ease-in-out transform hover:scale-105 active:scale-95" onClick={handleClose}>
             <i className="fas fa-times"></i>
           </span>
         </div>
@@ -73,7 +74,12 @@ function DetailOrders({ showModal, handleClose, cartId }) {
               ))}
             </div>
             <div className='button_row justify-center'>
-              <button onClick={handleClose} className='detail_button bg-[#6c757d]'>Đóng</button>
+              <button
+                onClick={handleClose}
+                className='detail_button bg-[#6c757d] transition-transform duration-300 ease-in-out transform hover:scale-105 active:scale-95'
+              >
+                Đóng
+              </button>
             </div>
           </div>
         </div>

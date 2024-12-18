@@ -1,7 +1,7 @@
 import PropTypes from 'prop-types'
 import { useNavigate } from 'react-router-dom'
 
-function Header({ openModal, hasUser, hasCartItem, openLogOutModal }) {
+function Header({ openModal, hasUser, openLogOutModal }) {
   const navigate = useNavigate()
 
   const moveToContact = (e) => {
@@ -33,15 +33,7 @@ function Header({ openModal, hasUser, hasCartItem, openLogOutModal }) {
           </li>
           <li className="li-item text-lg font-medium">
             <button onClick={hasUser ? () => navigate('/cart') : openModal }>
-              {hasCartItem ?
-                <span>
-                  <i className='fas fa-shopping-bag'></i>
-                  <span className='cart-item-count'></span>
-                </span>
-                :
-                <>
-                  <i className='fas fa-shopping-bag'></i>
-                </>}
+              <i className='fas fa-shopping-bag'></i>
             </button>
           </li>
           {hasUser &&
@@ -60,7 +52,6 @@ function Header({ openModal, hasUser, hasCartItem, openLogOutModal }) {
 Header.propTypes = {
   openModal: PropTypes.func,
   hasUser: PropTypes.bool,
-  hasCartItem: PropTypes.bool,
   openLogOutModal: PropTypes.func
 }
 
