@@ -4,6 +4,7 @@ import CartItem from '~/pages/Cart/CartContent/CartItem'
 import { fetchWithAuthToken } from '~/utils/fetchWithAuthToken.js'
 
 function CartContent() {
+  const apiURL = import.meta.env.VITE_API_URL
   const [hasCartItem, setHasCartItem] = useState({})
   const [cartPoints, setCartPoints] = useState({})
   const navigate = useNavigate()
@@ -11,7 +12,7 @@ function CartContent() {
   useEffect(() => {
     const fetchCartItem = async () => {
       try {
-        const response = await fetchWithAuthToken('http://localhost:3000/api/cart', {
+        const response = await fetchWithAuthToken(`${apiURL}/cart`, {
           method: 'GET',
           headers: {
             'Content-Type': 'application/json'
@@ -26,7 +27,7 @@ function CartContent() {
     fetchCartItem()
     const fetchCartPoints = async () => {
       try {
-        const response = await fetchWithAuthToken('http://localhost:3000/api/cart/points', {
+        const response = await fetchWithAuthToken(`${apiURL}/cart/points`, {
           method: 'GET',
           headers: {
             'Content-Type': 'application/json'

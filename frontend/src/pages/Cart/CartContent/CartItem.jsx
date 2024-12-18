@@ -7,6 +7,7 @@ import CardRecharge from '~/components/ShowModal/CardRecharge'
 import { fetchWithAuthToken } from '~/utils/fetchWithAuthToken'
 
 function CartItem({ hasCartItem, setHasCartItem, cartPoints, setCartPoints }) {
+  const apiURL = import.meta.env.VITE_API_URL
   const navigate = useNavigate()
   const [products, setProducts] = useState([])
   const [userProfile, setUserProfile] = useState({})
@@ -21,7 +22,7 @@ function CartItem({ hasCartItem, setHasCartItem, cartPoints, setCartPoints }) {
 
   const getCities = async () => {
     try {
-      const response = await fetch('http://localhost:3000/api/address/cities', {
+      const response = await fetch(`${apiURL}/address/cities`, {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json'
@@ -36,7 +37,7 @@ function CartItem({ hasCartItem, setHasCartItem, cartPoints, setCartPoints }) {
 
   const getDistricts = async (cityId) => {
     try {
-      const response = await fetch(`http://localhost:3000/api/address/districts/${cityId}`, {
+      const response = await fetch(`${apiURL}/address/districts/${cityId}`, {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json'
@@ -51,7 +52,7 @@ function CartItem({ hasCartItem, setHasCartItem, cartPoints, setCartPoints }) {
 
   const getWards = async (districtId) => {
     try {
-      const response = await fetch(`http://localhost:3000/api/address/wards/${districtId}`, {
+      const response = await fetch(`${apiURL}/address/wards/${districtId}`, {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json'
@@ -76,7 +77,7 @@ function CartItem({ hasCartItem, setHasCartItem, cartPoints, setCartPoints }) {
 
   const updateCartPoints = async () => {
     try {
-      const response = await fetchWithAuthToken('http://localhost:3000/api/cart/points', {
+      const response = await fetchWithAuthToken(`${apiURL}/cart/points`, {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json'
@@ -98,7 +99,7 @@ function CartItem({ hasCartItem, setHasCartItem, cartPoints, setCartPoints }) {
       }))
       const product = hasCartItem.cartItems.find((item) => item.id === id)
       if (product) {
-        await fetchWithAuthToken('http://localhost:3000/api/cart/add', {
+        await fetchWithAuthToken(`${apiURL}/cart/add`, {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json'
@@ -127,7 +128,7 @@ function CartItem({ hasCartItem, setHasCartItem, cartPoints, setCartPoints }) {
       })
       const product = hasCartItem.cartItems.find((item) => item.id === id)
       if (product) {
-        await fetchWithAuthToken('http://localhost:3000/api/cart/remove', {
+        await fetchWithAuthToken(`${apiURL}/cart/remove`, {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json'
@@ -147,7 +148,7 @@ function CartItem({ hasCartItem, setHasCartItem, cartPoints, setCartPoints }) {
 
   const handleCheckOut = async () => {
     try {
-      const response = await fetchWithAuthToken('http://localhost:3000/api/cart/checkout', {
+      const response = await fetchWithAuthToken(`${apiURL}/cart/checkout`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'
@@ -172,7 +173,7 @@ function CartItem({ hasCartItem, setHasCartItem, cartPoints, setCartPoints }) {
     try {
       const fetchProducts = async () => {
         try {
-          const response = await fetch('http://localhost:3000/api/products', {
+          const response = await fetch(`${apiURL}/products`, {
             method: 'GET',
             headers: {
               'Content-Type': 'application/json'
@@ -188,7 +189,7 @@ function CartItem({ hasCartItem, setHasCartItem, cartPoints, setCartPoints }) {
       fetchProducts()
       const fetchUserProfile = async () => {
         try {
-          const response = await fetchWithAuthToken('http://localhost:3000/api/users/profile', {
+          const response = await fetchWithAuthToken(`${apiURL}/users/profile`, {
             method: 'GET',
             headers: {
               'Content-Type': 'application/json'

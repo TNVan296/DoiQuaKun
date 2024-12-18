@@ -1,9 +1,9 @@
 import PropTypes from 'prop-types'
 import { useState, useEffect, useCallback } from 'react'
-import { useNavigate } from 'react-router-dom'
 import { fetchWithAuthToken } from '~/utils/fetchWithAuthToken'
 
 function CardRecharge({ showModal, handleClose, cartPoints }) {
+  const apiURL = import.meta.env.VITE_API_URL
   const [cardHistory, setCardHistory] = useState([])
   const [currentLength, setCurrentLength] = useState(10)
   const [currentPage, setCurrentPage] = useState(1)
@@ -26,7 +26,7 @@ function CardRecharge({ showModal, handleClose, cartPoints }) {
 
   const fetchCardHistory = useCallback(async () => {
     try {
-      const response = await fetchWithAuthToken('http://localhost:3000/api/users/cardHistory', {
+      const response = await fetchWithAuthToken(`${apiURL}/users/cardHistory`, {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json'
@@ -36,11 +36,11 @@ function CardRecharge({ showModal, handleClose, cartPoints }) {
     } catch (error) {
       console.error(error)
     }
-  }, [])
+  }, [apiURL])
 
   const handleAddCard = useCallback(async () => {
     try {
-      const response = await fetchWithAuthToken('http://localhost:3000/api/cards/recharge', {
+      const response = await fetchWithAuthToken(`${apiURL}/cards/recharge`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'
@@ -59,7 +59,7 @@ function CardRecharge({ showModal, handleClose, cartPoints }) {
     } catch (error) {
       console.error(error)
     }
-  }, [cardValue, fetchCardHistory])
+  }, [apiURL, cardValue, fetchCardHistory])
 
   useEffect(() => {
     fetchCardHistory()

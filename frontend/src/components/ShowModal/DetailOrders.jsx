@@ -3,13 +3,14 @@ import { useState, useEffect } from 'react'
 import { fetchWithAuthToken } from '~/utils/fetchWithAuthToken'
 
 function DetailOrders({ showModal, handleClose, cartId }) {
+  const apiURL = import.meta.env.VITE_API_URL
   const [cartItems, setCartItems] = useState([])
 
   useEffect(() => {
     if (!cartId) return
     const fetchOrderProducts = async () => {
       try {
-        const response = await fetchWithAuthToken(`http://localhost:3000/api/order/completed/${cartId}`, {
+        const response = await fetchWithAuthToken(`${apiURL}/order/completed/${cartId}`, {
           method: 'GET',
           headers: {
             'Content-Type': 'application/json'

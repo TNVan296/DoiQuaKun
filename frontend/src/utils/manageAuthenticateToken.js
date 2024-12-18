@@ -1,6 +1,7 @@
 import { isTokenExpired } from './checkTokenExpired.js'
 
 export async function ensureAccessToken() {
+  const apiURL = import.meta.env.VITE_API_URL
   const accessToken = localStorage.getItem('accessToken')
   const refreshToken = localStorage.getItem('refreshToken')
 
@@ -10,8 +11,8 @@ export async function ensureAccessToken() {
   }
 
   // nếu refresh token còn
-  if (refreshToken) {
-    const response = await fetch('http://localhost:3000/api/users/token', {
+  if (refreshToken && !isTokenExpired(refreshToken)) {
+    const response = await fetch(`${apiURL}/users/token`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'

@@ -7,6 +7,7 @@ dotenv.config();
 const authenticateToken = async (req, res, next) => {
   const authHeader = req.headers['authorization'];
   const token = authHeader && authHeader.split(' ')[1];
+
   if (!token) {
     return res.status(401).json({ message: 'Token required' });
   }
@@ -27,19 +28,24 @@ const authenticateToken = async (req, res, next) => {
 
 const generateRefreshToken = async (req, res) => {
   const { refreshToken: clientRefreshToken } = req.body;
+  const decoded = jwt.decode(clientRefreshToken);
 
   if (!clientRefreshToken) {
     return res.status(401).json({ message: 'Refresh token required' });
   }
 
+  if (!decoded || (decoded.exp && Date.now() >= decoded.exp * 1000)) {
+    return res.status(401).json({ message: 'Refresh token has expired. Please log in again.' });
+  }
+
   try {
     const decoded = jwt.verify(clientRefreshToken, process.env.RT_SECRET);
     const loggedUser = await db.User.findOne({ where: { email: decoded.email } });
-
-    if (!loggedUser || loggedUser.refreshToken !== clientRefreshToken) {
+    
+    if (!loggedUser) {
       return res.status(403).json({ message: 'Invalid refresh token' });
     }
-
+    
     // Tạo access token mới
     const newAccessToken = createAccessToken(loggedUser, process.env.AT_SECRET);
 
@@ -58,6 +64,7 @@ const generateRefreshToken = async (req, res) => {
       }
     });
   } catch (err) {
+    console.log(err)
     return res.status(403).json({ message: 'Invalid or expired refresh token' });
   }
 };

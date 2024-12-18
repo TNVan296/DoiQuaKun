@@ -3,6 +3,7 @@ import PropTypes from 'prop-types'
 import { nextInput } from '~/utils/otpInput.js'
 
 function VerifyOTP({ showModal, handleClose, verifySuccess, showSuccessLoginModal }) {
+  const apiURL = import.meta.env.VITE_API_URL
   const [otpInputValues, setOtpInputValues] = useState(Array(6).fill(''))
   const [wrongOtp, setWrongOtp] = useState(false)
   const [getNewOTP, setGetNewOTP] = useState(false)
@@ -11,7 +12,7 @@ function VerifyOTP({ showModal, handleClose, verifySuccess, showSuccessLoginModa
     try {
       const userEmail = localStorage.getItem('userEmail')
       const otp = parseInt(otpInputValues.join(''), 10)
-      const response = await fetch('http://localhost:3000/api/users/verifyOtp', {
+      const response = await fetch(`${apiURL}/users/verifyOtp`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'

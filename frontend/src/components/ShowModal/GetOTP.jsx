@@ -2,6 +2,7 @@ import { useState } from 'react'
 import PropTypes from 'prop-types'
 
 const GetOTP = ({ showModal, handleClose, showVerifyOtpModal }) => {
+  const apiURL = import.meta.env.VITE_API_URL
   const [email, setEmail] = useState('')
   const [wrongEmail, setWrongEmail] = useState(false)
 
@@ -12,7 +13,7 @@ const GetOTP = ({ showModal, handleClose, showVerifyOtpModal }) => {
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
     if (emailRegex.test(email)) {
       try {
-        const response = await fetch('http://localhost:3000/api/users/login', {
+        const response = await fetch(`${apiURL}/users/login`, {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json'

@@ -4,6 +4,7 @@ import { fetchWithAuthToken } from '~/utils/fetchWithAuthToken.js'
 import DetailOrders from '~/components/ShowModal/DetailOrders'
 
 function History() {
+  const apiURL = import.meta.env.VITE_API_URL
   const [currentLength, setCurrentLength] = useState(10)
   const [currentPage, setCurrentPage] = useState(1)
   const [orderData, setOrderData] = useState([])
@@ -26,7 +27,7 @@ function History() {
   useEffect(() => {
     const fetchCompletedOrders = async () => {
       try {
-        const response = await fetchWithAuthToken('http://localhost:3000/api/order/completed', {
+        const response = await fetchWithAuthToken(`${apiURL}/order/completed`, {
           method: 'GET',
           headers: {
             'Content-Type': 'application/json'

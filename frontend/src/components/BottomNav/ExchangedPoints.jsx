@@ -3,12 +3,13 @@ import PropTypes from 'prop-types'
 import { fetchWithAuthToken } from '~/utils/fetchWithAuthToken'
 
 function ExchangedPoints({ increaseValue, decreaseValue, addToCart }) {
+  const apiURL = import.meta.env.VITE_API_URL
   const [exchangePoints, setExchangePoints] = useState({})
 
   useEffect(() => {
     const fetchExchangePoints = async () => {
       try {
-        const response = await fetchWithAuthToken('http://localhost:3000/api/cart/points', {
+        const response = await fetchWithAuthToken(`${apiURL}/cart/points`, {
           method: 'GET',
           headers: {
             'Content-Type': 'application/json'

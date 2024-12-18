@@ -4,17 +4,17 @@ import UpdateProfileModal from '~/components/NotificationModal/UpdateProfileModa
 import { fetchWithAuthToken } from '~/utils/fetchWithAuthToken.js'
 
 function Account() {
+  const apiURL = import.meta.env.VITE_API_URL
   const [userProfile, setUserProfile] = useState({})
   const [cities, setCities] = useState([])
   const [districts, setDistricts] = useState([])
   const [wards, setWards] = useState([])
   const [showSuccessUpdateModal, setShowSuccessUpdateModal] = useState(false)
-  const [showFailUpdateModal, setShowFailUpdateModal] = useState(false)
   const navigate = useNavigate()
 
   const getCities = async () => {
     try {
-      const response = await fetch('http://localhost:3000/api/address/cities', {
+      const response = await fetch(`${apiURL}/address/cities`, {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json'
@@ -29,7 +29,7 @@ function Account() {
 
   const getDistricts = async (cityId) => {
     try {
-      const response = await fetch(`http://localhost:3000/api/address/districts/${cityId}`, {
+      const response = await fetch(`${apiURL}/address/districts/${cityId}`, {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json'
@@ -44,7 +44,7 @@ function Account() {
 
   const getWards = async (districtId) => {
     try {
-      const response = await fetch(`http://localhost:3000/api/address/wards/${districtId}`, {
+      const response = await fetch(`${apiURL}/address/wards/${districtId}`, {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json'
@@ -60,7 +60,7 @@ function Account() {
   const handleSubmit = async (e) => {
     e.preventDefault()
     try {
-      const response = await fetchWithAuthToken('http://localhost:3000/api/users/profile', {
+      const response = await fetchWithAuthToken(`${apiURL}/users/profile`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json'
@@ -78,7 +78,7 @@ function Account() {
   useEffect(() => {
     const fetchUserProfile = async () => {
       try {
-        const response = await fetchWithAuthToken('http://localhost:3000/api/users/profile', {
+        const response = await fetchWithAuthToken(`${apiURL}/users/profile`, {
           method: 'GET',
           headers: {
             'Content-Type': 'application/json'

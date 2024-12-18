@@ -4,6 +4,7 @@ import { fetchWithAuthToken } from '~/utils/fetchWithAuthToken.js'
 import CardRecharge from '~/components/ShowModal/CardRecharge'
 
 function Coupons() {
+  const apiURL = import.meta.env.VITE_API_URL
   const [cartPoints, setCartPoints] = useState({})
   const [cardHistory, setCardHistory] = useState([])
   const [currentLength, setCurrentLength] = useState(10)
@@ -27,7 +28,7 @@ function Coupons() {
   useEffect(() => {
     const fetchCartPoints = async () => {
       try {
-        const response = await fetchWithAuthToken('http://localhost:3000/api/cart/points', {
+        const response = await fetchWithAuthToken(`${apiURL}/cart/points`, {
           method: 'GET',
           headers: {
             'Content-Type': 'application/json'
@@ -41,7 +42,7 @@ function Coupons() {
     fetchCartPoints()
     const fetchCardHistory = async () => {
       try {
-        const response = await fetchWithAuthToken('http://localhost:3000/api/users/cardHistory', {
+        const response = await fetchWithAuthToken(`${apiURL}/users/cardHistory`, {
           method: 'GET',
           headers: {
             'Content-Type': 'application/json'
