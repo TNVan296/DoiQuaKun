@@ -2,11 +2,12 @@ import PropTypes from 'prop-types'
 import GiftContent from '~/pages/Gifts/GiftContent/GiftContent'
 
 function HomeContent({ hasUser, openModal }) {
+  const apiURL = import.meta.env.VITE_API_URL
   return (
     <div className='content pt-[80px]'>
       <div className='onboarding_1'>
         <div className='w-1/2 px-[15px]'>
-          <img src='../src/assets/onboarding_1_1.png' alt='Onboarding 1_1' />
+          <img src={`${apiURL}/static/onboarding_1_1.png`} alt='Onboarding 1_1' />
         </div>
         <div className='w-1/2 px-[15px]'>
           <div className='text-center onboarding_text'>
@@ -24,12 +25,12 @@ function HomeContent({ hasUser, openModal }) {
       </div>
       <div className='onboarding_2'>
         <div className='header_img'>
-          <img src='../src/assets/onboarding_2_1.png' alt='Onboarding 2_1' />
-          <img src='../src/assets/onboarding_2_2.png' alt='Onboarding 2_2' className='relative right-[105px] top-[-90px] float-right' />
+          <img src={`${apiURL}/static/onboarding_2_1.png`} alt='Onboarding 2_1' />
+          <img src={`${apiURL}/static/onboarding_2_2.png`} alt='Onboarding 2_2' className='relative right-[105px] top-[-90px] float-right' />
         </div>
         <div className='pl-[80px] pr-[105px] mx-0 flex w-full relative top-[-60px]'>
           <div className='w-1/3'>
-            <img src='../src/assets/onboarding_2_3.png' alt='Onboarding 2_3' />
+            <img src={`${apiURL}/static/onboarding_2_3.png`} alt='Onboarding 2_3' />
           </div>
           <div className='w-2/3 pl-[85px] pr-[0px]'>
             <p className='text-title font_Roboto'>Thẻ Siêu Quyền Năng</p>
@@ -48,30 +49,30 @@ function HomeContent({ hasUser, openModal }) {
           </div>
         </div>
         <div className='footer_img flex justify-between'>
-          <img src='../src/assets/onboarding_2_4.png' alt='Onboarding 2_4' className='pl-[45px]' />
-          <img src='../src/assets/onboarding_2_5.png' alt='Onboarding 2_5' className='pr-[80px]'/>
+          <img src={`${apiURL}/static/onboarding_2_4.png`} alt='Onboarding 2_4' className='pl-[45px]' />
+          <img src={`${apiURL}/static/onboarding_2_5.png`} alt='Onboarding 2_5' className='pr-[80px]'/>
         </div>
       </div>
       <div id='onboarding_4' className='onboarding_4'>
-        <img src='../src/assets/onboarding_4_header_vector.svg' className='w-full' />
+        <img src={`${apiURL}/onboarding_4_header_vector.svg`} className='w-full' />
         <div className='title-wrapper text-center pt-[80px]'>
           <p className='shadow-text font_iCiel_Crocante'>BA BƯỚC ĐỔI QUÀ KUN</p>
         </div>
         <div className='content-wrapper pt-[50px] pl-[150px]'>
           <div className='steps-wrapper grid grid-cols-[60px_550px] items-center gap-5'>
-            <img src='../src/assets/onboarding_4_step1.png' />
+            <img src={`${apiURL}/onboarding_4_step1.png`} />
             <p className='step-title font_iCiel_Panton'>Đăng ký tài khoản bằng SĐT</p>
             <svg className='justify-self-center' width="2" height="65" viewBox="0 0 2 65" fill="none" xmlns="http://www.w3.org/2000/svg">
               <line x1="1" y1="0.472321" x2="0.999997" y2="64.8339" stroke="#FDBD35" strokeWidth="2"></line>
             </svg>
             <p className='step-desc font_Quicksand'>Chỉ cần điền SĐT và nhập mật khẩu là bạn đã đăng ký tài khoản thành công</p>
-            <img src='../src/assets/onboarding_4_step2.png' />
+            <img src={`${apiURL}/onboarding_4_step2.png`} />
             <p className='step-title font_iCiel_Panton'>Chọn quà KUN mà bạn muốn đổi thưởng</p>
             <svg className='justify-self-center' width="2" height="65" viewBox="0 0 2 65" fill="none" xmlns="http://www.w3.org/2000/svg">
               <line x1="1" y1="0.472321" x2="0.999997" y2="64.8339" stroke="#FDBD35" strokeWidth="2"></line>
             </svg>
             <p className='step-desc font_Quicksand'>Nhập mã số trên mặt thẻ mà bạn sưu tập được. Tích lũy đủ số lượng thẻ cần thiết và chọn phần quà bạn muốn đổi thưởng.</p>
-            <img src='../src/assets/onboarding_4_step3.png' />
+            <img src={`${apiURL}/onboarding_4_step3.png`} />
             <p className='step-title font_iCiel_Panton'>Điền thông tin và nhận quà</p>
             <svg className='justify-self-center' width="2" height="65" viewBox="0 0 2 65" fill="none" xmlns="http://www.w3.org/2000/svg">
               <line x1="1" y1="0.472321" x2="0.999997" y2="64.8339" stroke="#FDBD35" strokeWidth="2"></line>
@@ -86,7 +87,7 @@ function HomeContent({ hasUser, openModal }) {
             </a>
           </div>
         </div>
-        <img src='../src/assets/onboarding_4_footer_vector.svg' className='w-full' />
+        <img src={`${apiURL}/onboarding_4_footer_vector.svg`} className='w-full' />
       </div>
       {hasUser ?
         <GiftContent /> :
@@ -104,7 +105,7 @@ function HomeContent({ hasUser, openModal }) {
         </>
       }
       <div className='onboarding_5 flex justify-end'>
-        <img src='../src/assets/onboarding_5.png' />
+        <img src={`${apiURL}/onboarding_5.png`} />
       </div>
     </div>
   )

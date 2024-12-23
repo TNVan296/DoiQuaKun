@@ -159,7 +159,7 @@ function GiftDetail() {
         <div className="gift_detail flex flex-row gap-10">
           <div className="w-1/2 px-5">
             <div className='gift_detail_img_wrapper mb-5'>
-              <img className="gift_detail_img" src={`../src/assets/${itemImage ? itemImage : productItem.image}`} />
+              <img className="gift_detail_img" src={`${apiURL}/static/${itemImage ? itemImage : productItem.image}`} />
               <button onClick={() => navigate('/cart')} className='form_button font_iCiel_Crocante w-[230px] mt-0 absolute top-[510px] left-[485px]'>đổi quà ngay</button>
             </div>
             <div className='gift_detail_side_img_wrapper'>
@@ -168,7 +168,7 @@ function GiftDetail() {
                   <img
                     className="slick_track_item"
                     key={picture.pictureId}
-                    src={`../src/assets/${picture.pictureName}`}
+                    src={`${apiURL}/static/${picture.pictureName}`}
                     onClick={() => handleImageChange(picture.pictureName)}
                   />
                 ))}
