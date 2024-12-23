@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom'
 
 function Header({ openModal, hasUser, openLogOutModal }) {
   const navigate = useNavigate()
+  const apiURL = import.meta.env.VITE_API_URL
 
   const moveToContact = (e) => {
     e.preventDefault()
@@ -15,7 +16,7 @@ function Header({ openModal, hasUser, openLogOutModal }) {
   return (
     <div className='navbar flex justify-between items-center px-0'>
       <div className='logo cursor-pointer'>
-        <img src='../src/assets/logo.png' alt='Logo' onClick={() => navigate('/home') } />
+        <img src={`${apiURL}/static/logo.png`} alt='Logo' onClick={() => navigate('/home') } />
       </div>
       <div className='items'>
         <ul className='flex mx-auto'>

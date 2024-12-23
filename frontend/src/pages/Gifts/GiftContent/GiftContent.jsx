@@ -41,7 +41,7 @@ function GiftContent() {
             onClick={() => navigate(`/gifts/${product.id}`) }
             className='gift_card shadow'>
             <a href="">
-              <img className="gift_card_img" src={`../src/assets/${product.image}`} />
+              <img className="gift_card_img" src={`${apiURL}/static/${product.image}`} />
             </a>
             <div className='gift_card_body'>
               <a href="">

@@ -22,7 +22,6 @@ function Cart() {
   const PrivateRoute = ({ children }) => {
     const isUserLoggedIn = localStorage.getItem('accessToken')
     if (!isUserLoggedIn) {
-      alert('Vui lòng đăng nhập để truy cập nội dung này !')
       return <Navigate to='/home' />
     }
     return children

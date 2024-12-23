@@ -40,7 +40,7 @@ function DetailOrders({ showModal, handleClose, cartId }) {
                 <>
                   <div key={item.id} className="gift_cart_container h-[110px]">
                     <div className="gift_cart_img">
-                      <img src={`../src/assets/${item.product.picture.name}`} alt="Product Image" />
+                      <img src={`${apiURL}/static/${item.product.picture.name}`} alt="Product Image" />
                     </div>
                     <div className="gift_cart_info mr-[10px] w-1/3">
                       <p className="gift_cart_title font_iCiel_Crocante">{item.product.name}</p>

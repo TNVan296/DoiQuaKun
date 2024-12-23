@@ -18,9 +18,26 @@ app.use('/public', express.static(path.join(__dirname, 'public')));
 // Khởi tạo Swagger
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocs));
 
-app.use(express.urlencoded({ extended: true }));
-app.use(cors());
-app.use(morgan('dev'))
+const corsOptions = process.env.ENV === 'production'
+    ? {
+          origin: 'https://doiquakun.thuongnva.io.vn', // Domain của production
+          methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
+          credentials: true, // Cho phép cookie
+      }
+    : {
+          origin: 'http://localhost:3000', // Domain cho môi trường dev
+          methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
+          credentials: true, // Cho phép cookie
+      };
+
+app.use(cors(corsOptions));
+if (process.env.ENV === 'production') {
+    // Ghi log chi tiết hơn trong production
+    app.use(morgan('combined')); // Combined log format: thông tin đầy đủ
+} else {
+    // Ghi log đơn giản hơn trong dev
+    app.use(morgan('dev')); // Dev log format: ngắn gọn, dễ đọc
+}
 
 app.use('/public', express.static(path.join(__dirname, 'public')));
 

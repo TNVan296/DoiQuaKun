@@ -32,7 +32,6 @@ function User() {
   const PrivateRoute = ({ children }) => {
     const isUserLoggedIn = localStorage.getItem('accessToken')
     if (!isUserLoggedIn) {
-      alert('Vui lòng đăng nhập để truy cập nội dung này !')
       return <Navigate to='/home' />
     }
     return children
@@ -62,7 +61,7 @@ function User() {
       }
     }
     fetchUserProfile()
-  }, [apiURL, hasUser])
+  }, [hasUser])
 
   return (
     <div className='container mx-auto'>
@@ -77,7 +76,7 @@ function User() {
             <div className="navigation_col w-2/5 flex flex-col gap-2 px-5">
               <div className='profile_info items-center'>
                 <div className='w-1/2'>
-                  <img className="profile_img" src="../src/assets/user.png" />
+                  <img className="profile_img" src={`${apiURL}/static/user.png`} />
                 </div>
                 <div className="w-1/2">
                   <p className='profile_name font_iCiel_Crocante'>{userProfile.name ? userProfile.name : ''}</p>

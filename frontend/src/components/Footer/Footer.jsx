@@ -1,9 +1,10 @@
 
 function Footer() {
+  const apiURL = import.meta.env.VITE_API_URL
   return (
     <div className='footer'>
       <div className='wrapper'>
-        <img src='../src/assets/idp_logo.png' alt='IDP Logo' />
+        <img src={`${apiURL}/idp_logo.png`} alt='IDP Logo' />
         <div className='wrapper-info grid grid-cols-6 gap-8'>
           <div className='info text-[20px] leading-6 col-span-2'>
             <p>CÔNG TY CỔ PHẦN SỮA QUỐC TẾ (IDP)</p>
